@@ -36,7 +36,7 @@ class SaleController extends Controller
     public function index()
     {
 
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id) {
             $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
         } else {
             $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
@@ -493,7 +493,7 @@ class SaleController extends Controller
     {
         $branches;
         $traspacing = BranchOffice::where('status',1)->get();
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $branches = BranchOffice::all();
         } else {
             // return back()->withErrors(["error" => "No tienes permisos"]);

@@ -6,7 +6,7 @@
             <!-- <a href="#" class="list-group-item list-group-item-action {{ strpos(Request::url(),'home') ? 'active' : '' }}">Inicio</a> -->
             <a href="/caja" class="list-group-item list-group-item-action {{ strpos(Request::url(),'caja') ? 'active' : '' }}">Vender</a>
             <a href="/sale" class="list-group-item list-group-item-action {{ strpos(Request::url(),'sale') ? 'active' : '' }}">Ventas</a>
-            @if(Auth::user()->rol_id === 1)
+            @if(Auth::user()->rol_id === 1 || Auth::user()->rol_id === 3)
                 <a href="/initialCash" class="list-group-item list-group-item-action {{ strpos(Request::url(),'initialCash') ? 'active' : '' }}">Establecer monto Inicial</a>
                 <a href="/users" class="list-group-item list-group-item-action {{ strpos(Request::url(),'users') ? 'active' : '' }}">Usuarios</a>
                 <a href="/clients" class="list-group-item list-group-item-action {{ strpos(Request::url(),'clients') ? 'active' : '' }}">Clientes</a>
@@ -23,10 +23,12 @@
                 <a href="/showCanceled" class="list-group-item list-group-item-action {{ strpos(Request::url(),'showCanceled') ? 'active' : '' }}">Devoluciones</a>
                 <a href="/credits" class="list-group-item list-group-item-action {{ strpos(Request::url(),'credits') ? 'active' : '' }}">Creditos</a>
                 <a href="/transfers" class="list-group-item list-group-item-action {{ strpos(Request::url(),'transfers') ? 'active' : '' }}">Traspasos</a>
-            @elseif(Auth::user()->rol_id === 3)
-                <a href="/box" class="list-group-item list-group-item-action {{ strpos(Request::url(),'box') ? 'active' : '' }}">Lista de cajas</a>
-                <a href="/stock" class="list-group-item list-group-item-action {{ strpos(Request::url(),'stock') ? 'active' : '' }}">Stock</a>
-                <a href="" class="list-group-item list-group-item-action {{ strpos(Request::url(),'transfers') ? 'active' : '' }}">Reportes</a>
+                @if(Auth::user()->rol_id === 3)
+                    <!--Repetida lista de cajas-->
+                    <!--<a href="/box" class="list-group-item list-group-item-action {{ strpos(Request::url(),'box') ? 'active' : '' }}">Lista de cajas</a>-->
+                    <a href="/stock" class="list-group-item list-group-item-action {{ strpos(Request::url(),'stock') ? 'active' : '' }}">Stock</a>
+                    <a href="" class="list-group-item list-group-item-action {{ strpos(Request::url(),'transfers') ? 'active' : '' }}">Reportes</a>
+                @endif
             @endif
         @endauth
     </ul>

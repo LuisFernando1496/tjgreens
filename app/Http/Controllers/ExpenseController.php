@@ -20,7 +20,7 @@ class ExpenseController extends Controller
     public function index()
     {
         //return Expense::where('branch_office_id',1)->get();
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             return view('expenses.index', ['expenses' => Expense::all()]);
         } else {
             return back()->withErrors(["error" => "No tiene permisos."]);
@@ -45,7 +45,7 @@ class ExpenseController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $caja = CashClosing::where('status', false)->where('user_id', Auth::user()->id)->first();
             if ($caja == []) {
                 return response('bad', 500)->json('bad');
@@ -106,7 +106,7 @@ class ExpenseController extends Controller
      */
     public function update(Request $request, Expense $expense)
     {
-        if (Auth::user()->rol_id==1) {
+        if (Auth::user()->rol_id==1 || Auth::user()->rol_id == 3) {
             try {
                 //return $request;
                 $expense->edit($request->only(['description', 'quantity', 'price']));
@@ -129,7 +129,7 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense)
     {
-        if (Auth::user()->rol_id==1) {
+        if (Auth::user()->rol_id==1 || Auth::user()->rol_id == 3) {
             $expense->del();
             return back()->with(["success" => "Éxito al realizar la operación."]);
         } else {

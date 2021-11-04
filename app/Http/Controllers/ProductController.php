@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $products = Product::where('status', true)->get();
             $offices = BranchOffice::where('status', true)->get();
             $providers = Provider::all();
@@ -143,7 +143,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             try {
                 $this->validate($request, [
                     'name' => 'required',
@@ -205,7 +205,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             if ($product->image == null) {
                 $product->changeStatus();
                 return back()->with(["success" => "Éxito al realizar la operación."]);
@@ -226,7 +226,7 @@ class ProductController extends Controller
 
     public function changeStatus(Request $request, Product $product)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             try {
                 $product->changeStatus($request->status);
                 return back()->with(["success" => "Éxito al realizar la operación."]);

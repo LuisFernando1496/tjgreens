@@ -19,7 +19,7 @@ class PurchaseController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $products = Product::where('status', true)->where('branch_office_id',Auth::user()->branch_office_id)->get();
             return view('purchase/index', ['products' => $products]);
         } else {
@@ -82,7 +82,7 @@ class PurchaseController extends Controller
     }
     public function getHistory()
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $products = Purchase::where('user_id',Auth::user()->id)->get();
             return view('purchase/history', ['products' => $this->paginate($products)]);
         } else {

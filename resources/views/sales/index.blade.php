@@ -50,7 +50,7 @@
                 <th scope="col">Folio sucursal</th>
                 <th scope="col">Empleado</th>
                 {{-- solo si es admin --}}
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <th scope="col">Sucursal</th>
                 @endif
                 <th scope="col">Subtotal</th>
@@ -62,13 +62,13 @@
         </thead>
         <tbody id="mydata">
             @foreach ($sales as $item)
-            @if($item->user_id == Auth::user()->id || Auth::user()->rol_id == "1")
+            @if($item->user_id == Auth::user()->id || Auth::user()->rol_id == "1" || Auth::user()->rol_id == "3")
 
             <tr>
                 <th scope="row">{{$item->id}}</th>
                 <th>{{$item->folio_branch_office}}</th>
                 <td>{{$item->user->name}}</td>
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <td>{{$item->branchOffice->name}}</td>
                 @endif
                 <td>{{$item->cart_subtotal}}</td>
@@ -76,7 +76,7 @@
                 <td>{{$item->cart_total}}</td>
                 <td>
                     <div class="row">
-                        @if (Auth::user()->rol_id == 1)
+                        @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                         <form  action="/reprint" method="POST" target="_blank">
                             <input type="hidden" name="sale_id" value="{{$item->id}}">
                             <button type="submit" class="btn btn-outline-secondary btn-sm mx-2" data-type="edit">
@@ -116,7 +116,7 @@
                 <th scope="col">Folio sucursal</th>
                 <th scope="col">Empleado</th>
                 {{-- solo si es admin --}}
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <th scope="col">Sucursal</th>
                 @endif
                 <th scope="col">Subtotal</th>
@@ -132,7 +132,7 @@
                 <th scope="row">{{$item->id}}</th>
                 <th>{{$item->folio_branch_office}}</th>
                 <td>{{$item->user->name}}</td>
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <td>{{$item->branchOffice->name}}</td>
                 @endif
                 <td>{{$item->cart_subtotal}}</td>
@@ -149,7 +149,7 @@
                                 <small>REIMPRIMIR TICKET</small>
                             </button>
                         </form>
-                        @if (Auth::user()->rol_id == 1)
+                        @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                         <form onsubmit="return confirm('Cancelar esta venta?')" action="/sale/{{$item->id}}" method="post">
                             @csrf
                             @method('delete')

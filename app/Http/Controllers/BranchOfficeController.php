@@ -18,7 +18,7 @@ class BranchOfficeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             return view('branchOffice.index', ['office' => BranchOffice::where('status', '=', true)->get()]);
         } else {
             return back()->withErrors(["error" => "No se pudo realizar la operación."]);
@@ -46,7 +46,7 @@ class BranchOfficeController extends Controller
         $offices = BranchOffice::all();
         DB::beginTransaction();
 
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             if (count($offices) == 10) {
                 return back()->withErrors(["error" => "Ya existen 10 sucursales registradas"]);
             } elseif (count($offices) < 10) {
@@ -120,7 +120,7 @@ class BranchOfficeController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             try {
                 $branchOffice = BranchOffice::findOrFail($id);
                 $branchOffice->changeStatus(false);

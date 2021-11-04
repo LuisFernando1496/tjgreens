@@ -29,7 +29,7 @@ class ClientController extends Controller
     public function showCredits()
     {
         $user = Auth::user();
-        if ($user->rol_id == 1) {
+        if ($user->rol_id == 1 || $user->rol_id == 3) {
             //dd(Sale::whereNotNull('client_id')->with('payments')->orderBy('id', 'DESC')->get());
             $credit=Sale::whereNotNull('client_id')->with('payments')->orderBy('id', 'DESC')->get();
             //dd($credit);

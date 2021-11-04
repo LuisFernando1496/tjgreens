@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $categories = Category::where('status', true)->get();
             return view('products/category', ['categories' => $categories]);
         } else {
@@ -42,7 +42,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $category = new Category([
                 'name' => $request['name'],
                 'status' => true
@@ -90,7 +90,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $category = Category::findOrFail($id);
             if ($category->update($request->all())) {
                 return back()->with(["success" => "Éxito al realizar la operación."]);
@@ -110,7 +110,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $category = Category::findOrFail($id);
             $newStatus['status'] = false;
 

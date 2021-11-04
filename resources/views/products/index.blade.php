@@ -270,7 +270,7 @@
                 <th scope="col">IVA</th>
                 <th scope="col">Categoria</th>
                 <th scope="col">Marca</th>                                
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <th scope="col">Sucursal</th>
                 @endif
                 <th scope="col"></th>
@@ -302,7 +302,7 @@
                 @endif
                 <td>{{$item->category->name}}</td>
                 <td>{{$item->brand->name ?? '-'}}</td>                
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     @if($item->branch_office == null)
                         <td>-</td>
                     @else

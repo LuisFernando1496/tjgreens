@@ -94,7 +94,7 @@
                 <th scope="col">Precio/Pieza</th>
                 <th scope="col">Total</th>                
                 <th scope="col">Numero de caja</th>
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <th scope="col">Sucursal</th>
                 @endif
 
@@ -110,7 +110,7 @@
                 <td>{{$item->price}}</td>
                 <td>${{$item->price*$item->quantity}}</td>
                 <td>{{$item->cash_closing->id}}</td>                
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <td>{{$item->branch_office->name}}</td>
                 @endif
                 <td>

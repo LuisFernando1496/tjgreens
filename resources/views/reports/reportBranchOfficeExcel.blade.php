@@ -33,7 +33,7 @@
             <h5>DESDE {{$from}} HASTA {{$to}}</h5>
 
             @foreach ($branchOffice as $b)
-            @if (Auth::user()->rol_id == 1)
+            @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
             <table style="width: 100%; margin-top:20px;" cellpadding="15">
                 <tr>
                     <th colspan="9" class="backgroundColor">
@@ -88,12 +88,12 @@
                     @endif
 
                     <td>{{$p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 )
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <td>${{$p->product->cost}}</td>
                     @endif
                     <td>${{$p->sale_price}}</td>
                     <td>${{$p->amount_discount * $p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 )
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <td>${{$p->product->cost * $p->quantity}}</td>
                     @endif
                     <td>${{$p->total}}</td> 
@@ -107,7 +107,7 @@
 
 
             <table style="width: 100%; margin-top:20px;">
-                @if (Auth::user()->rol_id == 1 )
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <tr>
                     <th>TOTAL VENTAS</th>
                     <td>${{$cash->subtotal + $card->subtotal}}</td>
