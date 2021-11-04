@@ -36,7 +36,7 @@ class SaleController extends Controller
     public function index()
     {
 
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
         } else {
             $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
