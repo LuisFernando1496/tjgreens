@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
-        if ($user->rol_id == 1) {
+        if ($user->rol_id == 1 || $user->rol_id == 3) {
             return view('user.index', ['users' => User::with('address')->where('status', 1)->where('id', '!=', Auth::user()->id)->get(), 'offices' => BranchOffice::where('status', true)->get(), 'rols' => Rol::all()]);
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
@@ -62,7 +62,7 @@ class UserController extends Controller
         $user = new User();
         $address = new Address();
         $current_user = Auth::user();
-        if ($current_user->rol_id == 1) {
+        if ($current_user->rol_id == 1 || $current_user->rol_id == 3) {
             $rols = Rol::all();
             $branchOffices = BranchOffice::all();
             return view('', ['user' => $user, 'rols' => $rols, 'branchOffices' => $branchOffices, 'address' => $address]);
@@ -161,7 +161,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             DB::beginTransaction();
             try {
                 if ($request->has('branch_office_id')) {
@@ -191,7 +191,7 @@ class UserController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['success' => false, 'message' => 'The provided credentials are incorrect'], 404);
         }
-        if ($user->rol_id == 1 || $user->rol_id == 2) {
+        if ($user->rol_id == 1 || $user->rol_id == 2 || $user->rol_id == 3) {
             return response()->json(['success' => true, 'user' => $user], 200);
         } else {
             return response()->json(['success' => false, 'message' => 'You are not admin or manager'], 401);
@@ -205,7 +205,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request,User $user)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             if ($request->has('eliminate_client')) {
                 $client = Client::findOrFail($request['eliminate_client']);
                 $client->changeStatus(false);

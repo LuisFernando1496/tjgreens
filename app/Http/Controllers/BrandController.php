@@ -11,7 +11,7 @@ class BrandController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $brands = Brand::where('status', true)->get();
             return view('products/brand', ['brands' => $brands]);
         } else {
@@ -38,7 +38,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $brand = new Brand([
                 'name' => $request['name'],
                 'status' => true
@@ -85,7 +85,7 @@ class BrandController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $brand = Brand::findOrFail($id);
 
             if ($brand->update($request->all())) {
@@ -106,7 +106,7 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
-        if (Auth::user()->rol_id == 1) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $brand = Brand::findOrFail($id);
             $newStatus['status'] = false;
 

@@ -159,7 +159,7 @@
                         </svg>  
                             Editar
                         </button> 
-                    @if (Auth::user()->rol_id == 1)
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <form onsubmit="return confirm('Eliminar sucursal?')" action="/BranchOffice/{{$item->id}}" method="post">
                         @csrf
                         @method('delete')
