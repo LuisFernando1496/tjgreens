@@ -64,10 +64,9 @@ class ProductController extends Controller
                 if (count($exist) != 0) {
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
-                $cost = $request->cost;
-                if ($request->dollar) {
+              
                     $cost = $request->cost * 20.68;
-                }
+           
 
 
                 $product = Product::create(

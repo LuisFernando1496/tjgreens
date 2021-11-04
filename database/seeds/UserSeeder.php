@@ -14,19 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name' => 'Samuel',
-            'last_name' => 'Aguilera Mendoza',
-            'curp' => 'AUMS951102HCSGNM02',
-            'rfc' => 'AUMS951102N17',
-            'phone' => '9616490518',
-            'email' => 'sam021195@hotmail.com',
-            'password' => '14270995',
-            'status' => 1,
-            'address_id' => 1,
-            'branch_office_id' => 1,
-            'rol_id' => 1,
-        ]);
+        
         /*
         User::create([
             'name' => 'Santiago',

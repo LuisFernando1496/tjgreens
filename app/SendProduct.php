@@ -13,6 +13,7 @@ class SendProduct extends Model
         'subtotal',
         'sale_price',
         'total',
+        'cost',
         'total_cost',
         'discount'
     ];

@@ -132,6 +132,7 @@ class SaleController extends Controller
                         'quantity' => $item['quantity'],
                         'subtotal' => $item['subtotal'],
                         'sale_price' => $item['sale_price'],
+                        'cost' => $item['costo'],
                         'total' => $item['total'],
                         'discount' => $item['discount']
                     ];
@@ -192,6 +193,7 @@ class SaleController extends Controller
                                 'quantity' => $item['quantity'],
                                 'subtotal' => $item['subtotal'],
                                 'sale_price' => $item['sale_price'],
+                                'cost' => $item['costo'],
                                 'total' => $item['total'],
                                 'total_cost' => $product->cost * $item['quantity'],
                                 'discount' => $item['discount']
@@ -245,6 +247,7 @@ class SaleController extends Controller
                             'quantity' => $item['quantity'],
                             'subtotal' => $item['subtotal'],
                             'sale_price' => $item['sale_price'],
+                            'cost' => $item['costo'],
                             'total' => $item['total'],
                             'total_cost' => $product->cost * $item['quantity'],
                             'discount' => $item['discount']
@@ -298,6 +301,7 @@ class SaleController extends Controller
                         'quantity' => $item['quantity'],
                         'subtotal' => $item['subtotal'],
                         'sale_price' => $item['sale_price'],
+                        'cost' => $item['costo'],
                         'total' => $item['total'],
                         'total_cost' => $product->cost * $item['quantity'],
                         'discount' => $item['discount']
@@ -356,7 +360,7 @@ class SaleController extends Controller
                 ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%") 
                 ->orWhere("brands.name", "LIKE", "%{$request->search}%")
                 ->where("branch_offices.status",1)
-                ->select('products.*','branch_offices.name as office_name','brands.name as brand_name', 'brands.id as brand_id', 'categories.name as category_name', 'categories.id as category_id')
+                ->select('products.*','products.cost as costo','branch_offices.name as office_name','brands.name as brand_name', 'brands.id as brand_id', 'categories.name as category_name', 'categories.id as category_id')
                 ->get();
         
         return response()->json($datas);

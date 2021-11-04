@@ -208,6 +208,7 @@
                                                 <th scope="col">Producto</th>
                                                 <th scope="col">Marca</th>
                                                 <th scope="col">Categoría</th>
+                                                <th scope="col">Costo</th>
                                                 <th scope="col">Precio</th>
                                                 <th scope="col">Cantidad</th>
                                                 <th scope="col">Descuento (%)</th>
@@ -517,6 +518,7 @@
                                             '<td>'+element.name+'</td>'+
                                             '<td>'+element.brand_name+'</td>'+
                                             '<td>'+element.category_name+'</td>'+
+                                            '<td>'+element.category_name+'</td>'+
                                             '<td>'+element.stock+'</td>'+
                                             '<td>'+element.price_1+'</td>'+
                                             '<td>'+element.price_2+'</td>'+
@@ -595,6 +597,7 @@
                             '<td class="name">'+product.name+'</td>'+
                             '<td class="brand-name">'+product.brand_name+'</td>'+
                             '<td>'+product.category_name+'</td>'+
+                            '<td class="costo">'+product.costo+'</td>'+
                             '<td>'+
                                 '<select class="custom-select price" style="width:150px;">'+
                                     '<option value="'+product.price_1+'">$ '+product.price_1+'</option>'+
@@ -833,6 +836,7 @@
                     let total = parseFloat($(this).find('.subtotal').text());
                     let quantity = parseFloat($(this).find('.quantity').val());
                     let discount = parseFloat($(this).find('.discount').val());
+                    let costo =  parseFloat($(this).find('.costo').text());
                     let subtotal = price * quantity;
                     items.push({
                         id : $(this).data('id'),
@@ -840,7 +844,8 @@
                         discount : discount,
                         sale_price : price,
                         total : total,
-                        subtotal : subtotal
+                        subtotal : subtotal,
+                         costo:costo
                     });
                 });
                 let request = {
@@ -861,6 +866,7 @@
 
                      }
                     };
+                    console.log(request);
                 $.ajax({
                     url: "/sale",
                     headers: {
