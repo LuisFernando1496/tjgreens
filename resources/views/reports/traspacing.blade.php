@@ -52,10 +52,12 @@
                   
                 </tr>
                 <tr>
+                    <th style="font-size: 10px" class="backgroundColor">MARCA</th>
                     <th style="font-size: 10px" class="backgroundColor">DESCRIPTION</th>
                     <th style="font-size: 10px" class="backgroundColor">QTY</th>
-                    <th style="font-size: 10px" class="backgroundColor">UNIT PRICE</th>
-                    <th style="font-size: 10px" class="backgroundColor">DISCOUNT</th>
+                    <th style="font-size: 10px" class="backgroundColor">UNIT COST</th>
+                    <th style="font-size: 10px" class="backgroundColor">COSTO TOTAL USD</th>
+                    <th style="font-size: 10px" class="backgroundColor">SELL RETAIL PRICE</th>
                     <th style="font-size: 10px" class="backgroundColor">TOTAL PRICE</th>
                   
                 </tr>

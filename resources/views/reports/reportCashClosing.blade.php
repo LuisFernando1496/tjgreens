@@ -31,7 +31,7 @@
             <h4 >REPORTE DE CORTE DE CAJA</h4>
             @foreach ($branchOffice as $b)
             <table style="width: 100%; margin-top:20px;">
-                @if (Auth::user()->rol_id == 1)
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <tr>
                     <th colspan="9" class="backgroundColor">
                         SUCURSAL
@@ -59,12 +59,12 @@
                     <th style="font-size: 14px" class="backgroundColor">CATEGORÍA</th>
                     <th style="font-size: 14px" class="backgroundColor">MARCA</th>
                     <th style="font-size: 14px" class="backgroundColor">CANTIDAD</th>
-                    @if (Auth::user()->rol_id == 1 )
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <th style="font-size: 14px" class="backgroundColor">COSTO</th>  
                     @endif
                     <th style="font-size: 14px" class="backgroundColor">PRECIO <br/> PÚBLICO</th>
                     <th style="font-size: 14px" class="backgroundColor">DESCUENTO</th>
-                    @if (Auth::user()->rol_id == 1 )
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <th style="font-size: 14px" class="backgroundColor">INVERSION</th>  
                     @endif
                     <th style="font-size: 14px" class="backgroundColor">TOTAL</th>
@@ -81,12 +81,12 @@
                     <td>{{$p->product->brand->name }}</td>
                     @endif
                     <td>{{$p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 )
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <td>${{$p->product->cost}}</td>
                     @endif
                     <td>${{$p->sale_price}}</td>
                     <td>${{($p->sale_price * (($p->PD/100)  ) ) * $p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 )
+                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <td>${{$p->product->cost * $p->quantity}}</td>
                     @endif
                     <td>${{$p->total}}</td> 
