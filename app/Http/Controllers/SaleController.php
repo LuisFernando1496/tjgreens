@@ -327,7 +327,7 @@ class SaleController extends Controller
     {
         $user = auth()->user();
         
-        if($user->rol_id == 2){
+        if($user->rol_id == 2 || $user->rol_id == 3){
            
                 $datas = Product::join('brands', 'products.brand_id', 'brands.id')
                 ->join('categories', 'products.category_id', 'categories.id')

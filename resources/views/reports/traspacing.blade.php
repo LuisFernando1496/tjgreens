@@ -64,10 +64,21 @@
                 
                @foreach ($send as $item)
                    <tr>
+                       <td>{{$item->product->brand->name}}</td>
                        <td>{{$item->product->name}}</td>
                        <td>{{$item->quantity}}</td>
+                       @if($item->cost != 0)
+                            <td>{{$item->cost}}</td>
+                        <td>{{$item->cost * $item->quantity}}</td>
+                     
+                           
+                       @else
+                            <td>{{$item->product->cost}}</td>
+                            <td>{{$item->product->cost * $item->quantity}}</td>
+                   
+                       @endif
+                      
                        <td>${{$item->sale_price}}</td>
-                       <td>${{$item->discount}}</td>
                        <td>${{$item->total}}</td>
                        @php
                            $totals += $item->total
@@ -76,7 +87,7 @@
                    </tr>
                @endforeach
              <tr>
-                 <th colspan="4"></th>
+                 <th colspan="6"></th>
                  <td>Total: ${{$totals}}</td>
              </tr>
             </table>
