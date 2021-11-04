@@ -38,7 +38,7 @@ class BoxController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->rol_id == 1){
+        if(Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3){
             return view('box.create',["box" => new Box,"branch_office" => BranchOffice::all()]);
         }else{
             return view('box.create',["box" => new Box,"branch_office" =>Auth::user()->branchOffice]);

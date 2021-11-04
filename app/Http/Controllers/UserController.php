@@ -40,7 +40,8 @@ class UserController extends Controller
             $last = Client::latest()->first();
             return view('user.indexClient', [
                 'users' => Client::where('status', 1)->orderBy('id','desc')->get(),
-                'last' => $last->id
+                //'last' => $last->id
+                'last' => $last
             ]);
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
