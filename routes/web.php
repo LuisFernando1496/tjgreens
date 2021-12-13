@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::resource('user', 'UserController');
 Route::group(['middleware'=>'auth'], function(){
+
+    //Rutas AJAX
+    Route::get('/users-ajax',[UserController::class,'ajaxget']);
+
     Route::resource('users', 'UserController');
     Route::get('clients', 'UserController@indexClient');
     Route::resource('expense', 'ExpenseController');
@@ -99,6 +104,8 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('transfers','TransferController');
 
     Route::get('/stock','ProductController@stock');
+
+    Route::get('/tag/{product}','ProductController@tag')->name('tag');
 
 });
 
