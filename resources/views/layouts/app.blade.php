@@ -29,7 +29,7 @@
 
 <body>
     <div class="d-flex" id="wrapper">
-        @include('layouts.footer')
+        
         @include('layouts.menu')
         <div id="page-content-wrapper">
             @include('layouts.navbar')

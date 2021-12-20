@@ -257,7 +257,13 @@
     <div style="text-align:right">
     <button onclick="limpiar()" type="button" class="btn  btn-outline-primary my-2" data-toggle="modal" data-target="#productModal"><small>CREAR</small></button>
     </div>
-    <table class="display table table-striped table-bordered" id="example" style="width:100%">
+    <div>
+        <input type="search" placeholder="Buscar..." id="search" name="search" class="float-right" >
+    </div>
+   
+    
+    <table class="display table table-striped table-bordered"  style="width:100%">
+        
         <thead class="black white-text">
             <tr>
                 <th scope="col">Codigo de barras</th>
@@ -276,7 +282,7 @@
                 <th scope="col"></th>
             </tr>
         </thead>
-        <tbody id="mydata">
+        <tbody id="result">
             @foreach ($products as $item)
             <tr>
                 <th scope="row">{{$item->bar_code}}</th>
@@ -330,9 +336,22 @@
         </tbody>
     </table>
 </div>
+{{ $products->links() }}
 @endsection
 @push('scripts')
 <script>
+      window.addEventListener("load",function(){
+          document.getElementById("search").addEventListener("keyup",function(){
+        fetch(`products/busqueda?search=${document.getElementById("search").value}`,{ method:'get',headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') }})
+        .then(response=>response.text())
+        .then(html=>{
+          document.getElementById("result").innerHTML = html
+          
+        })
+        
+             
+      })
+        });
     function limpiar(){
         let fields = document.getElementsByClassName('form-control')
 
