@@ -233,10 +233,11 @@
                                                 <th scope="col">Vendido</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="masVendidoTable">
                                             @foreach($ventasS as $v)
                                             @if($v->quantity >= 10)
-                                            <tr>
+                                            <tr class="item-resultMV" style="cursor: grab;" data-id="{{$v->product_name}}">
+                                            <!--<tr >-->
                                                 <td>{{$v->product_name}}</td>
                                                 <td>${{$v->sale_price}}</td>
                                                 <td>{{$v->quantity}}</td>
@@ -644,6 +645,32 @@
                     });
                 }
             }
+
+            $('.item-resultMV').click(function() {
+                $.ajax({
+                    url: "/search",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'GET',
+                    contentType: "application/json; charset=iso-8859-1",
+                    data: {'search':$(this).data('id')},
+                    dataType: 'html',
+                    success: function(data) {
+                        result=JSON.parse(data);
+                        if(result.length!==0){
+                            //console.log("R: "+result[0].id);
+                            $('#masvendidoModal').modal('hide');
+                            addProduct(result[0].id);
+                        }else{
+                            alert("No se encontraron resultados!");
+                        } 
+                    },
+                    error: function(e) {
+                        console.log("ERROR", e);
+                    },
+                });
+            });
 
             function search(){
                 $('#searchResult').empty();
