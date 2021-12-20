@@ -59,6 +59,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('branchOffice','BranchOfficeController');
 
     Route::get('search', 'SaleController@search');
+    Route::get('searchClient', 'SaleController@searchClient');
     Route::get('searchByCode', 'SaleController@searchByCode');
     Route::get('caja', 'SaleController@showCaja');
     Route::get('showCanceled', 'SaleController@showCanceledSale');

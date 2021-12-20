@@ -155,6 +155,102 @@
                         </div>
                     </div>  
                 </div>
+                
+                <div class="col-md-2">
+                    <div class="col-md-12">
+                        <button type="button" id="masVendido" data-toggle="modal" data-target="#masvendidoModal" class="btn btn-primary btn-block">Más Vendido</button>
+                    </div>
+                </div>
+
+
+                <!--Modal buscar client-->
+                <div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Buscar cliente</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <input type="text" id="searchClient" style="text-transform: uppercase" class="form-control" name="searchClient" autocomplate="searchClient" placeholder="Buscar cliente"/>
+                                        <div class="input-group-append">
+                                            <button id="searchClientButton" class="btn btn-outline-secondary">
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>  
+                                </div>
+
+                                <!--table-->
+                                <div class="col-md-12">
+                                    <table id="resultTableClient"class="table table-sm table-hover table-responsive-lg overflow-auto my-2">
+                                        <thead>
+                                            <!--<tr>
+                                                <th>Resultado de búsqueda 
+                                            </tr>-->
+                                            <tr>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Correo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="searchResultClient">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal mas vendido-->
+                <div class="modal fade" id="masvendidoModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Lo mas vendido de la semana {{sizeof($ventasS)}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!--table-->
+                                <div class="col-md-12">
+                                    <table class="display table table-striped table-bordered" id="example" style="width:100%">
+                                    <!--<table id="resultTableClient" class="table table-sm table-hover table-responsive-lg overflow-auto my-2">-->
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Producto</th>
+                                                <th scope="col">Precio</th>
+                                                <th scope="col">Vendido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($ventasS as $v)
+                                            @if($v->quantity >= 10)
+                                            <tr>
+                                                <td>{{$v->product_name}}</td>
+                                                <td>${{$v->sale_price}}</td>
+                                                <td>{{$v->quantity}}</td>
+                                            </tr>
+                                            @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="col-md-2">
                     <button class="btn btn-secondary btn-block" data-toggle="modal" data-target="#productsListModal">
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-grid-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -312,12 +408,22 @@
                                         </div>
                                         <div class="col-md-12">
                                             <label for="client">Cliente</label>
-                                            <select class="custom-select" name="client_id" id="client_id">
-                                            <option value="">Cliente general</option>
-                                                @foreach($clients as $client)
-                                                    <option value="{{$client->id}}">{{$client->name}} {{$client->last_name}}</option>
-                                                @endforeach
-                                            </select>
+                                            <div class="input-group">
+                                                <select class="custom-select" name="client_id" id="client_id">
+                                                    <option value="">Cliente general</option>
+                                                    @foreach($clients as $client)
+                                                        <option value="{{$client->id}}">{{$client->name}} {{$client->last_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#clientModal">
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                                            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="float-right pt-1">
@@ -406,6 +512,7 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(function() {
+            document.getElementById("search").focus();
             let result = [];
             let generalSubtotal = 0;
             let totalDiscount = 0;
@@ -442,6 +549,9 @@
                 }   
             });
             $('#client_id').change( function() {
+                //console.log($( "#client_id option:selected" ).val());
+                //$( "#client_id option:selected" ).val(100);
+                //console.log($( "#client_id option:selected" ).val());
                     if($( "#client_id option:selected" ).val()==""){
                         console.log($( "#client_id option:selected" ).val());
                         $('#paymentButton').prop('disabled',true);
@@ -489,6 +599,52 @@
             else{
                 sale_public.style.display= "inline-block";
             }
+
+            function fsearchClient(){
+                $('#searchResultClient').empty();
+                var usuario = document.getElementById('user').value;
+                if($("#searchClient").val().length!=0){
+                    $.ajax({
+                        url: "/searchClient",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'GET',
+                        contentType: "application/json; charset=iso-8859-1",
+                        data: {'search':$('#searchClient').val().toUpperCase()},
+                        dataType: 'html',
+                        success: function(data) {
+                            result=JSON.parse(data);
+                            if(result.length!==0){
+                                result.forEach(function(element,index){
+                                    $('#searchResultClient').append(
+                                        '<tr class="item-resultC" style="cursor: grab;" data-id="'+element.id+'">'+
+                                            '<td>'+element.name+' '+ element.last_name+'</td>'+
+                                            '<td>'+element.email+'</td>'+
+                                        '</tr>'
+                                    );
+                                });
+                                $('.item-resultC').off();
+                                $('.item-resultC').click(function() {
+                                    addClient($(this).data('id'));
+                                    $('#clientModal').modal('hide');
+                                });
+                            }   
+                            else{
+                                $('#searchResultClient').append(
+                                    '<tr class="item-result">'+
+                                        '<td colspan="8">No se encontraron resultados</td>'+
+                                    '</tr>'
+                                );
+                            } 
+                        },
+                        error: function(e) {
+                            console.log("ERROR", e);
+                        },
+                    });
+                }
+            }
+
             function search(){
                 $('#searchResult').empty();
                 var usuario = document.getElementById('user').value;
@@ -561,7 +717,17 @@
                         },
                     });
                 }
-            } 
+            }
+
+            function addClient(idClient){
+                let client = result.find(element => element.id == idClient);
+                //console.log("Cliente: "+client.name);
+                //$("#client_id").val(client.name);
+                $('#searchClient').val('');
+                $("#client_id option[value="+ client.id +"]").attr("selected",true);
+                
+            }
+
             function addProduct(idProduct){
                 let product = result.find(element => element.id == idProduct)
                 $('#addedProductName').text(product.name);
@@ -717,7 +883,7 @@
                     subtotal=price*quantity;
                     subtotal=((Math.round( (subtotal) * 10000) / 10000));
                     totalSale+=subtotal;
-                    totalSaleUSD+=subtotal/20;
+                    totalSaleUSD+=subtotal;//20;
                     
                     $(this).find('.subtotal').text(subtotal);
                 });
@@ -733,7 +899,7 @@
                         totalDiscount = ((Math.round( (totalDiscount) * 10000) / 10000));
                         totalSale = generalSubtotal - (generalSubtotal*(discount/100));
                         totalSale = ((Math.round( (totalSale) * 10000) / 10000));
-                        totalSaleUSD =totalSale/20
+                        totalSaleUSD =totalSale;//20;
                         if (discount>10){
                             discountWarning = true;
                         }
@@ -940,6 +1106,9 @@
             $('#searchButton').click( function() {
                 search();
             });
+            $('#searchClientButton').click( function() {
+                fsearchClient();
+            });
             $('#search').keyup( function(event) {
                 if(event.keyCode===13){
                     if($(this).val().length!==0){
@@ -947,6 +1116,16 @@
                     }
                     else if($(this).val().length===0){
                         $('#searchResult').empty();
+                    }
+                }
+            }); 
+            $('#searchClient').keyup( function(event) {
+                if(event.keyCode===13){
+                    if($(this).val().length!==0){
+                        fsearchClient();
+                    }
+                    else if($(this).val().length===0){
+                        $('#searchResultClient').empty();
                     }
                 }
             }); 

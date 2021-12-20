@@ -255,8 +255,9 @@
       @endforeach
     @endif
     <div style="text-align:right">
-    <button onclick="limpiar()" type="button" class="btn  btn-outline-primary my-2" data-toggle="modal" data-target="#productModal"><small>CREAR</small></button>
+        <button onclick="limpiar()" type="button" class="btn  btn-outline-primary my-2" data-toggle="modal" data-target="#productModal"><small>CREAR</small></button>
     </div>
+    
     <table class="display table table-striped table-bordered" id="example" style="width:100%">
         <thead class="black white-text">
             <tr>
