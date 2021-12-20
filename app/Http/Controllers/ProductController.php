@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
-use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -87,9 +87,9 @@ class ProductController extends Controller
                 if (count($exist) != 0) {
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
-              
+
                     $cost = $request->cost * 20.68;
-           
+
 
 
                 $product = Product::create(
@@ -276,6 +276,15 @@ class ProductController extends Controller
             'categories' => Category::where('status', true)->get(),
             'offices' => $offices,
             'providers' => $providers
+        ]);
+    }
+
+    public function tag(Product $product)
+    {
+        //return $product;
+
+        return view('products.tag',[
+            'product' => $product,
         ]);
     }
 }

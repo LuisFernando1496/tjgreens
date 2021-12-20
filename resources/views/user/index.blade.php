@@ -367,6 +367,39 @@
 <script>
     $(document).ready(function() {
 
+        $.get('/users-ajax',function(data){
+            console.log(data);
+            let response = data['users'];
+            let rol = data['rol'];
+            let rolname = data['rolname'];
+            response.forEach(element => {
+                if (rol != 2) {
+                    $('#mydata').append("<tr>"+
+                    "<td scope='row'>"+element['email']+"</td>"+
+                    "<td>"+element['name']+"</td>"+
+                    "<td>"+element['last_name']+"</td>"+
+                    "<td>"+element['rfc']+"</td>"+
+                    "<td>"+element['curp']+"</td>"+
+                    "<td>"+element['phone']+"</td>"+
+                    "<td>"+element['branch_office']['name']+"</td>"+
+                    "<td>"+element['rol']['name']+"</td>"+
+                    "<td></td>"+
+                    "</tr>");
+                } else {
+                    $('#mydata').append("<tr>"+
+                    "<td scope='row'>"+element['email']+"</td>"+
+                    "<td>"+element['name']+"</td>"+
+                    "<td>"+element['last_name']+"</td>"+
+                    "<td>"+element['rfc']+"</td>"+
+                    "<td>"+element['curp']+"</td>"+
+                    "<td>"+element['phone']+"</td>"+
+                    "<td>"+element['rol']['name']+"</td>"+
+                    "<td></td>"+
+                    "</tr>");
+                }
+            });
+        });
+
         $('button').click(function() {
             if ($(this).data('type') == 'delete') {
                 $('#deleteForm').attr('action', 'users/' + $(this).data('id'));

@@ -56,6 +56,7 @@
                 <th scope="col">Subtotal</th>
                 <th scope="col">Descuento</th>
                 <th scope="col">Total</th>
+                <th scope="col">Fecha</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
@@ -74,6 +75,7 @@
                 <td>{{$item->cart_subtotal}}</td>
                 <td>{{$item->amount_discount}}</td>
                 <td>{{$item->cart_total}}</td>
+                <td>{{$item->created_at}}</td>
                 <td>
                     <div class="row">
                         @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
@@ -122,6 +124,7 @@
                 <th scope="col">Subtotal</th>
                 <th scope="col">Descuento</th>
                 <th scope="col">Total</th>
+                <th scope="col">Fecha</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
@@ -138,6 +141,7 @@
                 <td>{{$item->cart_subtotal}}</td>
                 <td>{{$item->amount_discount}}</td>
                 <td>{{$item->cart_total}}</td>
+                <td>{{$item->created_at}}</td>
                 <td>
                     <div class="row">
                         <form  action="/reprint" method="POST" target="_blank">
@@ -194,7 +198,7 @@
             // }
             // else{
             //     item.payment_type = 1
-            // }                
+            // }
 
             if (rol != 1) {
                 item.products_in_sale.forEach(element => {

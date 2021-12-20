@@ -8,13 +8,13 @@ use App\Address;
 use App\Client;
 use Illuminate\Http\Request;
 use App\User;
-use DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -26,11 +26,31 @@ class UserController extends Controller
     public function index()
     {
         $user = Auth::user();
+
         if ($user->rol_id == 1 || $user->rol_id == 3) {
             return view('user.index', ['users' => User::with('address')->where('status', 1)->where('id', '!=', Auth::user()->id)->get(), 'offices' => BranchOffice::where('status', true)->get(), 'rols' => Rol::all()]);
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
+    }
+
+    public function ajaxget()
+    {
+        $user = Auth::user();
+        $rol = $user->rol_id;
+        if ($user->rol_id == 1 || $user->rol_id == 3) {
+            $users = User::with(['address','branchOffice','rol'])->where('status',1)->where('id','!=',$user->id)->get();
+            return response()->json([
+                'users' => $users,
+                'rol' => $rol,
+                'rolname' => $user->rol->name
+            ]);
+        } else {
+            return response()->json([
+                'error' => "No tienes permisos"
+            ]);
+        }
+
     }
 
     public function indexClient()
