@@ -23,7 +23,7 @@ class CreateSendProductsTable extends Migration
             $table->integer('quantity');
             $table->decimal('sale_price',8,2);
             $table->decimal('subtotal',8,2);
-            $table->decimal('cost',8,2);
+            //$table->decimal('cost',8,2);
             $table->decimal('total',8,2);
             $table->decimal('discount',8,2);
             $table->timestamps();

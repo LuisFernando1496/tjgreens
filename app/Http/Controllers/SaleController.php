@@ -16,6 +16,7 @@ use App\Exports\ReportTransfer;
 use App\Http\Resources\ProductCollection;
 use App\SendProduct;
 use App\User;
+use App\CommentSales;
 use DateTime;
 use DateTimeZone;
 use Carbon\Carbon;
@@ -77,9 +78,10 @@ class SaleController extends Controller
         'status','provincial_branch_office_id','destination_branch_office_id','user_id','details'
         */
       
-       
+
         $folioBranch = Sale::latest()->where('branch_office_id', Auth::user()->branchOffice->id)->pluck('folio_branch_office')->first();
         $sale = $request->all()["sale"];
+        //return response()->json(['error'=>'Espere tantito,',$sale['comentario']]);
         $oficce = $request->all()["sale_type"];
         $total_cost_sale = 0;
         //traspaso con factura
@@ -234,9 +236,16 @@ class SaleController extends Controller
                     $shopping_cart_id = new AppShoppingCart();
                     $shopping_cart_id->save();
                     //AGREGAR PRODUCTOS DE LA VENTA
+                    $comments = $sale['comentario'];
                     $sale['shopping_cart_id'] = $shopping_cart_id->id;
                     $sale = new Sale($sale);
                     $sale->save();
+                    if($comments != null){
+                        $commentSales = new CommentSales;
+                        $commentSales->sale_id = $sale->id;
+                        $commentSales->comentario = $comments;
+                        $commentSales->save();
+                    }
                     foreach ($request->all()["products"] as $key => $item) {
                         $product = Product::findOrFail($item['id']);
                    
@@ -288,9 +297,16 @@ class SaleController extends Controller
                 $shopping_cart_id = new AppShoppingCart();
                 $shopping_cart_id->save();
                 //AGREGAR PRODUCTOS DE LA VENTA
+                $comments = $sale['comentario'];
                 $sale['shopping_cart_id'] = $shopping_cart_id->id;
                 $sale = new Sale($sale);
                 $sale->save();
+                if($comments != null){
+                    $commentSales = new CommentSales;
+                    $commentSales->sale_id = $sale->id;
+                    $commentSales->comentario = $comments;
+                    $commentSales->save();
+                }
                 foreach ($request->all()["products"] as $key => $item) {
                     $product = Product::findOrFail($item['id']);
                  

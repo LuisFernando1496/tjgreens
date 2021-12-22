@@ -257,7 +257,7 @@
     <div style="text-align:right">
         <button onclick="limpiar()" type="button" class="btn  btn-outline-primary my-2" data-toggle="modal" data-target="#productModal"><small>CREAR</small></button>
     </div>
-<<<<<<< HEAD
+<!--<<<<<<< HEAD
     <div>
         <input type="search" placeholder="Buscar..." id="search" name="search" class="float-right" >
     </div>
@@ -265,10 +265,10 @@
     
     <table class="display table table-striped table-bordered"  style="width:100%">
         
-=======
+=======-->
     
     <table class="display table table-striped table-bordered" id="example" style="width:100%">
->>>>>>> 00053b9b26c8121be903b8b1b653b837ef473252
+<!-- 00053b9b26c8121be903b8b1b653b837ef473252-->
         <thead class="black white-text">
             <tr>
                 <th scope="col">Codigo de barras</th>
