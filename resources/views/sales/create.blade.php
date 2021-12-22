@@ -233,10 +233,11 @@
                                                 <th scope="col">Vendido</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="masVendidoTable">
                                             @foreach($ventasS as $v)
                                             @if($v->quantity >= 10)
-                                            <tr>
+                                            <tr class="item-resultMV" style="cursor: grab;" data-id="{{$v->product_name}}">
+                                            <!--<tr >-->
                                                 <td>{{$v->product_name}}</td>
                                                 <td>${{$v->sale_price}}</td>
                                                 <td>{{$v->quantity}}</td>
@@ -247,6 +248,30 @@
                                     </table>
                                 </div>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal mas vendido-->
+                <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Comentario a la venta</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group  my-3 mx-3">
+                                    <label for="name">Descripción</label>
+                                    <textarea class="form-control" type="text" name="comentario" id="comentario" value="" placeholder="Agregar algun comentario" required></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-success" id="agregarComentario">Agregar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -403,6 +428,7 @@
                                                     <option value="0">Efectivo</option>
                                                     <option value="1">Tarjeta</option>
                                                     <option value="2">Crédito</option>
+                                                    <option value="3">Pago Mixto</option>
                                                 </select>   
                                             </div>
                                         </div>
@@ -423,6 +449,23 @@
                                                         </svg>
                                                     </button>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-4 mx-2">
+                                            <div class="col-md-12">
+                                                <button type="button" id="addComment" class="btn btn-primary btn-block" data-toggle="modal" data-target="#commentModal">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                                    </svg>
+                                                    <small id="addC">Agregar comentario</small>
+                                                    <small id="adderC" hidden>Comentario agregado</small>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" hidden id="cardIngressDiv">
+                                            <div class="form-group">
+                                                <label for="ingress">Cantidad en tarjeta</label>
+                                                <input type="number" step="any" min="0" class="form-control" id="cardIngress"/>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -527,6 +570,8 @@
             // let client= document.getElementById('client');
 
             $('#payment_type').change( function() {
+                $('#cardIngressDiv').prop('hidden', true);
+                $('#cardIngress').val(0);
                 if ($('#payment_type').val() == 1) {
                     $('#ingress').prop('readonly', true);
                     $('#ingress').val(totalSale);
@@ -535,6 +580,11 @@
                 }else if ($('#payment_type').val() == 0) {
                     $('#ingress').prop('readonly', false);
                     // client.style.visibility = 'hidden';
+                }else if($('#payment_type').val() == 3){
+                    $('#ingress').prop('readonly', false);
+                    $('#cardIngressDiv').prop('hidden', false);
+                    $('#cardIngress').prop('required', true);
+                    $('#ingress').val(1);
                 }else{
                     $('#ingress').prop('readonly', true);
                     $('#ingress').val(0);
@@ -644,6 +694,32 @@
                     });
                 }
             }
+
+            $('.item-resultMV').click(function() {
+                $.ajax({
+                    url: "/search",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'GET',
+                    contentType: "application/json; charset=iso-8859-1",
+                    data: {'search':$(this).data('id')},
+                    dataType: 'html',
+                    success: function(data) {
+                        result=JSON.parse(data);
+                        if(result.length!==0){
+                            //console.log("R: "+result[0].id);
+                            $('#masvendidoModal').modal('hide');
+                            addProduct(result[0].id);
+                        }else{
+                            alert("No se encontraron resultados!");
+                        } 
+                    },
+                    error: function(e) {
+                        console.log("ERROR", e);
+                    },
+                });
+            });
 
             function search(){
                 $('#searchResult').empty();
@@ -930,10 +1006,13 @@
                         $('#turned').text('0.00');
                     }
                 } else {
-                    let turned =  $('#ingress').val() - totalSale.toFixed(2);
+                    //Aqui hacer la el total de la suma de cardIngress+ parseFloat($('#cardIngress').val()) ) - totalSale.toFixed(2);
+                    let turned =  (parseFloat($('#ingress').val()) + parseFloat($('#cardIngress').val())) - totalSale.toFixed(2);
                     turned = ((Math.round( (turned) * 10000) / 10000));
-                    if ($('#payment_type').val() == 2) {
-                        $('#ingress').prop('min',1);
+                    if ($('#payment_type').val() == 2 || $('#payment_type').val() == 3) {
+                        //$('#ingress').prop('min',1);
+                        $('#ingress').prop('min', 1);
+                        $('#cardIngress').prop('max', totalSale.toFixed(2)-1);
                     }else{
                         $('#ingress').prop('min',totalSale.toFixed(2));
                     }
@@ -951,6 +1030,12 @@
                 }
                 else{
                     $('#paymentButton').prop('disabled',true);
+                }
+
+                if($('#ingress').val() == 0){
+                    $('#paymentButton').prop('disabled',true);
+                }else{
+                    $('#paymentButton').prop('disabled',false);
                 }
                 $('#paymentButton').off();
                 $('.discount-warning').remove();
@@ -1014,6 +1099,13 @@
                          costo:costo
                     });
                 });
+                let commen = "";
+                if($('#comentario').val() != 0){
+                    console.log("Comantario agregado");
+                    commen = $('#comentario').val();
+                }else{
+                    console.log("Sin comentarios");
+                }
                 let request = {
                     sale : {
                         payment_type: $('#payment_type').find(':selected').val(),
@@ -1023,7 +1115,9 @@
                         cart_total: totalSale,
                         turned: parseInt($('#turned').text()),
                         ingress: parseInt($('#ingress').val()),
-                        client_id: $('#client_id').find(':selected').val()
+                        card_ingress: parseInt($('#cardIngress').val()),
+                        client_id: $('#client_id').find(':selected').val(),
+                        comentario: commen,
                     },
                         products:items,
                      sale_type:{
@@ -1032,7 +1126,7 @@
 
                      }
                     };
-                    console.log(request);
+                    console.log("req: "+request);
                 $.ajax({
                     url: "/sale",
                     headers: {
@@ -1137,6 +1231,13 @@
             $('#addProductByBarcodeButton').click( function() {
                 searchByBarcode();
             });
+            $('#agregarComentario').click(function(){
+                if($('#comentario').val() != 0){
+                    $('#addC').prop('hidden', true);
+                    $('#adderC').prop('hidden', false);
+                }
+                $('#commentModal').modal('hide');
+            });
             $('#bar_code').keyup( function(event) {
                 if(event.keyCode===13){
                     if($(this).val().length!==0){
@@ -1144,9 +1245,12 @@
                     }
                 }
             }); 
+            $('#cardIngress').keyup( function(event) {
+                update();
+            });
             $('#ingress').keyup( function(event) {
                 update();
-            });   
+            });
             $( '#authorizationForm' ).submit(function( event ) {
                 event.preventDefault();
                 let credentials = {
