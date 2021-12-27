@@ -88,7 +88,7 @@ class ProductController extends Controller
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
 
-                    $cost = $request->cost * 20.68;
+                    
 
 
 
@@ -96,7 +96,7 @@ class ProductController extends Controller
                     [
                         'name' => $request->name,
                         'stock' => $request->stock,
-                        'cost' => $cost,
+                        'cost' => $request->cost,
                         'expiration' => $request->expiration,
                         'iva' => $request->iva,
                         'product_key' => $request->product_key,
@@ -175,14 +175,11 @@ class ProductController extends Controller
                     'price_1' => 'required',
                     'bar_code' => 'required',
                 ]);
-                $cost = $request->cost;
-                if ($request->dollar) {
-                    $cost = $request->cost * 20.68;
-                }
+               
                 $product->edit([
                     'name' => $request->name,
                     'stock' => $request->stock,
-                    'cost' => $cost,
+                    'cost' => $request->cost,
                     'expiration' => $request->expiration,
                     'iva' => $request->iva,
                     'product_key' => $request->product_key,

@@ -40,7 +40,7 @@ class SaleController extends Controller
     {
 
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
+            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->orderBy('id','ASC')->get();
         } else {
             $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
         }
