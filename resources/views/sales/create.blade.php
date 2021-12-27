@@ -975,7 +975,7 @@
                         totalDiscount = ((Math.round( (totalDiscount) * 10000) / 10000));
                         totalSale = generalSubtotal - (generalSubtotal*(discount/100));
                         totalSale = ((Math.round( (totalSale) * 10000) / 10000));
-                        totalSaleUSD =totalSale;//20;
+                        totalSaleUSD = totalSale;//20;
                         if (discount>10){
                             discountWarning = true;
                         }
@@ -998,13 +998,13 @@
                     let turned =  $('#ingress').val() - (totalSale.toFixed(2)*0.050);
                     turned = ((Math.round( (turned) * 10000) / 10000));
                     $('#ingress').prop('min',totalSale.toFixed(2)*0.050);
-                    if(turned>0){
+                    /*if(turned>0){
                         //ACA CONVERTIR TOTAL A DLS Y REGRESAR CAMBIO EN MXN
                         $('#turned').text(turned.toFixed(2)*20);
                     }
                     else{
                         $('#turned').text('0.00');
-                    }
+                    }*/
                 } else {
                     //Aqui hacer la el total de la suma de cardIngress+ parseFloat($('#cardIngress').val()) ) - totalSale.toFixed(2);
                     let turned =  (parseFloat($('#ingress').val()) + parseFloat($('#cardIngress').val())) - totalSale.toFixed(2);
@@ -1016,13 +1016,13 @@
                     }else{
                         $('#ingress').prop('min',totalSale.toFixed(2));
                     }
-                    if(turned>0){
+                    /*if(turned>0){
                         //ACA CONVERTIR TOTAL A DLS Y REGRESAR CAMBIO EN MXN
                         $('#turned').text(turned.toFixed(2));
                     }
                     else{
                         $('#turned').text('0.00');
-                    }
+                    }*/
                 }
                 
                 if(shoppingListForm.checkValidity() && totalSale!==0){
@@ -1096,7 +1096,7 @@
                         sale_price : price,
                         total : total,
                         subtotal : subtotal,
-                         costo:costo
+                        costo:costo
                     });
                 });
                 let commen = "";
@@ -1117,14 +1117,13 @@
                         ingress: parseInt($('#ingress').val()),
                         card_ingress: parseInt($('#cardIngress').val()),
                         client_id: $('#client_id').find(':selected').val(),
-                        comentario: commen,
                     },
-                        products:items,
-                     sale_type:{
-                         saletype: $('#sale_type').find(':selected').val(),
-                         branch_office: $('#branch_office').find(':selected').val(),
-
-                     }
+                    products:items,
+                    sale_type:{
+                        saletype: $('#sale_type').find(':selected').val(),
+                        branch_office: $('#branch_office').find(':selected').val(),
+                        comentario: commen,
+                    }
                     };
                     console.log("req: "+request);
                 $.ajax({

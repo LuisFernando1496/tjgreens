@@ -146,7 +146,7 @@ class SaleController extends Controller
                     $productInSale->save();
                    
                 }
-                     return response()->json(['success' => true, 'data' =>$oficce, 'transfer'=>$transfer]);
+                return response()->json(['success' => true, 'data' =>$oficce, 'transfer'=>$transfer]);
             } catch (\Throwable $th) {
                 Product::rollBack();
                 SendProduct::rollBack();
@@ -183,8 +183,18 @@ class SaleController extends Controller
                         //AGREGAR PRODUCTOS DE LA VENTA
                         $sale['shopping_cart_id'] = $shopping_cart_id->id;
                         $sale['status_credit'] = 'adeudo';
+                        $comments = $oficce['comentario'];
+                        //$sale['shopping_cart_id'] = $shopping_cart_id->id;
                         $sale = new Sale($sale);
                         $sale->save();
+                        if($comments != null){
+                            $commentSales = new CommentSales;
+                            $commentSales->sale_id = $sale->id;
+                            $commentSales->comentario = $comments;
+                            $commentSales->save();
+                        }
+                        //$sale = new Sale($sale);
+                        //$sale->save();
                         foreach ($request->all()["products"] as $key => $item) {
                             $product = Product::findOrFail($item['id']);
                        
@@ -297,7 +307,7 @@ class SaleController extends Controller
                 $shopping_cart_id = new AppShoppingCart();
                 $shopping_cart_id->save();
                 //AGREGAR PRODUCTOS DE LA VENTA
-                $comments = $sale['comentario'];
+                $comments = $oficce['comentario'];
                 $sale['shopping_cart_id'] = $shopping_cart_id->id;
                 $sale = new Sale($sale);
                 $sale->save();
