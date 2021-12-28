@@ -59,7 +59,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Categoria</th>
                 <th scope="col">Stock</th>
-                <th scope="col">Costo pza (MXN)</th>
+                <!--<th scope="col">Costo pza (MXN)</th>-->
                 <th scope="col">Costo pza (USD)</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col"></th>
@@ -71,7 +71,7 @@
                 <th scope="row">{{$item->name}}</th>
                 <th scope="row">{{$item->category->name}}</th>
                 <th scope="row">{{$item->stock}}</th>
-                <th scope="row">{{$item->cost}}</th>
+                <!--<th scope="row">{{$item->cost}}</th>-->
                 <th scope="row">{{number_format(($item->cost),2)}}</th>
                 <!--<th scope="row">{{number_format(($item->cost /20.68),2)}}</th>-->
                 <th scope="row"><input type="number" name="" id="quantity{{$item->id}}"></th>

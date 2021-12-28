@@ -12,12 +12,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">
-                        @csrf
+                <div class="modal-body" id="guardarData">
+                    <form onsubmit="upperCreate()" action="" id="sendData" action="/product">
+                    <!--<form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">
+                        @csrf-->
                         <div class="form-group my-3 mx-3">
                             <label for="bar_code">Código de barras</label>
                             <input class="form-control" type="text" name="bar_code" id="bar_code" placeholder="Código de barras" required>
+                            <!--<div class="invalid-tooltip barcode-tooltip"></div>-->
                         </div>
                         <!-- <div class="form-group my-3 mx-3">
                             <label for="image">Imagen del producto</label>
@@ -112,7 +114,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn  btn-outline-primary">Guardar</button>
+                            <!--<button type="submit" class="btn  btn-outline-primary">Guardar</button>-->
+                            <button type="button" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -148,12 +151,12 @@
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="stock">Stock</label>
-                            <input readonly  class="form-control" type="number" name="stock" id="stock_edit" placeholder="Stock" required>
+                            <input class="form-control" type="number" name="stock" id="stock_edit" placeholder="Stock" required>
                         </div>
 
                         <div class="form-group my-3 mx-3">
                             <label for="price">Costo</label><br>
-                            <label for="rate">¿Costo en dolares?  <input type="checkbox" name="dollar" id="dollar" value="1"></label>
+                            <!--<label for="rate">¿Costo en dolares?  <input type="checkbox" name="dollar" id="dollar" value="1"></label>-->
                             <input class="form-control"  step="any" type="number" name="cost" id="cost_edit" placeholder="Costo" required>
                         </div>
 
@@ -393,11 +396,178 @@
 
     }
 
+
+
     function upperCreate(){
         document.getElementById('name').value = document.getElementById('name').value.toUpperCase()
         document.getElementById('name_edit').value = document.getElementById('name_edit').value.toUpperCase()
 
         return true;
     }
+
+
+    function guardarDatos(){
+        /*
+        name
+        stock
+        cost
+        expiration
+        price_1
+        price_2
+        price_3
+        iva
+        product_key
+        unit_product_key
+        lot
+        ieps
+        branch_office_id
+        category_id
+        brand_id
+        provider_id */
+        /*console.log(typeof($('#cost').val()));
+        if ($('#bar_code').val() == "" || $('#stock').val() == "" || $('#cost').val() == "") {
+            //$('#bar_code').focus();
+            //$(this).find('.barcode-tooltip').text('Rellenar campo.');
+            //console.log($(this).find('.barcode-tooltip').text("algo"));
+            console.log("vacio");
+        }*/
+        let datos = [];
+        datos.push({
+            bar_code: $('#bar_code').val(),
+            name: $('#name').val(),
+            cost: parseFloat($('#cost').val()),
+            fecha: $('#expiration').val(),
+            price_1: parseFloat($('#price_1').val()),
+            price_2: parseFloat($('#price_2').val()),
+            price_3: parseFloat($('#price_3').val()),
+            iva: parseFloat($('#iva').val()),
+            product_key: $('#product_key').val(),
+            unit_product_key: $('#unit_product_key').val(),
+            lot: $('#lot').val(),
+            ieps: $('#ieps').val(),
+            brachofficeid: parseInt($('#branch_office_id').val()),
+            category: parseInt($('#category_id').val()),
+            brand: parseInt($('#brand_id').val()),
+            provider: parseInt($('#provider_id').val()),
+        });
+        let request = {
+            data: datos,
+        };
+        console.log("si");
+        $.ajax({
+            url: "/product",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'POST',
+            contentType: "application/json; charset=iso-8859-1",
+            data: JSON.stringify(request),
+            dataType: 'html',
+            success: function() {
+                console.log("succes");
+                $('#sendData').submit()
+            },
+            error: function(e) {
+                console.log("ERROR", e);
+            },
+        });
+    }
+    
+
+    function pay(){
+        $('input,select').each(function(){
+            $(this).prop('readonly',true);
+        });
+        $('#authorizationModal').modal('hide');
+        $('#paymentButton').prop('disabled',true);
+        let items = [];
+        $('#shoppingList').children().each(function (){
+            let price = parseFloat($(this).find(':selected').val());
+            let total = parseFloat($(this).find('.subtotal').text());
+            let quantity = parseFloat($(this).find('.quantity').val());
+            let discount = parseFloat($(this).find('.discount').val());
+            let costo =  parseFloat($(this).find('.costo').text());
+            let subtotal = price * quantity;
+            items.push({
+                id : $(this).data('id'),
+                quantity : quantity,
+                discount : discount,
+                sale_price : price,
+                total : total,
+                subtotal : subtotal,
+                costo:costo
+            });
+        });
+        let commen = "";
+        if($('#comentario').val() != 0){
+            console.log("Comantario agregado");
+            commen = $('#comentario').val();
+        }else{
+            console.log("Sin comentarios");
+        }
+        let request = {
+            sale : {
+                payment_type: $('#payment_type').find(':selected').val(),
+                amount_discount: totalDiscount,
+                discount: parseInt($('#additional_discount').val()),
+                cart_subtotal: generalSubtotal,
+                cart_total: totalSale,
+                turned: parseInt($('#turned').text()),
+                ingress: parseInt($('#ingress').val()),
+                card_ingress: parseInt($('#cardIngress').val()),
+                client_id: $('#client_id').find(':selected').val(),
+            },
+            products:items,
+            sale_type:{
+                saletype: $('#sale_type').find(':selected').val(),
+                branch_office: $('#branch_office').find(':selected').val(),
+                comentario: commen,
+            }
+            };
+            console.log("req: "+request);
+        $.ajax({
+            url: "/sale",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: 'POST',
+            contentType: "application/json; charset=iso-8859-1",
+            data:JSON.stringify(request),
+            dataType: 'html',
+            success: function(data) {                                                
+                if(JSON.parse(data).success){
+                    //console.log(JSON.parse(data).data.products_in_sale)
+                    console.log('success')
+                        if(JSON.parse(data).data.saletype == 1)
+                        { 
+                            console.log(JSON.parse(data).transfer.id);
+                            $('#sendReprintId').val(JSON.parse(data).transfer.id)
+                            $('#reprintFormSend').submit()
+                            location.reload();  
+                            
+                        //  reprintFormSend sendReprintId
+                        }
+                        else
+                        {
+                            console.log(JSON.parse(data));
+                            $('#saleReprintId').val(JSON.parse(data).data.id)
+                            $('#reprintForm').submit()
+                            location.reload();
+                        }
+                        
+                        
+                }   
+                else{
+                    alert(data);
+                    $('#paymentButton').prop('disabled',false);
+                    console.log(JSON.parse(data));
+                } 
+            },
+            error: function(e) {
+                console.log("ERROR", e);
+            },
+        });
+    }
+
 </script>
 @endpush
