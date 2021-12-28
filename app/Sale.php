@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Sale extends Model
 {
-    protected $fillable = [ 'payment_type','status','status_credit','cart_subtotal','cart_total','turned','ingress', 'card_ingress','folio_branch_office','shopping_cart_id','branch_office_id','user_id','total_cost','amount_discount','discount','client_id', ];
+    protected $fillable = [ 'payment_type','status','status_credit','cart_subtotal','cart_total','turned','ingress', 'card_ingress','folio_branch_office','shopping_cart_id','branch_office_id','user_id','total_cost','amount_discount','discount','client_id'];
     
     public function url(){
         return $this->id ? 'ventas.update' : 'ventas.store';
