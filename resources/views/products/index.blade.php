@@ -156,7 +156,10 @@
 
                         <div class="form-group my-3 mx-3">
                             <label for="price">Costo</label><br>
+<<<<<<< HEAD
                             <!--<label for="rate">¿Costo en dolares?  <input type="checkbox" name="dollar" id="dollar" value="1"></label>-->
+=======
+>>>>>>> 8f0b6d65010d566f8e8bddab3fc28ce4d5fa2d4d
                             <input class="form-control"  step="any" type="number" name="cost" id="cost_edit" placeholder="Costo" required>
                         </div>
 
