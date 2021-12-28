@@ -88,12 +88,7 @@ class ProductController extends Controller
                 if (count($exist) != 0) {
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
-
-<<<<<<< HEAD
                     //$cost = $request->cost * 20.68;
-=======
-                    
->>>>>>> 8f0b6d65010d566f8e8bddab3fc28ce4d5fa2d4d
 
 
 
@@ -180,14 +175,10 @@ class ProductController extends Controller
                     'price_1' => 'required',
                     'bar_code' => 'required',
                 ]);
-<<<<<<< HEAD
                 //$cost = $request->cost;
                 /*if ($request->dollar) {
                     $cost = $request->cost * 20.68;
                 }*/
-=======
-               
->>>>>>> 8f0b6d65010d566f8e8bddab3fc28ce4d5fa2d4d
                 $product->edit([
                     'name' => $request->name,
                     'stock' => $request->stock,

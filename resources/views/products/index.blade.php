@@ -115,7 +115,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                             <!--<button type="submit" class="btn  btn-outline-primary">Guardar</button>-->
-                            <button type="button" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>
+                            <button type="submit" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -156,10 +156,7 @@
 
                         <div class="form-group my-3 mx-3">
                             <label for="price">Costo</label><br>
-<<<<<<< HEAD
                             <!--<label for="rate">¿Costo en dolares?  <input type="checkbox" name="dollar" id="dollar" value="1"></label>-->
-=======
->>>>>>> 8f0b6d65010d566f8e8bddab3fc28ce4d5fa2d4d
                             <input class="form-control"  step="any" type="number" name="cost" id="cost_edit" placeholder="Costo" required>
                         </div>
 
@@ -468,103 +465,8 @@
             dataType: 'html',
             success: function() {
                 console.log("succes");
+                JSON.parse(data).transfer;
                 $('#sendData').submit()
-            },
-            error: function(e) {
-                console.log("ERROR", e);
-            },
-        });
-    }
-    
-
-    function pay(){
-        $('input,select').each(function(){
-            $(this).prop('readonly',true);
-        });
-        $('#authorizationModal').modal('hide');
-        $('#paymentButton').prop('disabled',true);
-        let items = [];
-        $('#shoppingList').children().each(function (){
-            let price = parseFloat($(this).find(':selected').val());
-            let total = parseFloat($(this).find('.subtotal').text());
-            let quantity = parseFloat($(this).find('.quantity').val());
-            let discount = parseFloat($(this).find('.discount').val());
-            let costo =  parseFloat($(this).find('.costo').text());
-            let subtotal = price * quantity;
-            items.push({
-                id : $(this).data('id'),
-                quantity : quantity,
-                discount : discount,
-                sale_price : price,
-                total : total,
-                subtotal : subtotal,
-                costo:costo
-            });
-        });
-        let commen = "";
-        if($('#comentario').val() != 0){
-            console.log("Comantario agregado");
-            commen = $('#comentario').val();
-        }else{
-            console.log("Sin comentarios");
-        }
-        let request = {
-            sale : {
-                payment_type: $('#payment_type').find(':selected').val(),
-                amount_discount: totalDiscount,
-                discount: parseInt($('#additional_discount').val()),
-                cart_subtotal: generalSubtotal,
-                cart_total: totalSale,
-                turned: parseInt($('#turned').text()),
-                ingress: parseInt($('#ingress').val()),
-                card_ingress: parseInt($('#cardIngress').val()),
-                client_id: $('#client_id').find(':selected').val(),
-            },
-            products:items,
-            sale_type:{
-                saletype: $('#sale_type').find(':selected').val(),
-                branch_office: $('#branch_office').find(':selected').val(),
-                comentario: commen,
-            }
-            };
-            console.log("req: "+request);
-        $.ajax({
-            url: "/sale",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'POST',
-            contentType: "application/json; charset=iso-8859-1",
-            data:JSON.stringify(request),
-            dataType: 'html',
-            success: function(data) {                                                
-                if(JSON.parse(data).success){
-                    //console.log(JSON.parse(data).data.products_in_sale)
-                    console.log('success')
-                        if(JSON.parse(data).data.saletype == 1)
-                        { 
-                            console.log(JSON.parse(data).transfer.id);
-                            $('#sendReprintId').val(JSON.parse(data).transfer.id)
-                            $('#reprintFormSend').submit()
-                            location.reload();  
-                            
-                        //  reprintFormSend sendReprintId
-                        }
-                        else
-                        {
-                            console.log(JSON.parse(data));
-                            $('#saleReprintId').val(JSON.parse(data).data.id)
-                            $('#reprintForm').submit()
-                            location.reload();
-                        }
-                        
-                        
-                }   
-                else{
-                    alert(data);
-                    $('#paymentButton').prop('disabled',false);
-                    console.log(JSON.parse(data));
-                } 
             },
             error: function(e) {
                 console.log("ERROR", e);
