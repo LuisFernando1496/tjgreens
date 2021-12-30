@@ -184,6 +184,9 @@ class SaleController extends Controller
                         $sale['shopping_cart_id'] = $shopping_cart_id->id;
                         $sale['status_credit'] = 'adeudo';
                         $comments = $oficce['comentario'];
+                        if ($sale['card_ingress'] == null){
+                            $sale['card_ingress'] = 0;
+                        }
                         //$sale['shopping_cart_id'] = $shopping_cart_id->id;
                         $sale = new Sale($sale);
                         $sale->save();
@@ -248,6 +251,9 @@ class SaleController extends Controller
                     //AGREGAR PRODUCTOS DE LA VENTA
                     $comments = $sale['comentario'];
                     $sale['shopping_cart_id'] = $shopping_cart_id->id;
+                    if ($sale['card_ingress'] == null){
+                        $sale['card_ingress'] = 0;
+                    }
                     $sale = new Sale($sale);
                     $sale->save();
                     if($comments != null){
@@ -309,6 +315,9 @@ class SaleController extends Controller
                 //AGREGAR PRODUCTOS DE LA VENTA
                 $comments = $oficce['comentario'];
                 $sale['shopping_cart_id'] = $shopping_cart_id->id;
+                if ($sale['card_ingress'] == null){
+                    $sale['card_ingress'] = 0;
+                }
                 $sale = new Sale($sale);
                 $sale->save();
                 if($comments != null){
