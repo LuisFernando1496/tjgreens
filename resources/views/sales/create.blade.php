@@ -535,7 +535,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="box_id">Caja</label>
+                    <label for="box_id">Cajad</label>
                     <select class="custom-select" id="box_id" name="box_id" required>
                     </select>
                 </div>
@@ -555,7 +555,7 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(function() {
-            document.getElementById("search").focus();
+         //   document.getElementById("search").focus();
             let result = [];
             let generalSubtotal = 0;
             let totalDiscount = 0;
@@ -640,6 +640,7 @@
             });
 
             if($('#branch_office_id').val()!==undefined){
+                console.log('holaaaaa');
                 getBoxes();
             }
             if(user_id ==1 || user_id==3)
@@ -1182,6 +1183,7 @@
             }
             function getBoxes(){
                 $('#box_id').empty();
+               
                 $.ajax({
                     url: "/getBox/"+$('#branch_office_id').val(),
                     headers: {
@@ -1194,6 +1196,7 @@
                     success: function(data) {
                         let boxes=JSON.parse(data);
                         if(boxes.length!==0){
+                       
                             $('#openBoxButton').prop('disabled',false);
                         }
                         boxes.forEach((box)=>{

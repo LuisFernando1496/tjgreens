@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SendProduct extends Model
 {
+    protected $table = "send_products";
     protected $fillable = [
         'product_id',
         'transfer_id',
@@ -13,8 +14,8 @@ class SendProduct extends Model
         'subtotal',
         'sale_price',
         'total',
-        'cost',
-        'total_cost',
+      //  'cost',
+       // 'total_cost',
         'discount'
     ];
 
