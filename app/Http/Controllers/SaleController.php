@@ -12,11 +12,11 @@ use App\ShoppingCart as AppShoppingCart;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\BranchOffice;
 use App\Client;
+use App\CommentSales;
 use App\Exports\ReportTransfer;
 use App\Http\Resources\ProductCollection;
 use App\SendProduct;
 use App\User;
-use App\CommentSales;
 use DateTime;
 use DateTimeZone;
 use Carbon\Carbon;
@@ -525,7 +525,11 @@ class SaleController extends Controller
     {
         $details = ProductInSale::join('products', 'products.id', 'product_id')->where('sale_id', $id)->get();
         $sale = Sale::where('id', $id)->first();
-        return view('sales.details', ['details' => $details, 'sale' => $sale]);
+        return view('sales.details', [
+            'details' => $details, 
+            'sale' => $sale,
+            'coment' => CommentSales::all(),
+        ]);
     }
     public function showCanceledSale()
     {

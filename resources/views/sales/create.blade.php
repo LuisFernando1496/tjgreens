@@ -464,8 +464,8 @@
                                         </div>
                                         <div class="col-md-12" hidden id="cardIngressDiv">
                                             <div class="form-group">
-                                                <label for="ingress">Cantidad en tarjeta</label>
-                                                <input type="number" step="any" min="0" class="form-control" id="cardIngress"/>
+                                                <label for="cardIngress">Cantidad en tarjeta</label>
+                                                <input type="number" step="any" min="0" class="form-control" id="cardIngress" required/>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -995,9 +995,11 @@
                 //     $('#ingress').text(totalSale.toFixed(2));    
                 // }
                 if (document.getElementById("USD").checked == true) {
+                    console.log("aqui1");
                     let turned =  $('#ingress').val() - (totalSale.toFixed(2)*0.050);
                     turned = ((Math.round( (turned) * 10000) / 10000));
                     $('#ingress').prop('min',totalSale.toFixed(2)*0.050);
+                    $('#turned').text(turned.toFixed(2));
                     /*if(turned>0){
                         //ACA CONVERTIR TOTAL A DLS Y REGRESAR CAMBIO EN MXN
                         $('#turned').text(turned.toFixed(2)*20);
@@ -1006,8 +1008,12 @@
                         $('#turned').text('0.00');
                     }*/
                 } else {
-                    //Aqui hacer la el total de la suma de cardIngress+ parseFloat($('#cardIngress').val()) ) - totalSale.toFixed(2);
-                    let turned =  (parseFloat($('#ingress').val()) + parseFloat($('#cardIngress').val())) - totalSale.toFixed(2);
+                    let turned = 0.0;
+                    if (parseFloat($('#cardIngress').val())){
+                        turned = (parseFloat($('#ingress').val()) + parseFloat($('#cardIngress').val())) - totalSale.toFixed(2);
+                    }else{
+                        turned = $('#ingress').val() - totalSale.toFixed(2);
+                    }
                     turned = ((Math.round( (turned) * 10000) / 10000));
                     if ($('#payment_type').val() == 2 || $('#payment_type').val() == 3) {
                         //$('#ingress').prop('min',1);
@@ -1016,12 +1022,17 @@
                     }else{
                         $('#ingress').prop('min',totalSale.toFixed(2));
                     }
+                    if(turned > 0){
+                        $('#turned').text(turned.toFixed(2));
+                    }else{
+                        $('#turned').text('0.00');
+                    }
                     /*if(turned>0){
                         //ACA CONVERTIR TOTAL A DLS Y REGRESAR CAMBIO EN MXN
                         $('#turned').text(turned.toFixed(2));
                     }
                     else{
-                        $('#turned').text('0.00');
+                        
                     }*/
                 }
                 

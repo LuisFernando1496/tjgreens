@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = [ 'name','stock','cost','expiration','iva','product_key','unit_product_key','lot','ieps','price_1','price_2','price_3','bar_code','branch_office_id','category_id','brand_id','status'];
+    protected $fillable = ['name','stock','cost','expiration','iva','product_key','unit_product_key','lot','ieps','price_1','price_2','price_3','bar_code','branch_office_id','category_id','brand_id','status', 'provider_id'];
      
     public function branch_office(){
         return $this->belongsTo(BranchOffice::class);

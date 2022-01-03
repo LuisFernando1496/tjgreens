@@ -87,6 +87,8 @@ img {
         Pago en efectivo
         @elseif($sale->payment_type == 1)
         Pago con tarjeta
+        @elseif($sale->payment_type == 3)
+        Pago mixto
         @else
         Pago a crédito
         @endif

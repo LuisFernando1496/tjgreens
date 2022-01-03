@@ -13,9 +13,9 @@
                     </button>
                 </div>
                 <div class="modal-body" id="guardarData">
-                    <form onsubmit="upperCreate()" action="" id="sendData" action="/product">
-                    <!--<form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">
-                        @csrf-->
+                    <!--<form onsubmit="upperCreate()" action="" id="sendData" action="/product">-->
+                    <form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">
+                        @csrf
                         <div class="form-group my-3 mx-3">
                             <label for="bar_code">Código de barras</label>
                             <input class="form-control" type="text" name="bar_code" id="bar_code" placeholder="Código de barras" required>
@@ -114,8 +114,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <!--<button type="submit" class="btn  btn-outline-primary">Guardar</button>-->
-                            <button type="submit" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>
+                            <button type="submit" class="btn  btn-outline-primary">Guardar</button>
+                            <!--<button type="button" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>-->
                         </div>
                     </form>
                 </div>
@@ -263,7 +263,6 @@
 
  
     <table class="display table table-striped table-bordered" id="example" style="width:100%">
-
         <thead class="black white-text">
             <tr>
                 <th scope="col">Codigo de barras</th>
@@ -337,22 +336,21 @@
         </tbody>
     </table>
 </div>
-{{ $products->links() }}
+<!-- $products->links() paginar la tabla desde la base de datos-->
 @endsection
 @push('scripts')
 <script>
-      window.addEventListener("load",function(){
-          document.getElementById("search").addEventListener("keyup",function(){
-        fetch(`products/busqueda?search=${document.getElementById("search").value}`,{ method:'get',headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') }})
-        .then(response=>response.text())
-        .then(html=>{
-          document.getElementById("result").innerHTML = html
-          
-        })
-        
-             
-      })
+    /*window.addEventListener("load",function(){
+        document.getElementById("search").addEventListener("keyup",function(){
+            fetch(`products/busqueda?search=${document.getElementById("search").value}`,{ method:'get',headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') }})
+            .then(response=>response.text())
+            .then(html=>{
+                console.log("que haces?");
+                document.getElementById("result").innerHTML = html;
+            });
         });
+    });
+    */
     function limpiar(){
         let fields = document.getElementsByClassName('form-control')
 
@@ -372,7 +370,6 @@
     function llenar(item){
 
         document.getElementById("myFormEdit").action = "/product/"+item.id;
-
         document.getElementById('name_edit').value = item.name
         document.getElementById('stock_edit').value = item.stock
         document.getElementById('cost_edit').value = item.cost
@@ -406,7 +403,7 @@
     }
 
 
-    function guardarDatos(){
+    //function guardarDatos(){
         /*
         name
         stock
@@ -431,7 +428,7 @@
             //console.log($(this).find('.barcode-tooltip').text("algo"));
             console.log("vacio");
         }*/
-        let datos = [];
+        /*let datos = [];
         datos.push({
             bar_code: $('#bar_code').val(),
             name: $('#name').val(),
@@ -461,18 +458,18 @@
             },
             type: 'POST',
             contentType: "application/json; charset=iso-8859-1",
-            data: JSON.stringify(request),
+            data: request,//JSON.stringify(request),
             dataType: 'html',
             success: function() {
                 console.log("succes");
-                JSON.parse(data).transfer;
-                $('#sendData').submit()
+                JSON.parse(request);
+                //$('#sendData').submit()
             },
             error: function(e) {
                 console.log("ERROR", e);
             },
         });
-    }
+    }*/
 
 </script>
 @endpush

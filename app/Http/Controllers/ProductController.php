@@ -27,10 +27,17 @@ class ProductController extends Controller
     public function index()
     {
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $products = Product::where('status', true)->paginate(10);//->get();
+            //$products = Product::where('status', true)->paginate(10);//->get();
+            $products = Product::where('status', true)->get();
             $offices = BranchOffice::where('status', true)->get();
             $providers = Provider::all();
-            return view('products.index', ['products' => $products, 'brands' => Brand::where('status', true)->get(), 'categories' => Category::where('status', true)->get(), 'offices' => $offices, 'providers' => $providers]);
+            return view('products.index', [
+                'products' => $products,
+                'brands' => Brand::where('status', true)->get(), 
+                'categories' => Category::where('status', true)->get(), 
+                'offices' => $offices, 
+                'providers' => $providers
+            ]);
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
@@ -51,11 +58,10 @@ class ProductController extends Controller
         ->paginate(10);*/
         $search = $request->search;
       
-             $products = Product::addSelect(['category' => Category::select('name')
-             ->whereColumn('product_id', 'products.id')
-             
-         ])->get();
-     return $products;
+        $products = Product::addSelect([
+            'category' => Category::select('name')->whereColumn('product_id', 'products.id') 
+        ])->get();
+        return $products;
         return view('products.busqueda',compact('products'));
     }
 
@@ -78,20 +84,15 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             DB::beginTransaction();
             try {
-                return back()->withErrors(["error" => "No tienes permisos"]);
                 $exist = Product::where('bar_code', $request->bar_code)->where('branch_office_id', $request->branch_office_id)->where('status', true)->get();
 
                 if (count($exist) != 0) {
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
-                    //$cost = $request->cost * 20.68;
-
-
-
+                //$cost = $request->cost * 20.68;
                 $product = Product::create(
                     [
                         'name' => $request->name,
