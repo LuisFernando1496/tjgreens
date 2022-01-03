@@ -78,7 +78,7 @@ class SaleController extends Controller
         'status','provincial_branch_office_id','destination_branch_office_id','user_id','details'
         */
       
-
+       
         $folioBranch = Sale::latest()->where('branch_office_id', Auth::user()->branchOffice->id)->pluck('folio_branch_office')->first();
         $sale = $request->all()["sale"];
         //return response()->json(['error'=>'Espere tantito,',$sale['comentario']]);
@@ -87,7 +87,9 @@ class SaleController extends Controller
         //traspaso con factura
         if($oficce['saletype'] == 1)
         {
+            DB::beginTransaction();
             try {
+                
                 $transfer = Transfer::create([
                     'status'=>'Transferido',
                     'provincial_branch_office_id' => Auth::user()->branch_office_id ,
@@ -95,12 +97,13 @@ class SaleController extends Controller
                     'user_id' => Auth::user()->id,
                     'details'=> 'Transferencia de Productos'
                 ]);
+               
                foreach ($request->all()["products"] as $key => $item) {
                     $product = Product::findOrFail($item['id']);
                     $product->stock = $product->stock - $item['quantity'];
                     $product->save();
                     $addProduct = Product::where('branch_office_id',$oficce['branch_office'])->where('bar_code',$product->bar_code)->first();
-                  
+                   
                     if(!empty($addProduct))
                     {
                       $addProduct->update([
@@ -129,29 +132,28 @@ class SaleController extends Controller
                         'status' => $product->status
                       ]);
                     }
-                    
-                    $newProductTraspace = [
+                   
+                    SendProduct::create([
                         'product_id' => $item['id'],
                         'transfer_id' => $transfer->id,
                         'quantity' => $item['quantity'],
                         'subtotal' => $item['subtotal'],
                         'sale_price' => $item['sale_price'],
-                        'cost' => $item['costo'],
+                        //'cost' => $item['costo'],
                         'total' => $item['total'],
                         'discount' => $item['discount']
-                    ];
-                    
+                    ]);
+                   
                    // $total_cost_sale = $total_cost_sale + $newProductTraspace['total_cost'];
-                    $productInSale = new SendProduct($newProductTraspace);
-                    $productInSale->save();
                    
                 }
+                DB::commit();
                 return response()->json(['success' => true, 'data' =>$oficce, 'transfer'=>$transfer]);
             } catch (\Throwable $th) {
-                Product::rollBack();
-                SendProduct::rollBack();
-                Transfer::rolBack();
-                return response()->json(['error'=>'no se pudo realizar esta accion','data'=>$sale]);
+               // Product::rollBack();
+               // SendProduct::rollBack();
+               // Transfer::rolBack();
+                return response()->json(['error'=>'no se pudo realizar esta accion','data'=>$th]);
                 //throw $th;
             }
             
