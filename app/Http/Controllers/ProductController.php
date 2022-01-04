@@ -27,14 +27,12 @@ class ProductController extends Controller
     public function index()
     {
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $products = Product::where('status', true)->get();
-            $productos = Product::where('status',true)->paginate(5);
+            $products = Product::where('status', true)->paginate(10);//->get();
+            //$products = Product::where('status', true)->get();
             $offices = BranchOffice::where('status', true)->get();
             $providers = Provider::all();
-            $data = Product::where('status',true)->paginate(5);
             return view('products.index', [
                 'products' => $products,
-                'data' => $productos,
                 'brands' => Brand::where('status', true)->get(),
                 'categories' => Category::where('status', true)->get(),
                 'offices' => $offices,
@@ -43,6 +41,70 @@ class ProductController extends Controller
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
+
+
+    }
+
+    public function buscar(Request $request)
+    {
+        /*$products =  Product::join('brands', 'products.brand_id', 'brands.id')
+        ->join('categories', 'products.category_id', 'categories.id')
+        ->join('branch_offices','products.branch_office_id','branch_offices.id')
+        ->orWhere("products.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("products.status", "=", true)
+        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
+        ->orWhere("brands.name", "LIKE", "%{$request->search}%")
+       // ->select('products.name as name','categories.name as category->name','branch_offices.name as branch_office->name','brands.name as brands->name')
+        ->get();*/
+        //return back()->withErrors(["error" => "No tienes permisos",$request->search]);
+        $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
+        ->join('categories', 'products.category_id', 'categories.id')
+        ->join('branch_offices','products.branch_office_id','branch_offices.id')
+        ->where("products.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("products.status", "=", true)
+        ->select(
+            "products.name as name",
+            "products.stock as stock",
+            "products.bar_code as bar_code",
+            "products.cost as cost",
+            "products.price_1 as price_1",
+            "products.price_2 as price_2",
+            "products.price_3 as price_3",
+            "products.iva as iva",
+            "brands.name as brands_name",
+            "categories.name as categories_name",
+            "branch_offices.name as branch_office_name",
+        )
+        ->get();
+        //return compact("buscar");
+        return response()->json($buscar);
+        /*return view("products.index", [
+            "products" => $buscar,
+        ]);*/
+        //$products = Product::latest()->paginate(5);
+
+        //return view('products.index', ['products' => $buscar]);
+        //return back()->withErrors(["error" => "No tienes permisos",$buscar]);
+        /*$offices = BranchOffice::where('status', true)->get();
+        $providers = Provider::all();
+        return view('products.index', [
+            'products' => $products,
+            'brands' => Brand::where('status', true)->get(),
+            'categories' => Category::where('status', true)->get(),
+            'offices' => $offices,
+            'providers' => $providers
+        ]);*/
+        //return view('product.index', compact('buscar'));
+
+        /*$search = $request->search;
+
+        $products = Product::addSelect([
+            'category' => Category::select('name')->whereColumn('product_id', 'products.id')
+        ])->get();
+        return $products;
+        return view('products.busqueda',compact('products'));*/
     }
 
     function fetch_data(Request $request)
@@ -73,7 +135,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             DB::beginTransaction();
             try {
@@ -82,16 +143,12 @@ class ProductController extends Controller
                 if (count($exist) != 0) {
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
-
-                    $cost = $request->cost * 20.68;
-
-
-
+                //$cost = $request->cost * 20.68;
                 $product = Product::create(
                     [
                         'name' => $request->name,
                         'stock' => $request->stock,
-                        'cost' => $cost,
+                        'cost' => $request->cost,
                         'expiration' => $request->expiration,
                         'iva' => $request->iva,
                         'product_key' => $request->product_key,
@@ -105,6 +162,7 @@ class ProductController extends Controller
                         'branch_office_id' => $request->branch_office_id,
                         'category_id' => $request->category_id,
                         'brand_id' => $request->brand_id,
+                        'provider_id' => $request->provider_id
                     ]
                 );
 
@@ -170,14 +228,14 @@ class ProductController extends Controller
                     'price_1' => 'required',
                     'bar_code' => 'required',
                 ]);
-                $cost = $request->cost;
-                if ($request->dollar) {
+                //$cost = $request->cost;
+                /*if ($request->dollar) {
                     $cost = $request->cost * 20.68;
-                }
+                }*/
                 $product->edit([
                     'name' => $request->name,
                     'stock' => $request->stock,
-                    'cost' => $cost,
+                    'cost' => $request->cost,
                     'expiration' => $request->expiration,
                     'iva' => $request->iva,
                     'product_key' => $request->product_key,
@@ -191,6 +249,7 @@ class ProductController extends Controller
                     'branch_office_id' => $request->branch_office_id,
                     'category_id' => $request->category_id,
                     'brand_id' => $request->brand_id,
+                    'provider_id' => $request->provider_id
                 ]);
                 if ($request->hasFile('image')) {
                     $path = Storage::disk('s3')->put('images/products', $request->image);

@@ -12,10 +12,13 @@ use App\ShoppingCart as AppShoppingCart;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\BranchOffice;
 use App\Client;
+use App\CommentSales;
 use App\Exports\ReportTransfer;
 use App\Http\Resources\ProductCollection;
 use App\SendProduct;
 use App\User;
+use DateTime;
+use DateTimeZone;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +40,7 @@ class SaleController extends Controller
     {
 
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
+            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->orderBy('id','ASC')->get();
         } else {
             $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
         }
@@ -78,12 +81,15 @@ class SaleController extends Controller
        
         $folioBranch = Sale::latest()->where('branch_office_id', Auth::user()->branchOffice->id)->pluck('folio_branch_office')->first();
         $sale = $request->all()["sale"];
+        //return response()->json(['error'=>'Espere tantito,',$sale['comentario']]);
         $oficce = $request->all()["sale_type"];
         $total_cost_sale = 0;
         //traspaso con factura
         if($oficce['saletype'] == 1)
         {
+            DB::beginTransaction();
             try {
+                
                 $transfer = Transfer::create([
                     'status'=>'Transferido',
                     'provincial_branch_office_id' => Auth::user()->branch_office_id ,
@@ -91,12 +97,13 @@ class SaleController extends Controller
                     'user_id' => Auth::user()->id,
                     'details'=> 'Transferencia de Productos'
                 ]);
+               
                foreach ($request->all()["products"] as $key => $item) {
                     $product = Product::findOrFail($item['id']);
                     $product->stock = $product->stock - $item['quantity'];
                     $product->save();
                     $addProduct = Product::where('branch_office_id',$oficce['branch_office'])->where('bar_code',$product->bar_code)->first();
-                  
+                   
                     if(!empty($addProduct))
                     {
                       $addProduct->update([
@@ -125,29 +132,28 @@ class SaleController extends Controller
                         'status' => $product->status
                       ]);
                     }
-                    
-                    $newProductTraspace = [
+                   
+                    SendProduct::create([
                         'product_id' => $item['id'],
                         'transfer_id' => $transfer->id,
                         'quantity' => $item['quantity'],
                         'subtotal' => $item['subtotal'],
                         'sale_price' => $item['sale_price'],
-                        'cost' => $item['costo'],
+                        //'cost' => $item['costo'],
                         'total' => $item['total'],
                         'discount' => $item['discount']
-                    ];
-                    
+                    ]);
+                   
                    // $total_cost_sale = $total_cost_sale + $newProductTraspace['total_cost'];
-                    $productInSale = new SendProduct($newProductTraspace);
-                    $productInSale->save();
                    
                 }
-                     return response()->json(['success' => true, 'data' =>$oficce, 'transfer'=>$transfer]);
+                DB::commit();
+                return response()->json(['success' => true, 'data' =>$oficce, 'transfer'=>$transfer]);
             } catch (\Throwable $th) {
-                Product::rollBack();
-                SendProduct::rollBack();
-                Transfer::rolBack();
-                return response()->json(['error'=>'no se pudo realizar esta accion','data'=>$sale]);
+               // Product::rollBack();
+               // SendProduct::rollBack();
+               // Transfer::rolBack();
+                return response()->json(['error'=>'no se pudo realizar esta accion','data'=>$th]);
                 //throw $th;
             }
             
@@ -179,8 +185,21 @@ class SaleController extends Controller
                         //AGREGAR PRODUCTOS DE LA VENTA
                         $sale['shopping_cart_id'] = $shopping_cart_id->id;
                         $sale['status_credit'] = 'adeudo';
+                        $comments = $oficce['comentario'];
+                        if ($sale['card_ingress'] == null){
+                            $sale['card_ingress'] = 0;
+                        }
+                        //$sale['shopping_cart_id'] = $shopping_cart_id->id;
                         $sale = new Sale($sale);
                         $sale->save();
+                        if($comments != null){
+                            $commentSales = new CommentSales;
+                            $commentSales->sale_id = $sale->id;
+                            $commentSales->comentario = $comments;
+                            $commentSales->save();
+                        }
+                        //$sale = new Sale($sale);
+                        //$sale->save();
                         foreach ($request->all()["products"] as $key => $item) {
                             $product = Product::findOrFail($item['id']);
                        
@@ -232,9 +251,19 @@ class SaleController extends Controller
                     $shopping_cart_id = new AppShoppingCart();
                     $shopping_cart_id->save();
                     //AGREGAR PRODUCTOS DE LA VENTA
+                    $comments = $sale['comentario'];
                     $sale['shopping_cart_id'] = $shopping_cart_id->id;
+                    if ($sale['card_ingress'] == null){
+                        $sale['card_ingress'] = 0;
+                    }
                     $sale = new Sale($sale);
                     $sale->save();
+                    if($comments != null){
+                        $commentSales = new CommentSales;
+                        $commentSales->sale_id = $sale->id;
+                        $commentSales->comentario = $comments;
+                        $commentSales->save();
+                    }
                     foreach ($request->all()["products"] as $key => $item) {
                         $product = Product::findOrFail($item['id']);
                    
@@ -286,9 +315,19 @@ class SaleController extends Controller
                 $shopping_cart_id = new AppShoppingCart();
                 $shopping_cart_id->save();
                 //AGREGAR PRODUCTOS DE LA VENTA
+                $comments = $oficce['comentario'];
                 $sale['shopping_cart_id'] = $shopping_cart_id->id;
+                if ($sale['card_ingress'] == null){
+                    $sale['card_ingress'] = 0;
+                }
                 $sale = new Sale($sale);
                 $sale->save();
+                if($comments != null){
+                    $commentSales = new CommentSales;
+                    $commentSales->sale_id = $sale->id;
+                    $commentSales->comentario = $comments;
+                    $commentSales->save();
+                }
                 foreach ($request->all()["products"] as $key => $item) {
                     $product = Product::findOrFail($item['id']);
                  
@@ -366,6 +405,15 @@ class SaleController extends Controller
         return response()->json($datas);
       }
            
+    }
+
+    public function searchClient(Request $request){
+        $datas = Client::where("clients.name", "LIKE", "%{$request->search}%")
+        ->where('clients.status', '=', true)
+        ->orWhere('clients.last_name', "LIKE", "%{$request->search}%")
+        ->where('clients.status', '=', true)
+        ->get();
+        return response()->json($datas);
     }
 
     public function searchByCode(Request $request)
@@ -479,7 +527,11 @@ class SaleController extends Controller
     {
         $details = ProductInSale::join('products', 'products.id', 'product_id')->where('sale_id', $id)->get();
         $sale = Sale::where('id', $id)->first();
-        return view('sales.details', ['details' => $details, 'sale' => $sale]);
+        return view('sales.details', [
+            'details' => $details, 
+            'sale' => $sale,
+            'coment' => CommentSales::all(),
+        ]);
     }
     public function showCanceledSale()
     {
@@ -499,14 +551,42 @@ class SaleController extends Controller
             // return back()->withErrors(["error" => "No tienes permisos"]);
             $branches = [Auth::user()->branchOffice];
         }
-
+        $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City')); 
+        $from = $d->format('Y-m-d');
+        $to = date('Y-m-d', strtotime('-7 day', strtotime($from)));
+        $ventas =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+            ->join("users","users.id","=","sales.user_id")
+            ->join("products","products.id","=","product_in_sales.product_id")
+            ->join("brands","brands.id","=","products.brand_id")
+            ->join("categories","categories.id","=","products.category_id")
+            ->select(DB::raw("product_in_sales.product_id as product_id,
+            products.name as product_name,
+            brands.name as brand,
+            categories.name as category,
+            sum(product_in_sales.quantity) as quantity,
+            products.cost as cost,
+            product_in_sales.sale_price as sale_price,
+            product_in_sales.discount as discount,
+            sum(product_in_sales.total_cost) as total_cost,
+            sum(product_in_sales.total) as total,
+            users.name as seller,
+            users.last_name as seller_lastName,
+            product_in_sales.created_at as date"))
+            ->whereBetween('sales.created_at',[$to, $from])
+            ->where("sales.status",  "=", true)
+            ->groupBy("product_in_sales.product_id","product_in_sales.sale_price")
+            ->orderBy('quantity', 'DESC')
+            ->get();
         if (CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->count() == 0) {
             return view('sales.create', ["branches" => $branches, 'traspacing'=>  $traspacing]);
         } else {
             return view('sales.create', [
-                'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first(), "branches" => $branches, 'categories' => Category::all(),
+                'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first(),
+                "branches" => $branches,
+                'categories' => Category::all(),
                 'clients' => Client::where('status', true)->get(),
-                'traspacing' =>  $traspacing
+                'traspacing' =>  $traspacing,
+                "ventasS" => $ventas,
             ]);
         }
     }

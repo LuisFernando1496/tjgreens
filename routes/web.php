@@ -60,6 +60,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('branchOffice','BranchOfficeController');
 
     Route::get('search', 'SaleController@search');
+    Route::get('searchClient', 'SaleController@searchClient');
     Route::get('searchByCode', 'SaleController@searchByCode');
     Route::get('caja', 'SaleController@showCaja');
     Route::get('showCanceled', 'SaleController@showCanceledSale');
@@ -69,6 +70,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('sale', 'SaleController');
     Route::resource('purchase', 'PurchaseController');
     Route::get('purchase-history','PurchaseController@getHistory');
+    Route::get('products/busqueda','ProductController@buscar');
     Route::post('purchase-history/download','PurchaseController@reportPurchase')->name('reportPurchase');
     Route::resource('provider', 'ProviderController');
     Route::get('sale/productsCategory/{id}', 'SaleController@productsByCategory');

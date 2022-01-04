@@ -24,6 +24,14 @@
                             <td colspan="1"></td>
                             <td colspan="1"><b>Total: </b>${{$sale->cart_total}}</td>
                             </tr>
+                            <tr>
+                                <td colspan="1"><b>COMENTARIO</b></td>
+                                @foreach($coment as $c)
+                                    @if($sale->id == $c->sale_id)
+                                    <td class="text-center" colspan="4"><b>{{$c->sale_id}}</b></td>
+                                    @endif
+                                @endforeach
+                            </tr>
                         </tfoot>
                             <thead>
                             <tr>
@@ -32,7 +40,6 @@
                                 <th class="text-center">Cantidad</th>
                                 <th class="text-center">Precio</th>
                                 <th class="text-center">Subtotal</th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -42,7 +49,7 @@
                                     <td class="text-center">{{$item->discount}}%</td>
                                     <td class="text-center">{{$item->quantity}}</td>
                                     <td class="text-center">${{$item->sale_price}} c/u</td>
-                                    <td class="text-center">${{$item->subtotal}}</td>                                    
+                                    <td class="text-center">${{$item->subtotal}}</td>
                                 </tr>
                                 
                             @endforeach

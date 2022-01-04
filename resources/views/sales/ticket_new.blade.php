@@ -87,6 +87,8 @@ img {
         Pago en efectivo
         @elseif($sale->payment_type == 1)
         Pago con tarjeta
+        @elseif($sale->payment_type == 3)
+        Pago mixto
         @else
         Pago a crédito
         @endif
@@ -107,9 +109,12 @@ img {
         Total: ${{number_format($subtotal,2,'.',',')}} <br>
         ============ <br>--}}
     </div>
-    <p class="centrado">RFC:{{Auth::user()->rfc}} </p>
-    <p class="centrado">Email: {{Auth::user()->email}}</p>
-    <p class="centrado">¡GRACIAS POR SU COMPRA!</p>
+    <br>
+    <div class="centrado">
+ <img  src="{{asset('/qr-tj.svg')}}" style="width: 100px; height:100px" alt="Logotipo">
+    </div>
+   
+    <p class="centrado" >¡GRACIAS POR SU COMPRA!</p>
     <p class="centrado">Este ticket no es comprobante fiscal y se incluirá en la venta del día</p>
 </div>
 </body>

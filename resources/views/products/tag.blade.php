@@ -35,9 +35,15 @@ td.precio,th.precio {
     width: 100%;
     size: 1px;
 }
+.centrado1 {
+  
+    width: 100%;
+    size: 1px;
+    padding-left: 20px;
+}
 .ticket {
-    width: 90px;
-    max-width: 90px;
+    width: 150px;
+    max-width: 150px;
     border-style: dotted;
 }
 img {
@@ -53,7 +59,11 @@ img {
 </style>
 <div class="ticket">
     <p class="centrado">
-        Código: {{$product->bar_code}}  <br>
+        Código: {{$product->bar_code}} <br> 
+    </p>
+    <p class="centrado1">
+        {!! DNS1D::getBarcodeHTML($product->bar_code, 'C39')!!}  <br>
+        
         Precio 1: {{$product->price_1}}  <br>
         Precio 2: {{$product->price_2}}  <br>
         Precio 3: {{$product->price_3}}  <br>

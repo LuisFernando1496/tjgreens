@@ -33,6 +33,7 @@
 
             @php
             $totals = 0;
+            $counterProduct = 1;
         @endphp
 <h5>TRANSFER</h5>
             <table style="width: 100%; margin-top:20px;">
@@ -52,6 +53,7 @@
                   
                 </tr>
                 <tr>
+                    <th style="font-size: 10px" class="backgroundColor">#</th>
                     <th style="font-size: 10px" class="backgroundColor">MARCA</th>
                     <th style="font-size: 10px" class="backgroundColor">DESCRIPTION</th>
                     <th style="font-size: 10px" class="backgroundColor">QTY</th>
@@ -64,6 +66,7 @@
                 
                @foreach ($send as $item)
                    <tr>
+                        <td>{{$counterProduct}}</td>
                        <td>{{$item->product->brand->name}}</td>
                        <td>{{$item->product->name}}</td>
                        <td>{{$item->quantity}}</td>
@@ -81,7 +84,8 @@
                        <td>${{$item->sale_price}}</td>
                        <td>${{$item->total}}</td>
                        @php
-                           $totals += $item->total
+                           $totals += $item->total;
+                           $counterProduct++
                        @endphp
                     
                    </tr>

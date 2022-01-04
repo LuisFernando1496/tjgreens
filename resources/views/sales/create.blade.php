@@ -155,6 +155,127 @@
                         </div>
                     </div>  
                 </div>
+                
+                <div class="col-md-2">
+                    <div class="col-md-12">
+                        <button type="button" id="masVendido" data-toggle="modal" data-target="#masvendidoModal" class="btn btn-primary btn-block">Más Vendido</button>
+                    </div>
+                </div>
+
+
+                <!--Modal buscar client-->
+                <div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Buscar cliente</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <input type="text" id="searchClient" style="text-transform: uppercase" class="form-control" name="searchClient" autocomplate="searchClient" placeholder="Buscar cliente"/>
+                                        <div class="input-group-append">
+                                            <button id="searchClientButton" class="btn btn-outline-secondary">
+                                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>  
+                                </div>
+
+                                <!--table-->
+                                <div class="col-md-12">
+                                    <table id="resultTableClient"class="table table-sm table-hover table-responsive-lg overflow-auto my-2">
+                                        <thead>
+                                            <!--<tr>
+                                                <th>Resultado de búsqueda 
+                                            </tr>-->
+                                            <tr>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Correo</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="searchResultClient">
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal mas vendido-->
+                <div class="modal fade" id="masvendidoModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Lo mas vendido de la semana {{sizeof($ventasS)}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!--table-->
+                                <div class="col-md-12">
+                                    <table class="display table table-striped table-bordered" id="example" style="width:100%">
+                                    <!--<table id="resultTableClient" class="table table-sm table-hover table-responsive-lg overflow-auto my-2">-->
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Producto</th>
+                                                <th scope="col">Precio</th>
+                                                <th scope="col">Vendido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="masVendidoTable">
+                                            @foreach($ventasS as $v)
+                                            @if($v->quantity >= 10)
+                                            <tr class="item-resultMV" style="cursor: grab;" data-id="{{$v->product_name}}">
+                                            <!--<tr >-->
+                                                <td>{{$v->product_name}}</td>
+                                                <td>${{$v->sale_price}}</td>
+                                                <td>{{$v->quantity}}</td>
+                                            </tr>
+                                            @endif
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Modal mas vendido-->
+                <div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel">Comentario a la venta</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group  my-3 mx-3">
+                                    <label for="name">Descripción</label>
+                                    <textarea class="form-control" type="text" name="comentario" id="comentario" value="" placeholder="Agregar algun comentario" required></textarea>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-success" id="agregarComentario">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- <div class="col-md-2">
                     <button class="btn btn-secondary btn-block" data-toggle="modal" data-target="#productsListModal">
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-grid-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -307,17 +428,45 @@
                                                     <option value="0">Efectivo</option>
                                                     <option value="1">Tarjeta</option>
                                                     <option value="2">Crédito</option>
+                                                    <option value="3">Pago Mixto</option>
                                                 </select>   
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <label for="client">Cliente</label>
-                                            <select class="custom-select" name="client_id" id="client_id">
-                                            <option value="">Cliente general</option>
-                                                @foreach($clients as $client)
-                                                    <option value="{{$client->id}}">{{$client->name}} {{$client->last_name}}</option>
-                                                @endforeach
-                                            </select>
+                                            <div class="input-group">
+                                                <select class="custom-select" name="client_id" id="client_id">
+                                                    <option value="">Cliente general</option>
+                                                    @foreach($clients as $client)
+                                                        <option value="{{$client->id}}">{{$client->name}} {{$client->last_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#clientModal">
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                                                            <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row my-4 mx-2">
+                                            <div class="col-md-12">
+                                                <button type="button" id="addComment" class="btn btn-primary btn-block" data-toggle="modal" data-target="#commentModal">
+                                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fill-rule="evenodd" d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
+                                                    </svg>
+                                                    <small id="addC">Agregar comentario</small>
+                                                    <small id="adderC" hidden>Comentario agregado</small>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" hidden id="cardIngressDiv">
+                                            <div class="form-group">
+                                                <label for="cardIngress">Cantidad en tarjeta</label>
+                                                <input type="number" step="any" min="0" class="form-control" id="cardIngress" required/>
+                                            </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="float-right pt-1">
@@ -386,7 +535,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="box_id">Caja</label>
+                    <label for="box_id">Cajad</label>
                     <select class="custom-select" id="box_id" name="box_id" required>
                     </select>
                 </div>
@@ -406,6 +555,7 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(function() {
+         //   document.getElementById("search").focus();
             let result = [];
             let generalSubtotal = 0;
             let totalDiscount = 0;
@@ -420,6 +570,8 @@
             // let client= document.getElementById('client');
 
             $('#payment_type').change( function() {
+                $('#cardIngressDiv').prop('hidden', true);
+                $('#cardIngress').val(0);
                 if ($('#payment_type').val() == 1) {
                     $('#ingress').prop('readonly', true);
                     $('#ingress').val(totalSale);
@@ -428,6 +580,11 @@
                 }else if ($('#payment_type').val() == 0) {
                     $('#ingress').prop('readonly', false);
                     // client.style.visibility = 'hidden';
+                }else if($('#payment_type').val() == 3){
+                    $('#ingress').prop('readonly', false);
+                    $('#cardIngressDiv').prop('hidden', false);
+                    $('#cardIngress').prop('required', true);
+                    $('#ingress').val(1);
                 }else{
                     $('#ingress').prop('readonly', true);
                     $('#ingress').val(0);
@@ -442,6 +599,9 @@
                 }   
             });
             $('#client_id').change( function() {
+                //console.log($( "#client_id option:selected" ).val());
+                //$( "#client_id option:selected" ).val(100);
+                //console.log($( "#client_id option:selected" ).val());
                     if($( "#client_id option:selected" ).val()==""){
                         console.log($( "#client_id option:selected" ).val());
                         $('#paymentButton').prop('disabled',true);
@@ -480,6 +640,7 @@
             });
 
             if($('#branch_office_id').val()!==undefined){
+                console.log('holaaaaa');
                 getBoxes();
             }
             if(user_id ==1 || user_id==3)
@@ -489,6 +650,78 @@
             else{
                 sale_public.style.display= "inline-block";
             }
+
+            function fsearchClient(){
+                $('#searchResultClient').empty();
+                var usuario = document.getElementById('user').value;
+                if($("#searchClient").val().length!=0){
+                    $.ajax({
+                        url: "/searchClient",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type: 'GET',
+                        contentType: "application/json; charset=iso-8859-1",
+                        data: {'search':$('#searchClient').val().toUpperCase()},
+                        dataType: 'html',
+                        success: function(data) {
+                            result=JSON.parse(data);
+                            if(result.length!==0){
+                                result.forEach(function(element,index){
+                                    $('#searchResultClient').append(
+                                        '<tr class="item-resultC" style="cursor: grab;" data-id="'+element.id+'">'+
+                                            '<td>'+element.name+' '+ element.last_name+'</td>'+
+                                            '<td>'+element.email+'</td>'+
+                                        '</tr>'
+                                    );
+                                });
+                                $('.item-resultC').off();
+                                $('.item-resultC').click(function() {
+                                    addClient($(this).data('id'));
+                                    $('#clientModal').modal('hide');
+                                });
+                            }   
+                            else{
+                                $('#searchResultClient').append(
+                                    '<tr class="item-result">'+
+                                        '<td colspan="8">No se encontraron resultados</td>'+
+                                    '</tr>'
+                                );
+                            } 
+                        },
+                        error: function(e) {
+                            console.log("ERROR", e);
+                        },
+                    });
+                }
+            }
+
+            $('.item-resultMV').click(function() {
+                $.ajax({
+                    url: "/search",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: 'GET',
+                    contentType: "application/json; charset=iso-8859-1",
+                    data: {'search':$(this).data('id')},
+                    dataType: 'html',
+                    success: function(data) {
+                        result=JSON.parse(data);
+                        if(result.length!==0){
+                            //console.log("R: "+result[0].id);
+                            $('#masvendidoModal').modal('hide');
+                            addProduct(result[0].id);
+                        }else{
+                            alert("No se encontraron resultados!");
+                        } 
+                    },
+                    error: function(e) {
+                        console.log("ERROR", e);
+                    },
+                });
+            });
+
             function search(){
                 $('#searchResult').empty();
                 var usuario = document.getElementById('user').value;
@@ -561,7 +794,17 @@
                         },
                     });
                 }
-            } 
+            }
+
+            function addClient(idClient){
+                let client = result.find(element => element.id == idClient);
+                //console.log("Cliente: "+client.name);
+                //$("#client_id").val(client.name);
+                $('#searchClient').val('');
+                $("#client_id option[value="+ client.id +"]").attr("selected",true);
+                
+            }
+
             function addProduct(idProduct){
                 let product = result.find(element => element.id == idProduct)
                 $('#addedProductName').text(product.name);
@@ -717,7 +960,7 @@
                     subtotal=price*quantity;
                     subtotal=((Math.round( (subtotal) * 10000) / 10000));
                     totalSale+=subtotal;
-                    totalSaleUSD+=subtotal/20;
+                    totalSaleUSD+=subtotal;//20;
                     
                     $(this).find('.subtotal').text(subtotal);
                 });
@@ -733,7 +976,7 @@
                         totalDiscount = ((Math.round( (totalDiscount) * 10000) / 10000));
                         totalSale = generalSubtotal - (generalSubtotal*(discount/100));
                         totalSale = ((Math.round( (totalSale) * 10000) / 10000));
-                        totalSaleUSD =totalSale/20
+                        totalSaleUSD = totalSale;//20;
                         if (discount>10){
                             discountWarning = true;
                         }
@@ -753,31 +996,45 @@
                 //     $('#ingress').text(totalSale.toFixed(2));    
                 // }
                 if (document.getElementById("USD").checked == true) {
+                    console.log("aqui1");
                     let turned =  $('#ingress').val() - (totalSale.toFixed(2)*0.050);
                     turned = ((Math.round( (turned) * 10000) / 10000));
                     $('#ingress').prop('min',totalSale.toFixed(2)*0.050);
-                    if(turned>0){
+                    $('#turned').text(turned.toFixed(2));
+                    /*if(turned>0){
                         //ACA CONVERTIR TOTAL A DLS Y REGRESAR CAMBIO EN MXN
                         $('#turned').text(turned.toFixed(2)*20);
                     }
                     else{
                         $('#turned').text('0.00');
-                    }
+                    }*/
                 } else {
-                    let turned =  $('#ingress').val() - totalSale.toFixed(2);
+                    let turned = 0.0;
+                    if (parseFloat($('#cardIngress').val())){
+                        turned = (parseFloat($('#ingress').val()) + parseFloat($('#cardIngress').val())) - totalSale.toFixed(2);
+                    }else{
+                        turned = $('#ingress').val() - totalSale.toFixed(2);
+                    }
                     turned = ((Math.round( (turned) * 10000) / 10000));
-                    if ($('#payment_type').val() == 2) {
-                        $('#ingress').prop('min',1);
+                    if ($('#payment_type').val() == 2 || $('#payment_type').val() == 3) {
+                        //$('#ingress').prop('min',1);
+                        $('#ingress').prop('min', 1);
+                        $('#cardIngress').prop('max', totalSale.toFixed(2)-1);
                     }else{
                         $('#ingress').prop('min',totalSale.toFixed(2));
                     }
-                    if(turned>0){
+                    if(turned > 0){
+                        $('#turned').text(turned.toFixed(2));
+                    }else{
+                        $('#turned').text('0.00');
+                    }
+                    /*if(turned>0){
                         //ACA CONVERTIR TOTAL A DLS Y REGRESAR CAMBIO EN MXN
                         $('#turned').text(turned.toFixed(2));
                     }
                     else{
-                        $('#turned').text('0.00');
-                    }
+                        
+                    }*/
                 }
                 
                 if(shoppingListForm.checkValidity() && totalSale!==0){
@@ -785,6 +1042,12 @@
                 }
                 else{
                     $('#paymentButton').prop('disabled',true);
+                }
+
+                if($('#ingress').val() == 0){
+                    $('#paymentButton').prop('disabled',true);
+                }else{
+                    $('#paymentButton').prop('disabled',false);
                 }
                 $('#paymentButton').off();
                 $('.discount-warning').remove();
@@ -845,9 +1108,16 @@
                         sale_price : price,
                         total : total,
                         subtotal : subtotal,
-                         costo:costo
+                        costo:costo
                     });
                 });
+                let commen = "";
+                if($('#comentario').val() != 0){
+                    console.log("Comantario agregado");
+                    commen = $('#comentario').val();
+                }else{
+                    console.log("Sin comentarios");
+                }
                 let request = {
                     sale : {
                         payment_type: $('#payment_type').find(':selected').val(),
@@ -857,16 +1127,17 @@
                         cart_total: totalSale,
                         turned: parseInt($('#turned').text()),
                         ingress: parseInt($('#ingress').val()),
-                        client_id: $('#client_id').find(':selected').val()
+                        card_ingress: parseInt($('#cardIngress').val()),
+                        client_id: $('#client_id').find(':selected').val(),
                     },
-                        products:items,
-                     sale_type:{
-                         saletype: $('#sale_type').find(':selected').val(),
-                         branch_office: $('#branch_office').find(':selected').val(),
-
-                     }
+                    products:items,
+                    sale_type:{
+                        saletype: $('#sale_type').find(':selected').val(),
+                        branch_office: $('#branch_office').find(':selected').val(),
+                        comentario: commen,
+                    }
                     };
-                    console.log(request);
+                    console.log("req: "+request);
                 $.ajax({
                     url: "/sale",
                     headers: {
@@ -912,6 +1183,7 @@
             }
             function getBoxes(){
                 $('#box_id').empty();
+               
                 $.ajax({
                     url: "/getBox/"+$('#branch_office_id').val(),
                     headers: {
@@ -924,6 +1196,7 @@
                     success: function(data) {
                         let boxes=JSON.parse(data);
                         if(boxes.length!==0){
+                       
                             $('#openBoxButton').prop('disabled',false);
                         }
                         boxes.forEach((box)=>{
@@ -940,6 +1213,9 @@
             $('#searchButton').click( function() {
                 search();
             });
+            $('#searchClientButton').click( function() {
+                fsearchClient();
+            });
             $('#search').keyup( function(event) {
                 if(event.keyCode===13){
                     if($(this).val().length!==0){
@@ -947,6 +1223,16 @@
                     }
                     else if($(this).val().length===0){
                         $('#searchResult').empty();
+                    }
+                }
+            }); 
+            $('#searchClient').keyup( function(event) {
+                if(event.keyCode===13){
+                    if($(this).val().length!==0){
+                        fsearchClient();
+                    }
+                    else if($(this).val().length===0){
+                        $('#searchResultClient').empty();
                     }
                 }
             }); 
@@ -958,6 +1244,13 @@
             $('#addProductByBarcodeButton').click( function() {
                 searchByBarcode();
             });
+            $('#agregarComentario').click(function(){
+                if($('#comentario').val() != 0){
+                    $('#addC').prop('hidden', true);
+                    $('#adderC').prop('hidden', false);
+                }
+                $('#commentModal').modal('hide');
+            });
             $('#bar_code').keyup( function(event) {
                 if(event.keyCode===13){
                     if($(this).val().length!==0){
@@ -965,9 +1258,12 @@
                     }
                 }
             }); 
+            $('#cardIngress').keyup( function(event) {
+                update();
+            });
             $('#ingress').keyup( function(event) {
                 update();
-            });   
+            });
             $( '#authorizationForm' ).submit(function( event ) {
                 event.preventDefault();
                 let credentials = {

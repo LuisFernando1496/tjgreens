@@ -16,43 +16,34 @@
         </style>
     </head> 
     <body>
-        {{-- <div style="text-align:center; margin-left: auto; margin-right: auto;">
-            <table style="width: 100%; margin-top:20px;">
-                <tr>
-                    <th colspan="1" style=" border-color: transparent" >
-                        <img  src="{{ public_path('logopdf.png') }}" width="150px;">
-                    </th>
-                    <th colspan="4" style=" border-color: transparent" >
-                        <h4 style="padding-right: 15em">REPORTE DE INVENTARIO</h4>
-                    </th>
-                </tr>
-
-            </table> --}}
+      @php
+          $cantidadProduct = 0;
+      @endphp
         
             <h4 >REPORTE DE INVENTARIO</h4>
             <table style="width: 100%; margin-top:20px;">
                 @if (Auth::user()->rol_id == 1)
-                <tr>
-                    <th colspan="5" class="backgroundColor">
-                        SUCURSAL
-                    </th>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        {{$branchOffice->name}}
-                    </td>
-                </tr>
-                @else
-                <tr>
-                    <th colspan="4" class="backgroundColor">
-                        SUCURSAL
-                    </th>
-                </tr>
-                <tr>
-                    <td colspan="4">
-                        {{$branchOffice->name}}
-                    </td>
-                </tr>
+                    <tr>
+                        <th colspan="5" class="backgroundColor">
+                            SUCURSAL
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            {{$branchOffice->name}}
+                        </td>
+                    </tr>
+                    @else
+                    <tr>
+                        <th colspan="4" class="backgroundColor">
+                            SUCURSAL
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            {{$branchOffice->name}}
+                        </td>
+                    </tr>
                 @endif
                 <tr>
                     <th class="backgroundColor">PRODUCTO</th>
@@ -65,6 +56,9 @@
                 </tr>
                 @foreach ($products as $p)
                 @if ($branchOffice->id == $p->branch_office_id )
+                        @php
+                        $cantidadProduct ++;
+                    @endphp
                 <tr>
                     
                     <td>{{$p->name}}</td>
@@ -92,67 +86,10 @@
             </table>
 
 
-            {{-- <table style="width: 100%; margin-top:20px;">
-                <tr>
-                    <th>TOTAL VENTAS</th>
-                    <td>${{$cash->subtotal + $card->subtotal}}</td>
-                    <th>INVERSIÓN</th>
-                    <td>${{$cash->costo + $card->costo}}</td>
-                </tr>
-                <tr>
-                    <th>DINERO EFECTIVO</th>
-                    <td>${{$cash->total}}</td>
-                    <th>DINERO ELECTRÓNICO</th>
-                    <td>${{$card->total}}</td>
-                    
-                </tr>
-                <tr>
-                    <th>GANANCIA</th>
-                    <td>${{($cash->subtotal + $card->subtotal) - ($cash->costo + $card->costo) }}</td>
-                    <th>DESCUENTOS</th>
-                    <td>${{$cash->descuento + $card->descuento}}</td>
-                </tr>
-                <tr>
-                    <th>GASTOS</th>
-                    <td colspan="3">${{$card->expense}}</td>
-                </tr>
-            </table> --}}
-
-            {{-- <table style="width: 100%; margin-top:20px;">
-                <tr>
-                    <th>CAJA INICIAL</th>
-                    <td>${{$cash->caja_inicial}}</td>
-                    <th>CAJA FINAL</th>
-                    <td>${{$cash->caja_final}}</td>
-                </tr>
-                <tr>
-                    <th>TOTAL VENTAS</th>
-                    <td>${{$cash->subtotal + $card->subtotal}}</td>
-                    <th>INVERSIÓN</th>
-                    <td>${{$cash->costo + $card->costo}}</td>
-                </tr>
-                <tr>
-                    <th>DINERO EFECTIVO</th>
-                    <td>${{$cash->total}}</td>
-                    <th>DINERO ELECTRÓNICO</th>
-                    <td>${{$card->total}}</td>
-                    
-                </tr>
-                <tr>
-                    <th>GANANCIA</th>
-                    <td>${{($cash->subtotal + $card->subtotal) - ($cash->costo + $card->costo) }}</td>
-                    <th>DESCUENTOS</th>
-                    <td>${{$cash->descuento + $card->descuento}}</td>
-                </tr>
-                <tr>
-                    <th>GASTOS</th>
-                    <td colspan="3">${{$card->expense}}</td>
-                </tr>
-            </table> --}}
-
+            <h5 style="margin: 5px;">Total de productos: {{$cantidadProduct}}</h5>
             <h5 style="margin: 20px;">REPORTE GENERADO POR {{strtoupper($user->name)}}</h5>
             <h5 style="margin: 5px;">{{$date}}</h5>
             
-        </div>
+    
     </body>
 </html>

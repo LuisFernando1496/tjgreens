@@ -59,7 +59,7 @@
                 <th scope="col">Nombre</th>
                 <th scope="col">Categoria</th>
                 <th scope="col">Stock</th>
-                <th scope="col">Costo pza (MXN)</th>
+                <!--<th scope="col">Costo pza (MXN)</th>-->
                 <th scope="col">Costo pza (USD)</th>
                 <th scope="col">Cantidad</th>
                 <th scope="col"></th>
@@ -71,8 +71,9 @@
                 <th scope="row">{{$item->name}}</th>
                 <th scope="row">{{$item->category->name}}</th>
                 <th scope="row">{{$item->stock}}</th>
-                <th scope="row">{{$item->cost}}</th>
-                <th scope="row">{{number_format(($item->cost /20.68),2)}}</th>
+                <!--<th scope="row">{{$item->cost}}</th>-->
+                <th scope="row">{{number_format(($item->cost),2)}}</th>
+                <!--<th scope="row">{{number_format(($item->cost /20.68),2)}}</th>-->
                 <th scope="row"><input type="number" name="" id="quantity{{$item->id}}"></th>
                 <td>                    
                     <button onclick="llenar({{$item}})" type="button" class="btn btn-outline-primary btn-sm"Sdata-type="edit" data-toggle="modal" data-target="#productModalEdit">
@@ -130,11 +131,11 @@
 
     function llenar(item){
          
-      const costUsd = (item.cost/20.68).toFixed(2)
+      //const costUsd = (item.cost/20.68).toFixed(2)
         document.getElementById('name_edit').value = item.name
         document.getElementById('quantity_edit').value = document.getElementById('quantity'+item.id).value
         document.getElementById('total').value = document.getElementById('quantity'+item.id).value*item.cost
-        document.getElementById('totalUsd').value = document.getElementById('quantity'+item.id).value*costUsd
+        document.getElementById('totalUsd').value = document.getElementById('quantity'+item.id).value//*costUsd
         document.getElementById('product_id').value = item.id
        
         
