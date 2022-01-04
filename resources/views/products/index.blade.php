@@ -115,7 +115,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="button" class="btn  btn-outline-primary" id="btnGuardar">Guardar</button>
+                            <button type="submit" class="btn  btn-outline-primary" id="btnGuardar">Guardar</button>
                             <!--<button type="button" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>-->
                         </div>
                     </form>
@@ -278,9 +278,9 @@
         </div>
     </div>
 
-    <div id="cont2">
+    <!--<div id="cont2">
 
-    </div>
+    </div>-->
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
@@ -436,7 +436,7 @@
                 document.getElementById("result2").innerHTML = ""
             }
         });
-        document.getElementById("btnGuardar").addEventListener("click", function(){
+        /*document.getElementById("btnGuardar").addEventListener("click", function(){
             console.log("click");
             let a = {
                 nose: 'noseee',
@@ -450,7 +450,7 @@
                     console.log("text");
                     document.getElementById("cont2").innerHTML = text;
                 });
-        });
+        });*/
     });
 
     function limpiar(){
@@ -503,10 +503,5 @@
 
         return true;
     }
-
-<<<<<<< HEAD
-
-=======
->>>>>>> f4a0fee80b303d8c7218dc2ac8ce0a0af1e6a45d
 </script>
 @endpush
