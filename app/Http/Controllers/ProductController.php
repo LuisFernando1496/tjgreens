@@ -33,16 +33,16 @@ class ProductController extends Controller
             $providers = Provider::all();
             return view('products.index', [
                 'products' => $products,
-                'brands' => Brand::where('status', true)->get(), 
-                'categories' => Category::where('status', true)->get(), 
-                'offices' => $offices, 
+                'brands' => Brand::where('status', true)->get(),
+                'categories' => Category::where('status', true)->get(),
+                'offices' => $offices,
                 'providers' => $providers
             ]);
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
 
-        
+
     }
 
     public function guardar(Request $request)
@@ -59,7 +59,7 @@ class ProductController extends Controller
         ->orWhere("products.name", "LIKE", "%{$request->search}%")
         ->where("products.stock", ">", 0)
         ->where("products.status", "=", true)
-        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%") 
+        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
         ->orWhere("brands.name", "LIKE", "%{$request->search}%")
        // ->select('products.name as name','categories.name as category->name','branch_offices.name as branch_office->name','brands.name as brands->name')
         ->get();*/
@@ -109,20 +109,29 @@ class ProductController extends Controller
         $providers = Provider::all();
         return view('products.index', [
             'products' => $products,
-            'brands' => Brand::where('status', true)->get(), 
-            'categories' => Category::where('status', true)->get(), 
-            'offices' => $offices, 
+            'brands' => Brand::where('status', true)->get(),
+            'categories' => Category::where('status', true)->get(),
+            'offices' => $offices,
             'providers' => $providers
         ]);*/
         //return view('product.index', compact('buscar'));
 
         /*$search = $request->search;
-      
+
         $products = Product::addSelect([
-            'category' => Category::select('name')->whereColumn('product_id', 'products.id') 
+            'category' => Category::select('name')->whereColumn('product_id', 'products.id')
         ])->get();
         return $products;
         return view('products.busqueda',compact('products'));*/
+    }
+
+    function fetch_data(Request $request)
+    {
+     if($request->ajax())
+     {
+      $data = DB::table('posts')->paginate(5);
+      return view('pagination_data', compact('data'))->render();
+     }
     }
 
     /**
@@ -349,5 +358,22 @@ class ProductController extends Controller
         return view('products.tag',[
             'product' => $product,
         ]);
+    }
+
+    public function allProductos()
+    {
+        $products = Product::where('status', true)->paginate();
+        return response()->json($products);
+    }
+
+    public function searchProduct($name)
+    {
+        $products = Product::join('branch_offices','branch_offices.id','=','products.branch_office_id')
+        ->join('categories','categories.id','=','products.category_id')
+        ->join('brands','brands.id','=','products.brand_id')->select('products.*')
+        ->where('products.name','LIKE',"%$name%")->orWhere('branch_offices.name','LIKE',"%$name%")
+        ->orWhere('categories.name','LIKE',"%$name%")->orWhere('brands','LIKE',"%$name%")->paginate();
+
+        return response()->json($products);
     }
 }
