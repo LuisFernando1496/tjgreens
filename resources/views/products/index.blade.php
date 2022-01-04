@@ -486,9 +486,5 @@
         return true;
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> f4a0fee80b303d8c7218dc2ac8ce0a0af1e6a45d
 </script>
 @endpush
