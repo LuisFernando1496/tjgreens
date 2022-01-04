@@ -115,7 +115,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn  btn-outline-primary" id="btnGuardar">Guardar</button>
+                            <button type="button" class="btn  btn-outline-primary" id="btnGuardar">Guardar</button>
                             <!--<button type="button" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>-->
                         </div>
                     </form>
@@ -278,9 +278,8 @@
         </div>
     </div>
 
-    <!--<div id="cont2">
+    <div id="cont2"></div>
 
-    </div>-->
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
@@ -395,7 +394,7 @@
                 .then(text => {
                     document.getElementById("result2").innerHTML = "";
                     result=JSON.parse(text);
-                    result.forEach(function(element,index){
+                    result.data.forEach(function(element,index){
                         document.getElementById("result2").innerHTML += '<tr>'+
                                 '<td>'+element.bar_code+'</td>'+
                                 '<td>'+element.name+'</td>'+
@@ -425,7 +424,9 @@
                                     '</form>'+
                                     '<a href="{{route("tag",$item)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
                                 '</td>'+
-                            '</tr>';
+                            '</tr>'
+
+                            ;
                     });
 
                 });
@@ -436,21 +437,26 @@
                 document.getElementById("result2").innerHTML = ""
             }
         });
-        /*document.getElementById("btnGuardar").addEventListener("click", function(){
+        document.getElementById("btnGuardar").addEventListener("click", function(){
             console.log("click");
+            let datos = [];
+            datos.push({
+                id: 1,
+                name: "David",
+                bar_code: "123",
+            });
             let a = {
-                nose: 'noseee',
-                sise: 'siseee',
+                datos: datos,
             };
             fetch(`products/guardar?data=${JSON.stringify(a)}`,{
                     method: 'get',
                     headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') },
                 }).then(response => response.text())
                 .then(text => {
-                    console.log("text");
+                    //console.log("text");
                     document.getElementById("cont2").innerHTML = text;
                 });
-        });*/
+        });
     });
 
     function limpiar(){

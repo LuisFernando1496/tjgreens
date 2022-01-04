@@ -47,8 +47,10 @@ class ProductController extends Controller
 
     public function guardar(Request $request)
     {
-        $datos = $request->all();
-        return back()->withErrors(["Guardar" => "Guardar2:",$datos['sise']]);
+        $datos = $request->all()["datos"];
+        //foreach ($request as $key => $value) {
+        return back()->withErrors(["Guardar" => "Guardar2:", $datos]);
+        //}
     }
 
     public function buscar(Request $request)
@@ -84,9 +86,12 @@ class ProductController extends Controller
             "categories.name as categories_name",
             "branch_offices.name as branch_office_name",
         )
-        ->get();
+        //->get();
+        ->paginate(10);
+        //return $buscar;
         //return compact("buscar");
         return response()->json($buscar);
+        //return view('products.index', ['buscar'=>$buscar]);
     }
 
     function fetch_data(Request $request)
