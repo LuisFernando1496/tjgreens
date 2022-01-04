@@ -45,25 +45,32 @@ class ProductController extends Controller
 
     }
 
+    public function guardar(Request $request)
+    {
+        $datos = $request->all();
+        return back()->withErrors(["Guardar" => "Guardar2:",$datos['sise']]);
+    }
+
     public function buscar(Request $request)
     {
-        /*$products =  Product::join('brands', 'products.brand_id', 'brands.id')
-        ->join('categories', 'products.category_id', 'categories.id')
-        ->join('branch_offices','products.branch_office_id','branch_offices.id')
-        ->orWhere("products.name", "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)
-        ->where("products.status", "=", true)
-        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
-        ->orWhere("brands.name", "LIKE", "%{$request->search}%")
-       // ->select('products.name as name','categories.name as category->name','branch_offices.name as branch_office->name','brands.name as brands->name')
-        ->get();*/
-        //return back()->withErrors(["error" => "No tienes permisos",$request->search]);
         $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
         ->join('categories', 'products.category_id', 'categories.id')
         ->join('branch_offices','products.branch_office_id','branch_offices.id')
-        ->where("products.name", "LIKE", "%{$request->search}%")
+        ->where("products.bar_code", "LIKE", "%{$request->search}%")
         ->where("products.stock", ">", 0)
         ->where("products.status", "=", true)
+        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("branch_offices.status", "=", true)
+        ->orWhere('products.name', "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("products.status", "=", true)
+        ->orWhere("brands.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("brands.status", "=", true)
+        ->orWhere("categories.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("categories.status", "=", true)
         ->select(
             "products.name as name",
             "products.stock as stock",
@@ -80,31 +87,6 @@ class ProductController extends Controller
         ->get();
         //return compact("buscar");
         return response()->json($buscar);
-        /*return view("products.index", [
-            "products" => $buscar,
-        ]);*/
-        //$products = Product::latest()->paginate(5);
-
-        //return view('products.index', ['products' => $buscar]);
-        //return back()->withErrors(["error" => "No tienes permisos",$buscar]);
-        /*$offices = BranchOffice::where('status', true)->get();
-        $providers = Provider::all();
-        return view('products.index', [
-            'products' => $products,
-            'brands' => Brand::where('status', true)->get(),
-            'categories' => Category::where('status', true)->get(),
-            'offices' => $offices,
-            'providers' => $providers
-        ]);*/
-        //return view('product.index', compact('buscar'));
-
-        /*$search = $request->search;
-
-        $products = Product::addSelect([
-            'category' => Category::select('name')->whereColumn('product_id', 'products.id')
-        ])->get();
-        return $products;
-        return view('products.busqueda',compact('products'));*/
     }
 
     function fetch_data(Request $request)

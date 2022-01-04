@@ -115,7 +115,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn  btn-outline-primary">Guardar</button>
+                            <button type="submit" class="btn  btn-outline-primary" id="btnGuardar">Guardar</button>
                             <!--<button type="button" class="btn btn-outline-primary" id="btnGuardar" name="btnGuardar" onclick="guardarDatos()">Guardar</button>-->
                         </div>
                     </form>
@@ -278,6 +278,9 @@
         </div>
     </div>
 
+    <!--<div id="cont2">
+
+    </div>-->
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
@@ -433,6 +436,21 @@
                 document.getElementById("result2").innerHTML = ""
             }
         });
+        /*document.getElementById("btnGuardar").addEventListener("click", function(){
+            console.log("click");
+            let a = {
+                nose: 'noseee',
+                sise: 'siseee',
+            };
+            fetch(`products/guardar?data=${JSON.stringify(a)}`,{
+                    method: 'get',
+                    headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') },
+                }).then(response => response.text())
+                .then(text => {
+                    console.log("text");
+                    document.getElementById("cont2").innerHTML = text;
+                });
+        });*/
     });
 
     function limpiar(){
@@ -485,6 +503,5 @@
 
         return true;
     }
-
 </script>
 @endpush

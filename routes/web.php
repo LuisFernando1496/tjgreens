@@ -71,6 +71,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('purchase', 'PurchaseController');
     Route::get('purchase-history','PurchaseController@getHistory');
     Route::get('products/busqueda','ProductController@buscar');
+    Route::get('products/guardar','ProductController@guardar');
     Route::post('purchase-history/download','PurchaseController@reportPurchase')->name('reportPurchase');
     Route::resource('provider', 'ProviderController');
     Route::get('sale/productsCategory/{id}', 'SaleController@productsByCategory');
