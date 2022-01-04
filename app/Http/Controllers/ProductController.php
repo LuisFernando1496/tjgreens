@@ -45,6 +45,12 @@ class ProductController extends Controller
         
     }
 
+    public function guardar(Request $request)
+    {
+        $datos = $request->all();
+        return back()->withErrors(["Guardar" => "Guardar2:",$datos['sise']]);
+    }
+
     public function buscar(Request $request)
     {
         /*$products =  Product::join('brands', 'products.brand_id', 'brands.id')
@@ -61,9 +67,21 @@ class ProductController extends Controller
         $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
         ->join('categories', 'products.category_id', 'categories.id')
         ->join('branch_offices','products.branch_office_id','branch_offices.id')
-        ->where("products.name", "LIKE", "%{$request->search}%")
+        ->where("products.bar_code", "LIKE", "%{$request->search}%")
         ->where("products.stock", ">", 0)
         ->where("products.status", "=", true)
+        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("branch_offices.status", "=", true)
+        ->orWhere('products.name', "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("products.status", "=", true)
+        ->orWhere("brands.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("brands.status", "=", true)
+        ->orWhere("categories.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("categories.status", "=", true)
         ->select(
             "products.name as name",
             "products.stock as stock",
