@@ -51,17 +51,35 @@ class ProductController extends Controller
         ->join('categories', 'products.category_id', 'categories.id')
         ->join('branch_offices','products.branch_office_id','branch_offices.id')
         ->orWhere("products.name", "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)->where("products.status", "=", true)
+        ->where("products.stock", ">", 0)
+        ->where("products.status", "=", true)
         ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%") 
         ->orWhere("brands.name", "LIKE", "%{$request->search}%")
        // ->select('products.name as name','categories.name as category->name','branch_offices.name as branch_office->name','brands.name as brands->name')
-        ->paginate(10);*/
+        ->get();*/
         //return back()->withErrors(["error" => "No tienes permisos",$request->search]);
-        $buscar = Product::where("name", "LIKE", "%{$request->search}%")
-        ->where("status", "=", true)
+        $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
+        ->join('categories', 'products.category_id', 'categories.id')
+        ->join('branch_offices','products.branch_office_id','branch_offices.id')
+        ->where("products.name", "LIKE", "%{$request->search}%")
+        ->where("products.stock", ">", 0)
+        ->where("products.status", "=", true)
+        ->select(
+            "products.name as name",
+            "products.stock as stock",
+            "products.bar_code as bar_code",
+            "products.cost as cost",
+            "products.price_1 as price_1",
+            "products.price_2 as price_2",
+            "products.price_3 as price_3",
+            "products.iva as iva",
+            "brands.name as brands_name",
+            "categories.name as categories_name",
+            "branch_offices.name as branch_office_name",
+        )
         ->get();
+        //return compact("buscar");
         return response()->json($buscar);
-        //return view("nombres.paginas",compact("buscar")); 
         /*return view("products.index", [
             "products" => $buscar,
         ]);*/
