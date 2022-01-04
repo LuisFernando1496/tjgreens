@@ -28,12 +28,30 @@ class ProductController extends Controller
     {
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             $products = Product::where('status', true)->get();
+            $productos = Product::where('status',true)->paginate(5);
             $offices = BranchOffice::where('status', true)->get();
             $providers = Provider::all();
-            return view('products.index', ['products' => $products, 'brands' => Brand::where('status', true)->get(), 'categories' => Category::where('status', true)->get(), 'offices' => $offices, 'providers' => $providers]);
+            $data = Product::where('status',true)->paginate(5);
+            return view('products.index', [
+                'products' => $products,
+                'data' => $productos,
+                'brands' => Brand::where('status', true)->get(),
+                'categories' => Category::where('status', true)->get(),
+                'offices' => $offices,
+                'providers' => $providers
+            ]);
         } else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
+    }
+
+    function fetch_data(Request $request)
+    {
+     if($request->ajax())
+     {
+      $data = DB::table('posts')->paginate(5);
+      return view('pagination_data', compact('data'))->render();
+     }
     }
 
     /**
@@ -263,5 +281,22 @@ class ProductController extends Controller
         return view('products.tag',[
             'product' => $product,
         ]);
+    }
+
+    public function allProductos()
+    {
+        $products = Product::where('status', true)->paginate();
+        return response()->json($products);
+    }
+
+    public function searchProduct($name)
+    {
+        $products = Product::join('branch_offices','branch_offices.id','=','products.branch_office_id')
+        ->join('categories','categories.id','=','products.category_id')
+        ->join('brands','brands.id','=','products.brand_id')->select('products.*')
+        ->where('products.name','LIKE',"%$name%")->orWhere('branch_offices.name','LIKE',"%$name%")
+        ->orWhere('categories.name','LIKE',"%$name%")->orWhere('brands','LIKE',"%$name%")->paginate();
+
+        return response()->json($products);
     }
 }
