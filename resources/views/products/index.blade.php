@@ -262,7 +262,44 @@
     </div>
 
  
-    <table class="display table table-striped table-bordered" id="example" style="width:100%">
+    <!--<table class="display table table-striped table-bordered" id="example" style="width:100%">-->
+    <div class="col-md-8">
+        <div class="input-group">
+            <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar producto"/>
+            <div class="input-group-append">
+                <button id="searchButton" class="btn btn-outline-secondary">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>  
+    </div>
+
+    <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
+        <thead class="black white-text">
+            <tr>
+                <th scope="col">Codigo de barras</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Stock</th>
+                <th scope="col">Costo</th>
+                <th scope="col">Precio 1</th>
+                <th scope="col">Precio 2</th>
+                <th scope="col">Precio 3</th>
+                <th scope="col">IVA</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Marca</th>
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                <th scope="col">Sucursal</th>
+                @endif
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="result2">
+        </tbody>
+    </table>
+    <table class="display table table-striped table-bordered" style="width:100%" id="tabla1">
         <thead class="black white-text">
             <tr>
                 <th scope="col">Codigo de barras</th>
@@ -336,21 +373,67 @@
         </tbody>
     </table>
 </div>
-<!-- $products->links() paginar la tabla desde la base de datos-->
+{{ $products->links() }}<!--paginar la tabla desde la base de datos-->
 @endsection
 @push('scripts')
 <script>
-    /*window.addEventListener("load",function(){
-        document.getElementById("search").addEventListener("keyup",function(){
-            fetch(`products/busqueda?search=${document.getElementById("search").value}`,{ method:'get',headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') }})
-            .then(response=>response.text())
-            .then(html=>{
-                console.log("que haces?");
-                document.getElementById("result").innerHTML = html;
-            });
+    window.addEventListener("load",function(){
+        $("#tabla2").prop('hidden', true);
+        document.getElementById("search").addEventListener("keyup", function(){
+            if (document.getElementById("search").value.length > 1){
+                $("#tabla1").prop('hidden', true);
+                $("#tabla2").prop('hidden', false);
+                fetch(`products/busqueda?search=${document.getElementById("search").value.toUpperCase()}`,{
+                    method: 'get',
+                    headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') }
+                }).then(response => response.text())
+                .then(text => {
+                    document.getElementById("result2").innerHTML = "";
+                    result=JSON.parse(text);
+                    result.forEach(function(element,index){
+                        //console.log(element.name);
+                        document.getElementById("result2").innerHTML += '<tr>'+
+                                '<td>'+element.bar_code+'</td>'+
+                                '<td>'+element.name+'</td>'+
+                                '<td>'+element.stock+'</td>'+
+                                '<td>'+element.cost+'</td>'+
+                                '<td>'+element.price_1+'</td>'+
+                                '<td>'+element.price_2+'</td>'+
+                                '<td>'+element.price_3+'</td>'+
+                                '<td>'+element.iva+'</td>'+
+                                '<td>'+element.category_id+'</td>'+
+                                '<td>'+element.brand_id+'</td>'+
+                                '<td>'+element.branch_office_id+'</td>'+
+                                '<td>'+
+                                    '<button onclick="llenar({{$item}})" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">'+
+                                        '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
+                                            '<path fill-rule="evenodd" d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>'+
+                                        '</svg>'+
+                                        '</button>'+
+                                    '<form onsubmit="return confirm("'+'"Eliminar producto?"'+')" action="/product/{{$item->id}}" method="post">'+
+                                        '@csrf'+
+                                        '@method("delete")'+
+                                        '<button type="submit" class="btn btn-outline-danger btn-sm my-2" data-type="delete">'+
+                                            '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
+                                                '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>'+
+                                            '</svg>'+
+                                        '</button>'+
+                                    '</form>'+
+                                    '<a href="{{route("tag",$item)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                '</td>'+
+                            '</tr>';
+                    });
+                    
+                });
+                //.catch(error => console.log(error));
+            }else{
+                $("#tabla1").prop('hidden', false);
+                $("#tabla2").prop('hidden', true);
+                document.getElementById("result2").innerHTML = ""
+            }
         });
     });
-    */
+    
     function limpiar(){
         let fields = document.getElementsByClassName('form-control')
 
@@ -401,75 +484,6 @@
 
         return true;
     }
-
-
-    //function guardarDatos(){
-        /*
-        name
-        stock
-        cost
-        expiration
-        price_1
-        price_2
-        price_3
-        iva
-        product_key
-        unit_product_key
-        lot
-        ieps
-        branch_office_id
-        category_id
-        brand_id
-        provider_id */
-        /*console.log(typeof($('#cost').val()));
-        if ($('#bar_code').val() == "" || $('#stock').val() == "" || $('#cost').val() == "") {
-            //$('#bar_code').focus();
-            //$(this).find('.barcode-tooltip').text('Rellenar campo.');
-            //console.log($(this).find('.barcode-tooltip').text("algo"));
-            console.log("vacio");
-        }*/
-        /*let datos = [];
-        datos.push({
-            bar_code: $('#bar_code').val(),
-            name: $('#name').val(),
-            cost: parseFloat($('#cost').val()),
-            fecha: $('#expiration').val(),
-            price_1: parseFloat($('#price_1').val()),
-            price_2: parseFloat($('#price_2').val()),
-            price_3: parseFloat($('#price_3').val()),
-            iva: parseFloat($('#iva').val()),
-            product_key: $('#product_key').val(),
-            unit_product_key: $('#unit_product_key').val(),
-            lot: $('#lot').val(),
-            ieps: $('#ieps').val(),
-            brachofficeid: parseInt($('#branch_office_id').val()),
-            category: parseInt($('#category_id').val()),
-            brand: parseInt($('#brand_id').val()),
-            provider: parseInt($('#provider_id').val()),
-        });
-        let request = {
-            data: datos,
-        };
-        console.log("si");
-        $.ajax({
-            url: "/product",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: 'POST',
-            contentType: "application/json; charset=iso-8859-1",
-            data: request,//JSON.stringify(request),
-            dataType: 'html',
-            success: function() {
-                console.log("succes");
-                JSON.parse(request);
-                //$('#sendData').submit()
-            },
-            error: function(e) {
-                console.log("ERROR", e);
-            },
-        });
-    }*/
 
 </script>
 @endpush

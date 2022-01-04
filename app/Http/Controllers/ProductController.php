@@ -27,8 +27,8 @@ class ProductController extends Controller
     public function index()
     {
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            //$products = Product::where('status', true)->paginate(10);//->get();
-            $products = Product::where('status', true)->get();
+            $products = Product::where('status', true)->paginate(10);//->get();
+            //$products = Product::where('status', true)->get();
             $offices = BranchOffice::where('status', true)->get();
             $providers = Provider::all();
             return view('products.index', [
@@ -56,13 +56,37 @@ class ProductController extends Controller
         ->orWhere("brands.name", "LIKE", "%{$request->search}%")
        // ->select('products.name as name','categories.name as category->name','branch_offices.name as branch_office->name','brands.name as brands->name')
         ->paginate(10);*/
-        $search = $request->search;
+        //return back()->withErrors(["error" => "No tienes permisos",$request->search]);
+        $buscar = Product::where("name", "LIKE", "%{$request->search}%")
+        ->where("status", "=", true)
+        ->get();
+        return response()->json($buscar);
+        //return view("nombres.paginas",compact("buscar")); 
+        /*return view("products.index", [
+            "products" => $buscar,
+        ]);*/
+        //$products = Product::latest()->paginate(5);
+
+        //return view('products.index', ['products' => $buscar]);
+        //return back()->withErrors(["error" => "No tienes permisos",$buscar]);
+        /*$offices = BranchOffice::where('status', true)->get();
+        $providers = Provider::all();
+        return view('products.index', [
+            'products' => $products,
+            'brands' => Brand::where('status', true)->get(), 
+            'categories' => Category::where('status', true)->get(), 
+            'offices' => $offices, 
+            'providers' => $providers
+        ]);*/
+        //return view('product.index', compact('buscar'));
+
+        /*$search = $request->search;
       
         $products = Product::addSelect([
             'category' => Category::select('name')->whereColumn('product_id', 'products.id') 
         ])->get();
         return $products;
-        return view('products.busqueda',compact('products'));
+        return view('products.busqueda',compact('products'));*/
     }
 
     /**
@@ -111,6 +135,7 @@ class ProductController extends Controller
                         'branch_office_id' => $request->branch_office_id,
                         'category_id' => $request->category_id,
                         'brand_id' => $request->brand_id,
+                        'provider_id' => $request->provider_id
                     ]
                 );
 
@@ -197,6 +222,7 @@ class ProductController extends Controller
                     'branch_office_id' => $request->branch_office_id,
                     'category_id' => $request->category_id,
                     'brand_id' => $request->brand_id,
+                    'provider_id' => $request->provider_id
                 ]);
                 if ($request->hasFile('image')) {
                     $path = Storage::disk('s3')->put('images/products', $request->image);
