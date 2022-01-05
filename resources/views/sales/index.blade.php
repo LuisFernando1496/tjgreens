@@ -43,6 +43,7 @@
             <small>CERRAR CAJA</small>
         </button>
     </div>
+
     <div class="col-md-8">
         <div class="input-group">
             <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar producto"/>
@@ -146,6 +147,41 @@
         </tbody>
     </table>
     @else
+    <div class="col-md-8">
+        <div class="input-group">
+            <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar producto"/>
+            <div class="input-group-append">
+                <button id="searchButton" class="btn btn-outline-secondary">
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                        <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
+        <thead class="black white-text">
+            <tr>
+                <th scope="col">Folio general</th>
+                <th scope="col">Folio sucursal</th>
+                <th scope="col">Empleado</th>
+                {{-- solo si es admin --}}
+                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                <th scope="col">Sucursal</th>
+                @endif
+                <th scope="col">Subtotal</th>
+                <th scope="col">Descuento</th>
+                <th scope="col">Total</th>
+                <th scope="col">Fecha</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="result2">
+        </tbody>
+    </table>
     <table class="display table table-striped table-bordered" id="tabla1" style="width:100%">
         <thead class="black white-text">
             <tr>
@@ -215,9 +251,11 @@
 @endsection
 @push('scripts')
 <script>
-
     let result = [];
     window.addEventListener("load",function(){
+        //$("#search").val("");
+        //document.getElementById("search").value = "";
+        document.getElementById("search").focus();
         //$("#search").prop('hidden', true);
         $("#tabla2").prop('hidden', true);
         //$("#searchButton").prop('hidden', true);

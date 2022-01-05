@@ -295,9 +295,7 @@
             </div>
         </div>
     </div>
-
-    <div id="cont2"></div>
-
+    
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
