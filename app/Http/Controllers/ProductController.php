@@ -84,11 +84,13 @@ class ProductController extends Controller
                     Image::create(["path" => $path, "title" => $product->name, "size" => $request->image->getSize(), "product_id" => $product->id]);
                 }
                 DB::commit();
-                return back()->with(["success" => "Éxito al realizar la operación."]);
+                return response()->json(["success" => "Éxito al realizar la operación."]);
+                //return back()->with(["success" => "Éxito al realizar la operación."]);
             } catch (\Throwable $th) {
                 DB::rollback();
                 //return $th->getMessage();
-                return back()->withErrors(["error" => $th->getMessage()]);
+                return response()->json(["error" => $th->getMessage()]);
+                //return back()->withErrors(["error" => $th->getMessage()]);
             }
         } else {
             return response()->json(["error" => "No tienes permisos"]);

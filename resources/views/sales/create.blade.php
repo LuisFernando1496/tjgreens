@@ -982,8 +982,8 @@
                             discountWarning = true;
                         }
                         $('.discount').each(function (){
-                        $(this).prop('readonly',true);
-                    });
+                            $(this).prop('readonly',true);
+                        });
                     addNotification('additional_discount-warning','Los descuentos sobre el total anulan los decuentos por producto');
                     }
                 }
@@ -1052,7 +1052,7 @@
                 }
                 $('#paymentButton').off();
                 $('.discount-warning').remove();
-                if(discountWarning){ 
+                if(discountWarning){
                     addNotification('discount-warning','Los descuentos mayores a 10% necesitan autorización del gerente');
                     $('#paymentButton').attr('data-toggle','modal');
                     $('#paymentButton').attr('data-target','#authorizationModal');

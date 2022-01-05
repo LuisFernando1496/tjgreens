@@ -16,11 +16,11 @@
                 <div class="modal-body" id="guardarData">
                     <form onsubmit="upperCreate()" id="sendData">
                     <!--<form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">-->
-                        @csrf
+                        <!--@csrf-->
                         <div class="form-group my-3 mx-3">
                             <label for="bar_code">Código de barras</label>
                             <input class="form-control" type="text" name="bar_code" id="bar_code" placeholder="Código de barras" required>
-                            <!--<div class="invalid-tooltip barcode-tooltip"></div>-->
+                            <div data-toggle="tooltip_bar_code" class="alert-danger"></div>
                         </div>
                         <!-- <div class="form-group my-3 mx-3">
                             <label for="image">Imagen del producto</label>
@@ -29,52 +29,64 @@
                         <div class="form-group  my-3 mx-3">
                             <label for="name">Nombre</label>
                             <input  style="text-transform: uppercase" class="form-control" type="text" name="name" id="name" placeholder="Nombre" required>
+                            <div data-toggle="tooltip_name" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="stock">Stock</label>
                             <input class="form-control" type="number" name="stock" id="stock" placeholder="Stock" required>
+                            <div data-toggle="tooltip_stock" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="price">Costo</label><br>
                             <input class="form-control"  step="any" type="number" name="cost" id="cost" placeholder="Costo" required>
+                            <div data-toggle="tooltip_cost" class="alert-danger"></div>
                         </div>
 
                         <div class="form-group my-3 mx-3">
                             <label for="expiration">Caducidad</label>
                             <input class="form-control" type="date" name="expiration" id="expiration" placeholder="25/09/2021" >
+                            <div data-toggle="tooltip_expiration" class="alert-danger"></div>
                         </div>
 
                         <div class="form-group my-3 mx-3">
                             <label for="price">Precio 1</label>
                             <input class="form-control" step="any" type="number" name="price_1" id="price_1" placeholder="Precio 1" required>
+                            <div data-toggle="tooltip_price_1" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="price">Precio 2</label>
                             <input class="form-control"  step="any" type="number" name="price_2" id="price_2" placeholder="Precio 2">
+                            <div data-toggle="tooltip_price_2" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="price">Precio 3</label>
                             <input class="form-control"  step="any" type="number" name="price_3" id="price_3" placeholder="Precio 3">
+                            <div data-toggle="tooltip_price_3" class="alert-danger"></div>
                         </div>
                          {{-- <div class="form-group my-3 mx-3">
                             <label for="iva">Iva</label>
                             <input class="form-control" type="number" step="any" name="iva" id="iva" placeholder="1.6" required>
+                            <div data-toggle="tooltip_iva" class="alert-danger"></div>
                         </div>
                        <div class="form-group my-3 mx-3">
                             <label for="product_key">Clave de producto</label>
                             <input class="form-control" type="text" name="product_key" id="product_key" placeholder="DSA4A7" required>
+                            <div data-toggle="tooltip_product_key" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="unit_product_key">Clave de unidad del producto</label>
                             <input class="form-control" type="text" name="unit_product_key" id="unit_product_key" placeholder="HD5" required>
+                            <div data-toggle="tooltip_unit_product_key" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="lot">Lote</label>
                             <input class="form-control" type="text" name="lot" id="lot" placeholder="lote" required>
+                            <div data-toggle="tooltip_lot" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="ieps">IEPS</label>
                             <input class="form-control" type="text" name="ieps" id="ieps" placeholder="ieps" required>
+                            <div data-toggle="tooltip_ieps" class="alert-danger"></div>
                         </div>--}}
                         {{-- solo si es admin --}}
                         <div class="form-group my-3-mx-3">
@@ -85,6 +97,7 @@
                                 <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
+                            <div data-toggle="tooltip_branch_office_id" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3-mx-3">
                             <label for="category_id">Categoria</label>
@@ -94,6 +107,7 @@
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
+                            <div data-toggle="tooltip_category_id" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3-mx-3">
                             <label for="brand_id">Marca</label>
@@ -103,6 +117,7 @@
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
+                            <div data-toggle="tooltip_brand_id" class="alert-danger"></div>
                         </div>
                         <div class="form-group my-3-mx-3">
                             <label for="provider_id">Proveedor</label>
@@ -112,6 +127,7 @@
                                     <option value="{{$item->id}}">{{$item->name}}</option>
                                 @endforeach
                             </select>
+                            <div data-toggle="tooltip_provider_id" class="alert-danger"></div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
@@ -384,10 +400,10 @@
 @push('scripts')
 <!--<script>-->
 <script type="application/javascript">
-    console.log("aqui");
+    //console.log("aqui");
     let result = [];
     window.addEventListener("load",function(){
-        console.log("aqui2");
+        //console.log("aqui2");
         $("#tabla2").prop('hidden', true);
         document.getElementById("search").addEventListener("keyup", function(){
             if (document.getElementById("search").value.length >= 1){
@@ -448,57 +464,91 @@
             }
         });
         document.getElementById("btnGuardar").addEventListener("click", function(){
-            if($('#bar_code').val()==""){
+            if($('#bar_code').val()==""){        
+                $('[data-toggle="tooltip_bar_code"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("bar_code").focus();
             }
+            $('[data-toggle="tooltip_bar_code"]').tooltip().prop("hidden", true);
             if($('#name').val()==""){
+                $('[data-toggle="tooltip_name"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("name").focus();
             }
+            $('[data-toggle="tooltip_name"]').tooltip().prop("hidden", true);
             if($('#stock').val()==""){
+                $('[data-toggle="tooltip_stock"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("stock").focus();
             }
+            $('[data-toggle="tooltip_stock"]').tooltip().prop("hidden", true);
             if($('#cost').val()==""){
+                $('[data-toggle="tooltip_cost"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("cost").focus();
             }
+            $('[data-toggle="tooltip_cost"]').tooltip().prop("hidden", true);
             if($('#expiration').val()==""){
+                $('[data-toggle="tooltip_expiration"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("expiration").focus();
             }
+            $('[data-toggle="tooltip_expiration"]').tooltip().prop("hidden", true);
             if($('#iva').val()==""){
+                $('[data-toggle="tooltip_iva"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("iva").focus();
             }
+            $('[data-toggle="tooltip_iva"]').tooltip().prop("hidden", true);
             if($('#product_key').val()==""){
+                $('[data-toggle="tooltip_product_key"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("product_key").focus();
             }
+            $('[data-toggle="tooltip_product_key"]').tooltip().prop("hidden", true);
             if($('#unit_product_key').val()==""){
+                $('[data-toggle="tooltip_unit_product_key"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("unit_product_key").focus();
             }
+            $('[data-toggle="tooltip_product_key"]').tooltip().prop("hidden", true);
             if($('#lot').val()==""){
+                $('[data-toggle="tooltip_unit_product_key"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("lot").focus();
             }
+            $('[data-toggle="tooltip_unit_product_key"]').tooltip().prop("hidden", true);
             if($('#ieps').val()==""){
+                $('[data-toggle="tooltip_ieps"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("ieps").focus();
             }
+            $('[data-toggle="tooltip_ieps"]').tooltip().prop("hidden", true);
             if($('#price_1').val()==""){
+                $('[data-toggle="tooltip_price_1"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("price_1").focus();
             }
+            $('[data-toggle="tooltip_price_1"]').tooltip().prop("hidden", true);
             if($('#price_2').val()==""){
+                $('[data-toggle="tooltip_price_2"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("price_2").focus();
             }
+            $('[data-toggle="tooltip_price_2"]').tooltip().prop("hidden", true);
             if($('#price_3').val()==""){
+                $('[data-toggle="tooltip_price_3"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("price_3").focus();
             }
+            $('[data-toggle="tooltip_price_3"]').tooltip().prop("hidden", true);
             if($('#branch_office_id').val()==""){
+                $('[data-toggle="tooltip_branch_office_id"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("branch_office_id").focus();
             }
+            $('[data-toggle="tooltip_branch_office_id"]').tooltip().prop("hidden", true);
             if($('#category_id').val()==""){
+                $('[data-toggle="tooltip_category_id"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("category_id").focus();
             }
+            $('[data-toggle="tooltip_category_id"]').tooltip().prop("hidden", true);
             if($('#brand_id').val()==""){
+                $('[data-toggle="tooltip_brand_id"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("brand_id").focus();
             }
+            $('[data-toggle="tooltip_brand_id"]').tooltip().prop("hidden", true);
             if($('#provider_id').val()==""){
+                $('[data-toggle="tooltip_provider_id"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("provider_id").focus();
             }
+            $('[data-toggle="tooltip_provider_id"]').tooltip().prop("hidden", true);
             fetch(`products/guardar`,{
                 method: 'POST',
                 body: JSON.stringify({
