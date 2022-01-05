@@ -677,6 +677,7 @@
                                 });
                                 $('.item-resultC').off();
                                 $('.item-resultC').click(function() {
+                                    console.log("data"+$(this).data('id'));
                                     addClient($(this).data('id'));
                                     $('#clientModal').modal('hide');
                                 });
@@ -798,7 +799,7 @@
 
             function addClient(idClient){
                 let client = result.find(element => element.id == idClient);
-                //console.log("Cliente: "+client.name);
+                //console.log("Cliente: "+result);
                 //$("#client_id").val(client.name);
                 $('#searchClient').val('');
                 $("#client_id option[value="+ client.id +"]").attr("selected",true);

@@ -40,12 +40,49 @@ class SaleController extends Controller
     {
 
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->orderBy('id','ASC')->get();
+            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->orderBy('id','DESC')->paginate(10);
         } else {
-            $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->get();
+            $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->paginate(10);
         }
 
-        return view('sales.index', ['sales' => $sales, 'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first()]);
+        return view('sales.index', [
+            'sales' => $sales, 
+            'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first()
+        ]);
+    }
+
+
+    public function buscarVen(Request $request)
+    {
+        //return back()->withErrors(["error" => "No tienes permisos", $request->search]);
+        //join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+        $buscar = Sale::join('branch_offices','sales.branch_office_id','branch_offices.id')
+        ->join('users', 'sales.user_id', 'users.id')
+        //->join('product_in_sales', 'sales.id', 'product_in_sales.sale_id')
+        //->join("product_in_sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+        ->where("users.name", "LIKE", "%{$request->search}%")
+        ->where("users.status", "=", true)
+        ->orWhere("sales.id", "LIKE", "%{$request->search}%")
+        ->where("sales.status", "=", true)
+        ->orWhere("sales.folio_branch_office", "LIKE", "%{$request->search}%")
+        ->where("sales.status", "=", true)
+        ->orWhere("branch_offices.name", "LIKE", "%{$request->search}%")
+        ->where("branch_offices.status", "=", true)
+        ->select(
+            "sales.id as id",
+            "sales.folio_branch_office as folio_branch_office",
+            "users.name as name",
+            "branch_offices.name as branch_offices_name",
+            "sales.cart_subtotal as cart_subtotal",
+            "sales.amount_discount as amount_discount",
+            "sales.cart_total as cart_total",
+            "sales.created_at as created_at",
+            "sales.user_id as user_id",
+        )
+        //->orderBy('id','DESC')
+        ->paginate(20);
+        //return back()->withErrors(["error" => "No tienes permisos", $buscar]);
+        return response()->json($buscar);
     }
 
     /**
@@ -78,7 +115,6 @@ class SaleController extends Controller
         'status','provincial_branch_office_id','destination_branch_office_id','user_id','details'
         */
       
-       
         $folioBranch = Sale::latest()->where('branch_office_id', Auth::user()->branchOffice->id)->pluck('folio_branch_office')->first();
         $sale = $request->all()["sale"];
         //return response()->json(['error'=>'Espere tantito,',$sale['comentario']]);

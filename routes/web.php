@@ -68,10 +68,11 @@ Route::group(['middleware'=>'auth'], function(){
     Route::post('reprint/{id}', 'SaleController@reprint');
     Route::resource('expense', 'ExpenseController');
     Route::resource('sale', 'SaleController');
+    Route::get('sales/busqueda','SaleController@buscarVen');
     Route::resource('purchase', 'PurchaseController');
     Route::get('purchase-history','PurchaseController@getHistory');
     Route::get('products/busqueda','ProductController@buscar');
-    Route::get('products/guardar','ProductController@guardar');
+    Route::post('products/guardar','ProductController@guardar');
     Route::post('purchase-history/download','PurchaseController@reportPurchase')->name('reportPurchase');
     Route::resource('provider', 'ProviderController');
     Route::get('sale/productsCategory/{id}', 'SaleController@productsByCategory');

@@ -14,8 +14,8 @@
                     </button>
                 </div>
                 <div class="modal-body" id="guardarData">
-                    <!--<form onsubmit="upperCreate()" action="" id="sendData" action="/product">-->
-                    <form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">
+                    <form onsubmit="upperCreate()" id="sendData">
+                    <!--<form id="myForm" action="/product" enctype="multipart/form-data" method="post" onsubmit="upperCreate()">-->
                         @csrf
                         <div class="form-group my-3 mx-3">
                             <label for="bar_code">Código de barras</label>
@@ -248,6 +248,7 @@
             </button>
         </div>
     @endif
+    <div id="alertsuccess"></div>
     @if($errors->any())
       @foreach($errors->all() as $error)
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -258,6 +259,7 @@
         </div>
       @endforeach
     @endif
+    <div id="alerterror"></div>
     <div style="text-align:right">
         <button onclick="limpiar()" type="button" class="btn  btn-outline-primary my-2" data-toggle="modal" data-target="#productModal"><small>CREAR</small></button>
     </div>
@@ -380,11 +382,15 @@
 {{ $products->links() }}<!--paginar la tabla desde la base de datos-->
 @endsection
 @push('scripts')
-<script>
+<!--<script>-->
+<script type="application/javascript">
+    console.log("aqui");
+    let result = [];
     window.addEventListener("load",function(){
+        console.log("aqui2");
         $("#tabla2").prop('hidden', true);
         document.getElementById("search").addEventListener("keyup", function(){
-            if (document.getElementById("search").value.length > 1){
+            if (document.getElementById("search").value.length >= 1){
                 $("#tabla1").prop('hidden', true);
                 $("#tabla2").prop('hidden', false);
                 fetch(`products/busqueda?search=${document.getElementById("search").value.toUpperCase()}`,{
@@ -393,9 +399,15 @@
                 }).then(response => response.text())
                 .then(text => {
                     document.getElementById("result2").innerHTML = "";
+                    console.log(typeof(text));
                     result=JSON.parse(text);
+                    //console.log(result.data[0]);
+                    //r = JSON.parse(result.data[0]);
+                    //console.log(r);
                     result.data.forEach(function(element,index){
-                        document.getElementById("result2").innerHTML += '<tr>'+
+                        console.log(result.data[index]);
+                        document.getElementById("result2").innerHTML += //'<tr>'+
+                                '<tr class="item-resultC" style="cursor: grab;" data-id="'+element.id+'">'+
                                 '<td>'+element.bar_code+'</td>'+
                                 '<td>'+element.name+'</td>'+
                                 '<td>'+element.stock+'</td>'+
@@ -408,12 +420,12 @@
                                 '<td>'+element.brands_name+'</td>'+
                                 '<td>'+element.branch_office_name+'</td>'+
                                 '<td>'+
-                                    '<button onclick="llenar({{$item}})" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">'+
+                                    '<button onclick="llenar2('+element.id+')" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">'+
                                         '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
                                             '<path fill-rule="evenodd" d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>'+
                                         '</svg>'+
-                                        '</button>'+
-                                    '<form onsubmit="return confirm(`Eliminar producto?`)" action="/product/{{$item->id}}" method="post">'+
+                                    '</button>'+
+                                    '<form onsubmit="return confirm(`Eliminar producto?`)" action="/product/'+element.id+'" method="post">'+
                                         '@csrf'+
                                         '@method("delete")'+
                                         '<button type="submit" class="btn btn-outline-danger btn-sm my-2" data-type="delete">'+
@@ -422,11 +434,9 @@
                                             '</svg>'+
                                         '</button>'+
                                     '</form>'+
-                                    '<a href="{{route("tag",$item)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                    '<a href="/tag/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
                                 '</td>'+
-                            '</tr>'
-
-                            ;
+                            '</tr>';
                     });
 
                 });
@@ -438,24 +448,100 @@
             }
         });
         document.getElementById("btnGuardar").addEventListener("click", function(){
-            console.log("click");
-            let datos = [];
-            datos.push({
-                id: 1,
-                name: "David",
-                bar_code: "123",
+            if($('#bar_code').val()==""){
+                return document.getElementById("bar_code").focus();
+            }
+            if($('#name').val()==""){
+                return document.getElementById("name").focus();
+            }
+            if($('#stock').val()==""){
+                return document.getElementById("stock").focus();
+            }
+            if($('#cost').val()==""){
+                return document.getElementById("cost").focus();
+            }
+            if($('#expiration').val()==""){
+                return document.getElementById("expiration").focus();
+            }
+            if($('#iva').val()==""){
+                return document.getElementById("iva").focus();
+            }
+            if($('#product_key').val()==""){
+                return document.getElementById("product_key").focus();
+            }
+            if($('#unit_product_key').val()==""){
+                return document.getElementById("unit_product_key").focus();
+            }
+            if($('#lot').val()==""){
+                return document.getElementById("lot").focus();
+            }
+            if($('#ieps').val()==""){
+                return document.getElementById("ieps").focus();
+            }
+            if($('#price_1').val()==""){
+                return document.getElementById("price_1").focus();
+            }
+            if($('#price_2').val()==""){
+                return document.getElementById("price_2").focus();
+            }
+            if($('#price_3').val()==""){
+                return document.getElementById("price_3").focus();
+            }
+            if($('#branch_office_id').val()==""){
+                return document.getElementById("branch_office_id").focus();
+            }
+            if($('#category_id').val()==""){
+                return document.getElementById("category_id").focus();
+            }
+            if($('#brand_id').val()==""){
+                return document.getElementById("brand_id").focus();
+            }
+            if($('#provider_id').val()==""){
+                return document.getElementById("provider_id").focus();
+            }
+            fetch(`products/guardar`,{
+                method: 'POST',
+                body: JSON.stringify({
+                    name: $('#name').val().toUpperCase(),
+                    stock: parseInt($('#stock').val()),
+                    cost: parseInt($('#cost').val()),
+                    expiration: $('#expiration').val(),
+                    iva: parseInt($('#iva').val()),
+                    product_key: parseInt($('#product_key').val()),
+                    unit_product_key: parseInt($('#unit_product_key').val()),
+                    lot: parseInt($('#lot').val()),
+                    ieps: parseInt($('#ieps').val()),
+                    price_1: parseInt($('#price_1').val()),
+                    price_2: parseInt($('#price_2').val()),
+                    price_3: parseInt($('#price_3').val()),
+                    bar_code: $('#bar_code').val(),
+                    branch_office_id: $('#branch_office_id').find(':selected').val(),
+                    category_id: $('#category_id').find(':selected').val(),
+                    brand_id: $('#brand_id').find(':selected').val(),
+                    provider_id: $('#provider_id').find(':selected').val(),
+                }),
+                headers: {"Content-type": "application/json; charset=UTF-8"},
+            }).then(response => response.text())
+            .then(text => {
+                $('#productModal').modal('hide');
+                //console.log(typeof(text));
+                result = JSON.parse(text);
+                if(result.success){
+                    document.getElementById("alertsuccess").innerHTML = 
+                    '<div class="alert alert-success alert-dismissible fade show" role="alert">'+result.success+
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                            '<span aria-hidden="true">&times;</span>'+
+                        '</button>'+
+                    '</div>';
+                }else{
+                    document.getElementById("alerterror").innerHTML = 
+                    '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+result.error+
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                            '<span aria-hidden="true">&times;</span>'+
+                        '</button>'+
+                    '</div>';
+                }
             });
-            let a = {
-                datos: datos,
-            };
-            fetch(`products/guardar?data=${JSON.stringify(a)}`,{
-                    method: 'get',
-                    headers: {'X-CSRF-Token': $('meta[name="_token"]').attr('content') },
-                }).then(response => response.text())
-                .then(text => {
-                    //console.log("text");
-                    document.getElementById("cont2").innerHTML = text;
-                });
         });
     });
 
@@ -475,8 +561,31 @@
         }
     }
 
-    function llenar(item){
+    function llenar2(idP){
+        let item = result.data.find(element => element.id == idP);
+        console.log("a: "+item.category_id);
+        document.getElementById("myFormEdit").action = "/product/"+item.id;
+        document.getElementById('name_edit').value = item.name
+        document.getElementById('stock_edit').value = item.stock
+        document.getElementById('cost_edit').value = item.cost
+        document.getElementById('price_1_edit').value = item.price_1
+        document.getElementById('price_2_edit').value = item.price_2
+        document.getElementById('price_3_edit').value = item.price_3
+        document.getElementById('bar_code_edit').value = item.bar_code
+        document.getElementById('branch_office_id_edit').value = item.branch_office_id
+        document.getElementById('provider_id_edit').value = item.provider_id
+        document.getElementById('category_id_edit').value = item.category_id
+        document.getElementById('brand_id_edit').value = item.brand_id
+        document.getElementById('expiration_edit').value = item.expiration
+        document.getElementById('iva_edit').value = item.iva
+        document.getElementById('product_key_edit').value = item.product_key
+        document.getElementById('unit_product_key_edit').value = item.unit_product_key
+        document.getElementById('lot_edit').value = item.lot
+        document.getElementById('ieps_edit').value = item.ieps
+    }
 
+    function llenar(item){
+        console.log("llenar: "+item.category_id);
         document.getElementById("myFormEdit").action = "/product/"+item.id;
         document.getElementById('name_edit').value = item.name
         document.getElementById('stock_edit').value = item.stock
@@ -489,15 +598,13 @@
         document.getElementById('provider_id_edit').value = item.provider_id
         document.getElementById('category_id_edit').value = item.category_id
         document.getElementById('brand_id_edit').value = item.brand_id
-        console.log(item.provider_id);
+        //console.log(item.provider_id);
         document.getElementById('expiration_edit').value = item.expiration
         document.getElementById('iva_edit').value = item.iva
         document.getElementById('product_key_edit').value = item.product_key
         document.getElementById('unit_product_key_edit').value = item.unit_product_key
         document.getElementById('lot_edit').value = item.lot
         document.getElementById('ieps_edit').value = item.ieps
-
-
 
     }
 

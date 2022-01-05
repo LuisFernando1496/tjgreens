@@ -47,10 +47,52 @@ class ProductController extends Controller
 
     public function guardar(Request $request)
     {
-        $datos = $request->all()["datos"];
-        //foreach ($request as $key => $value) {
-        return back()->withErrors(["Guardar" => "Guardar2:", $datos]);
-        //}
+        //return back()->withErrors(["Guardar" => "Guardar2:", $request->name]);
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+            DB::beginTransaction();
+            try {
+                $exist = Product::where('bar_code', $request->bar_code)->where('branch_office_id', $request->branch_office_id)->where('status', true)->get();
+
+                if (count($exist) != 0) {
+                    return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
+                }
+                //$cost = $request->cost * 20.68;
+                $product = Product::create(
+                    [
+                        'name' => $request->name,
+                        'stock' => $request->stock,
+                        'cost' => $request->cost,
+                        'expiration' => $request->expiration,
+                        'iva' => $request->iva,
+                        'product_key' => $request->product_key,
+                        'unit_product_key' => $request->unit_product_key,
+                        'lot' => $request->lot,
+                        'ieps' => $request->ieps,
+                        'price_1' => $request->price_1,
+                        'price_2' => $request->price_2,
+                        'price_3' => $request->price_3,
+                        'bar_code' => $request->bar_code,
+                        'branch_office_id' => $request->branch_office_id,
+                        'category_id' => $request->category_id,
+                        'brand_id' => $request->brand_id,
+                        'provider_id' => $request->provider_id
+                    ]
+                );
+
+                if ($request->has('image')) {
+                    $path = Storage::disk('s3')->put('images/products', $request->image);
+                    Image::create(["path" => $path, "title" => $product->name, "size" => $request->image->getSize(), "product_id" => $product->id]);
+                }
+                DB::commit();
+                return back()->with(["success" => "Éxito al realizar la operación."]);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                //return $th->getMessage();
+                return back()->withErrors(["error" => $th->getMessage()]);
+            }
+        } else {
+            return response()->json(["error" => "No tienes permisos"]);
+        }
     }
 
     public function buscar(Request $request)
@@ -74,6 +116,16 @@ class ProductController extends Controller
         ->where("products.stock", ">", 0)
         ->where("categories.status", "=", true)
         ->select(
+            "products.id as id",
+            "products.expiration as expiration",
+            "products.provider_id as provider_id",
+            "products.brand_id as brand_id",
+            "products.category_id as category_id",
+            "products.branch_office_id as branch_office_id",
+            "products.lot as lot",
+            "products.ieps as ieps",
+            "products.product_key as product_key",
+            "products.unit_product_key as unit_product_key",
             "products.name as name",
             "products.stock as stock",
             "products.bar_code as bar_code",
@@ -87,11 +139,10 @@ class ProductController extends Controller
             "branch_offices.name as branch_office_name",
         )
         //->get();
-        ->paginate(10);
+        ->paginate(20);
         //return $buscar;
-        //return compact("buscar");
         return response()->json($buscar);
-        //return view('products.index', ['buscar'=>$buscar]);
+        //return view('products.index', $buscar);
     }
 
     function fetch_data(Request $request)
