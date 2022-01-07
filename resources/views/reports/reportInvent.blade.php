@@ -34,23 +34,23 @@
             <table style="width: 100%; margin-top:20px;">
                 @if (Auth::user()->rol_id == 1)
                 <tr>
-                    <th colspan="6" class="backgroundColor">
+                    <th colspan="8" class="backgroundColor">
                         SUCURSAL
                     </th>
                 </tr>
                 <tr>
-                    <td colspan="6">
+                    <td colspan="8">
                         {{$b->name}}
                     </td>
                 </tr>
                 @else
                 <tr>
-                    <th colspan="5" class="backgroundColor">
+                    <th colspan="7" class="backgroundColor">
                         SUCURSAL
                     </th>
                 </tr>
                 <tr>
-                    <td colspan="5">
+                    <td colspan="7">
                         {{$b->name}}
                     </td>
                 </tr>
@@ -60,7 +60,9 @@
                     <th class="backgroundColor">CATEGORÍA</th>
                     <th class="backgroundColor">MARCA</th>
                     <th class="backgroundColor">CANTIDAD</th>
-                    <th class="backgroundColor">PRECIO (PRODUCTO)</th>
+                    <th class="backgroundColor">PRECIO 1</th>
+                    <th class="backgroundColor">PRECIO 2</th>
+                    <th class="backgroundColor">PRECIO 3</th>
                     @if (Auth::user()->rol_id == 1)
                     <th class="backgroundColor">COSTO</th>
                     @endif
@@ -83,7 +85,17 @@
                     @else
                     <td>{{$p->stock}}</td> 
                     @endif
-                    <td>${{$p->price_1}}</td>
+                    <td >${{$p->price_1}}</td>
+                    @if($p->price_2 == 0)
+                    <td >N/A</td>
+                    @else
+                    <td >${{$p->price_2}}</td>
+                    @endif
+                    @if($p->price_3 == 0)
+                    <td >N/A</td>
+                    @else
+                    <td >${{$p->price_3}}</td>
+                    @endif
                     @if (Auth::user()->rol_id == 1)
                     <td>${{$p->cost}}</td>
                     @endif
