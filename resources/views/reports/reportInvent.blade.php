@@ -60,9 +60,10 @@
                     <th class="backgroundColor">CATEGORÍA</th>
                     <th class="backgroundColor">MARCA</th>
                     <th class="backgroundColor">CANTIDAD</th>
-                    <th class="backgroundColor">PRECIO 1</th>
+                    <th class="backgroundColor" colspan="3">PRECIOS (PRODUCTO 1, 2 y 3)</th>
+                    <!--<th class="backgroundColor">PRECIO 1</th>
                     <th class="backgroundColor">PRECIO 2</th>
-                    <th class="backgroundColor">PRECIO 3</th>
+                    <th class="backgroundColor">PRECIO 3</th>-->
                     @if (Auth::user()->rol_id == 1)
                     <th class="backgroundColor">COSTO</th>
                     @endif
