@@ -46,7 +46,7 @@
 
     <div class="col-md-8">
         <div class="input-group">
-            <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar producto"/>
+            <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar ventas"/>
             <div class="input-group-append">
                 <button id="searchButton" class="btn btn-outline-secondary">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -149,7 +149,7 @@
     @else
     <div class="col-md-8">
         <div class="input-group">
-            <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar producto"/>
+            <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar venta"/>
             <div class="input-group-append">
                 <button id="searchButton" class="btn btn-outline-secondary">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
