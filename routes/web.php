@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WarehouseController;
+use App\Warehouse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -109,6 +113,20 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/stock','ProductController@stock');
 
     Route::get('/tag/{product}','ProductController@tag')->name('tag');
+
+    Route::get('/almacen',[WarehouseController::class,'index'])->name('almacen.index');
+    Route::post('/almacen',[WarehouseController::class,'store'])->name('almacen.store');
+    Route::patch('/almacen-status/{id}',[WarehouseController::class,'status'])->name('almacen.status');
+    Route::patch('/almacen/{almacen}',[WarehouseController::class,'update'])->name('almacen.update');
+    Route::get('/ventas',[WarehouseController::class,'ventas'])->name('almacen.ventas');
+
+    Route::post('/inventario',[InventoryController::class,'store'])->name('inventario.store');
+    Route::patch('/inventario/{id}',[InventoryController::class,'update'])->name('inventario.update');
+
+    Route::post('/addInventario/{id}',[CartController::class,'store'])->name('add');
+    Route::get('/getCarrito',[CartController::class,'index']);
+    Route::post('/concluir',[CartController::class,'concluir'])->name('concluir');
+    Route::patch('/venta-pagada/{id}',[CartController::class,'pagado'])->name('venta.pagada');
 
 });
 
