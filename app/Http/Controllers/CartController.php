@@ -147,7 +147,19 @@ class CartController extends Controller
                         'stock' => $item->stock + $producto->quantity
                     ]);
                 } else {
-                    # code...
+                    $new = new Product();
+                    $new->name = $inventario->name;
+                    $new->bar_code = $inventario->bar_code;
+                    $new->cost = $inventario->cost;
+                    $new->price_1 = $inventario->price;
+                    $new->price_2 = $inventario->price;
+                    $new->price_3 = $inventario->price;
+                    $new->category_id = $inventario->category_id;
+                    $new->brand_id = $inventario->brand_id;
+                    $new->status = true;
+                    $new->stock = $producto->quantity;
+                    $new->branch_office_id = $user->branch_office_id;
+                    $new->save();
                 }
 
             }
