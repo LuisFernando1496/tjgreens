@@ -677,6 +677,7 @@
                                 });
                                 $('.item-resultC').off();
                                 $('.item-resultC').click(function() {
+                                    console.log("data"+$(this).data('id'));
                                     addClient($(this).data('id'));
                                     $('#clientModal').modal('hide');
                                 });
@@ -798,7 +799,7 @@
 
             function addClient(idClient){
                 let client = result.find(element => element.id == idClient);
-                //console.log("Cliente: "+client.name);
+                //console.log("Cliente: "+result);
                 //$("#client_id").val(client.name);
                 $('#searchClient').val('');
                 $("#client_id option[value="+ client.id +"]").attr("selected",true);
@@ -981,8 +982,8 @@
                             discountWarning = true;
                         }
                         $('.discount').each(function (){
-                        $(this).prop('readonly',true);
-                    });
+                            $(this).prop('readonly',true);
+                        });
                     addNotification('additional_discount-warning','Los descuentos sobre el total anulan los decuentos por producto');
                     }
                 }
@@ -1051,7 +1052,7 @@
                 }
                 $('#paymentButton').off();
                 $('.discount-warning').remove();
-                if(discountWarning){ 
+                if(discountWarning){
                     addNotification('discount-warning','Los descuentos mayores a 10% necesitan autorización del gerente');
                     $('#paymentButton').attr('data-toggle','modal');
                     $('#paymentButton').attr('data-target','#authorizationModal');
