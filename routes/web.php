@@ -130,6 +130,11 @@ Route::group(['middleware'=>'auth'], function(){
     Route::post('/concluir',[CartController::class,'concluir'])->name('concluir');
     Route::patch('/venta-pagada/{id}',[CartController::class,'pagado'])->name('venta.pagada');
 
+    Route::get('/getOrder',[WarehouseController::class,'generateOrder'])->name('getOrder');
+
+    Route::post('/addCompra/{id}',[CartController::class,'addcart'])->name('addCompra');
+    Route::post('/concluirCompra',[CartController::class,'concluirCompra'])->name('concluir.compra');
+
 });
 
 Route::get('/productos',[ProductController::class,'allProductos']);

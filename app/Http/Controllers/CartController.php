@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Cart;
+use App\CartShopping;
 use App\Inventory;
 use App\InventoryShipment;
+use App\InventoryShopping;
 use App\Product;
 use App\Shipment;
+use App\Shopping;
 use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\ShoppingCart;
 
 class CartController extends Controller
 {
@@ -57,7 +61,8 @@ class CartController extends Controller
 
             try {
                 DB::beginTransaction();
-                DB::table('carts')->where('inventory_id','=',$id)->update([
+                DB::table('carts')->where('inventory_id','=',$id)
+                ->where('status','=',true)->update([
                     'quantity' => $cantidad,
                     'subtotal' => $subtotal,
                     'total' => $total,
@@ -90,6 +95,53 @@ class CartController extends Controller
         }
     }
 
+    public function addcart(Request $request,$id)
+    {
+        $user = Auth::user();
+        $search = CartShopping::where('inventory_id','=',$id)->get();
+        if (sizeof($search) > 0) {
+            $descuento = ($request->discount + $search[0]->discount)/100;
+            $cantidad = ($request->quantity + $search[0]->quantity);
+            $subtotal = ($request->subtotal + $search[0]->subtotal);
+            $total = $subtotal - ($subtotal * $descuento);
+
+            try {
+                DB::beginTransaction();
+                DB::table('cart_shoppings')->where('inventory_id','=',$id)
+                ->where('status','=',true)->update([
+                    'quantity' => $cantidad,
+                    'subtotal' => $subtotal,
+                    'total' => $total,
+                    'discount' => $descuento * 100
+                ]);
+                DB::commit();
+                return redirect()->route('almacen.index');
+            } catch (\Error $th) {
+                DB::rollBack();
+                return $th;
+            }
+        } else {
+            try {
+                DB::beginTransaction();
+                $carrito = new CartShopping();
+                $carrito->inventory_id = $id;
+                $carrito->user_id = $user->id;
+                $carrito->quantity = $request->quantity;
+                $carrito->subtotal = $request->subtotal;
+                $carrito->total = $request->total;
+                $carrito->discount = $request->discount;
+                $carrito->status = true;
+                $carrito->save();
+                DB::commit();
+                return redirect()->route('almacen.index');
+            } catch (\Error $th) {
+                DB::rollBack();
+                return $th;
+            }
+        }
+
+    }
+
     public function concluir(Request $request)
     {
         $user = Auth::user();
@@ -109,7 +161,7 @@ class CartController extends Controller
 
             foreach ($carrito as $cart) {
                 $product = new InventoryShipment();
-                $product->inventory_id = $cart->id;
+                $product->inventory_id = $cart->inventory_id;
                 $product->shipment_id = $traspaso->id;
                 $product->quantity = $cart->quantity;
                 $product->total = $cart->total;
@@ -118,6 +170,49 @@ class CartController extends Controller
 
                 DB::table('carts')->where('id','=',$cart->id)->update([
                     'status' => false
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('almacen.index');
+
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+    }
+
+    public function concluirCompra(Request $request)
+    {
+        $user = Auth::user();
+        $almacen = Warehouse::where('user_id','=',$user->id)->get();
+        $carrito = CartShopping::where('user_id','=',$user->id)->where('status',true)->get();
+        try {
+            DB::beginTransaction();
+            $compra = new Shopping();
+            $compra->warehouse_id = $almacen[0]->id;
+            $compra->office_id = $request->office_id;
+            $compra->total = $request->total;
+            $compra->type = $request->type;
+            $compra->subtotal = $request->subtotal;
+            $compra->discount = $request->discount;
+            $compra->user_id = $user->id;
+            $compra->save();
+
+            foreach ($carrito as $cart) {
+                $product = new InventoryShopping();
+                $product->inventory_id = $cart->inventory_id;
+                $product->shopping_id = $compra->id;
+                $product->quantity = $cart->quantity;
+                $product->total = $cart->total;
+                $product->discount = $cart->discount;
+                $product->save();
+
+                DB::table('cart_shoppings')->where('id','=',$cart->id)->update([
+                    'status' => false
+                ]);
+                $inventario = Inventory::findOrFail($cart->inventory_id);
+                DB::table('inventories')->where('id','=',$cart->inventory_id)->update([
+                    'stock' => $inventario->stock + $cart->quantity
                 ]);
             }
             DB::commit();

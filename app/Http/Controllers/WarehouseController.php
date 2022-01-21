@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\BranchOffice;
 use App\Brand;
 use App\Cart;
+use App\CartShopping;
 use App\Category;
 use App\Inventory;
+use App\InventoryShopping;
 use App\Shipment;
+use App\Shopping;
 use App\User;
 use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 
 class WarehouseController extends Controller
@@ -39,6 +43,7 @@ class WarehouseController extends Controller
             $categorias = Category::all();
             $carrito = Cart::where('user_id','=',$user->id)
             ->where('status','=',true)->get();
+            $carritoCompras = CartShopping::where('user_id','=',$user->id)->where('status','=',true)->get();
             $marcas = Brand::all();
             $oficinas = BranchOffice::where('status','=',true)->get();
             return view('warehouse.index',[
@@ -47,6 +52,7 @@ class WarehouseController extends Controller
                 'categorias' => $categorias,
                 'marcas' => $marcas,
                 'carrito' => $carrito,
+                'carritoCompras' => $carritoCompras,
                 'oficinas' => $oficinas
             ]);
         }
@@ -171,6 +177,28 @@ class WarehouseController extends Controller
         $ventas = Shipment::where('user_id','=',$user->id)->get();
         return view('warehouse.ventas',[
             'ventas' => $ventas
+        ]);
+    }
+
+    public function generateOrder()
+    {
+        $user = Auth::user();
+        $hoy = date('Y-m-d');
+        $almacen = Warehouse::where('user_id','=',$user->id)->get();
+        $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)
+        ->whereDate('created_at',$hoy)
+        /*->orwhereDate('updated_at',$hoy)*/->get();
+
+        $compra = Shopping::where('warehouse_id','=',$almacen[0]->id)
+        ->whereDate('created_at',$hoy)->get();
+
+        $compras = InventoryShopping::where('shopping_id','=',$compra[0]->id)->get();
+        $totalCosto = 0;
+        $totalPrecio = 0;
+
+        return view('warehouse.order',[
+            'compras' => $inventario,
+            'recompras' => $compras,
         ]);
     }
 }
