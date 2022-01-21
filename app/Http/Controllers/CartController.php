@@ -51,7 +51,7 @@ class CartController extends Controller
     public function store(Request $request,$id)
     {
         $user = Auth::user();
-        $search = Cart::where('inventory_id','=',$id)->get();
+        $search = Cart::where('inventory_id','=',$id)->where('status','=',true)->get();
         if (sizeof($search) > 0) {
 
             $descuento = ($request->discount + $search[0]->discount)/100;
@@ -98,7 +98,7 @@ class CartController extends Controller
     public function addcart(Request $request,$id)
     {
         $user = Auth::user();
-        $search = CartShopping::where('inventory_id','=',$id)->get();
+        $search = CartShopping::where('inventory_id','=',$id)->where('status','=',true)->get();
         if (sizeof($search) > 0) {
             $descuento = ($request->discount + $search[0]->discount)/100;
             $cantidad = ($request->quantity + $search[0]->quantity);
@@ -235,11 +235,14 @@ class CartController extends Controller
             ]);
             foreach ($productos as $producto) {
                 $inventario = Inventory::findOrFail($producto->inventory_id);
+
                 $item = Product::where('name','=',$inventario->name)->where('category_id','=',$inventario->category_id)
                 ->where('brand_id','=',$inventario->brand_id)->where('branch_office_id','=',$user->branch_office_id)->get();
+
                 if (sizeof($item) > 0) {
-                    DB::table('products')->where('id','=',$item->id)->update([
-                        'stock' => $item->stock + $producto->quantity
+                    //return $item;
+                    DB::table('products')->where('id','=',$item[0]->id)->update([
+                        'stock' => $item[0]->stock + $producto->quantity
                     ]);
                 } else {
                     $new = new Product();
@@ -255,10 +258,10 @@ class CartController extends Controller
                     $new->stock = $producto->quantity;
                     $new->branch_office_id = $user->branch_office_id;
                     $new->save();
+
                 }
 
             }
-
             DB::commit();
             return redirect()->route('almacen.ventas');
         } catch (\Error $th) {

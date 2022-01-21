@@ -31,4 +31,9 @@ class Inventory extends Model
     {
         return $this->belongsTo(Warehouse::class,'id');
     }
+
+    public function carritos()
+    {
+        return $this->hasMany(Cart::class,'id','inventory_id');
+    }
 }

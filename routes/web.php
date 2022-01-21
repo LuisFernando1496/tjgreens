@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShoppingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
 use App\Warehouse;
@@ -134,6 +135,10 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::post('/addCompra/{id}',[CartController::class,'addcart'])->name('addCompra');
     Route::post('/concluirCompra',[CartController::class,'concluirCompra'])->name('concluir.compra');
+
+    Route::post('/reporteVentas',[ShoppingController::class,'ventas'])->name('reporte.ventas');
+    Route::post('/reporteCompras',[ShoppingController::class,'compras'])->name('reporte.compras');
+    Route::get('/ticket-venta/{id}',[WarehouseController::class,'ticket'])->name('generate.ticket');
 
 });
 

@@ -15,6 +15,12 @@
                     <div class="col">
                         <h4 class="card-title">Ventas de almacén</h4>
                     </div>
+                    <div class="col-2">
+                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reportVenta"><i class="bi bi-receipt-cutoff">Reporte Ventas</i></button>
+                    </div>
+                    <div class="col-3">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#reporteCompra"><i class="bi bi-receipt-cutoff">Reporte Compras</i></button>
+                    </div>
                 </div>
             </div>
             <div class="card-body">
@@ -50,7 +56,7 @@
                                                 <button class="btn btn-outline-success" type="submit"><i class="bi bi-cash"></i></button>
                                             </form>
                                         @else
-                                            <button class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></button>
+                                            <a href="{{route('generate.ticket',$venta->id)}}" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>
                                         @endif
                                     </td>
                                 </tr>
@@ -87,11 +93,11 @@
                                                     @forelse ($venta->productos as $product)
                                                         <tr>
                                                             <td>{{$product->id}}</td>
-                                                            <td>{{$product->inventario->name}}</td>
-                                                            <td>${{$product->inventario->price}}</td>
+                                                            <td>{{$product->inventario[0]->name}}</td>
+                                                            <td>${{$product->inventario[0]->price}}</td>
                                                             <td>{{$product->quantity}}</td>
                                                             @php
-                                                                $subtotal = ($product->quantity * $product->inventario->price);
+                                                                $subtotal = ($product->quantity * $product->inventario[0]->price);
                                                             @endphp
                                                             <td>${{number_format($subtotal,2,'.',',')}}</td>
                                                             <td>{{$product->discount}}%</td>
@@ -114,5 +120,128 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="reportVenta" tabindex="-1" aria-labelledby="reportVenta" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form action="{{route('reporte.ventas')}}" method="POST">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reporte de Ventas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Fecha Inicio:</label>
+                                    <input type="date" class="form-control" name="from" id="from">
+                                </div>
+                                <div class="col">
+                                    <label for="">Fecha Final:</label>
+                                    <input type="date" class="form-control" name="to" id="to">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-check form-switch">
+                                        <input name="today" class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" checked>
+                                        <label class="form-check-label" for="flexSwitchCheckChecked">¿Hoy?</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Generar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal fade" id="reporteCompra" tabindex="-1" aria-labelledby="reporteCompra" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <form action="{{route('reporte.compras')}}" method="POST">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reporte de Compras</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Fecha Inicio:</label>
+                                    <input type="date" class="form-control" name="from" id="fromCompras">
+                                </div>
+                                <div class="col">
+                                    <label for="">Fecha Final:</label>
+                                    <input type="date" class="form-control" name="to" id="toCompras">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-check form-switch">
+                                        <input name="today" class="form-check-input" type="checkbox" role="switch" id="switchCompras" checked>
+                                        <label class="form-check-label" for="flexSwitchCheckChecked">¿Hoy?</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Generar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            isCheck();
+            isToday();
+
+            $('#flexSwitchCheckChecked').click(function(){
+                isCheck();
+            });
+            $('#switchCompras').click(function(){
+                isToday();
+            });
+
+            function isCheck() {
+                if ($('#flexSwitchCheckChecked').is(':checked')) {
+                    $('#from').prop('readonly',true);
+                    $('#to').prop('readonly',true);
+                    $('#from').removeAttr("name");
+                    $('#to').removeAttr("name");
+                } else {
+                    $('#from').prop('readonly',false);
+                    $('#to').prop('readonly',false);
+                    $('#from').attr("name","from");
+                    $('#to').attr("name","to");
+                }
+            }
+
+            function isToday()
+            {
+                if ($('#switchCompras').is(':checked')) {
+                    $('#fromCompras').prop('readonly',true);
+                    $('#toCompras').prop('readonly',true);
+                    $('#fromCompras').removeAttr("name");
+                    $('#toCompras').removeAttr("name");
+                } else {
+                    $('#fromCompras').prop('readonly',false);
+                    $('#toCompras').prop('readonly',false);
+                    $('#fromCompras').attr("name","from");
+                    $('#toCompras').attr("name","to");
+                }
+            }
+        });
+    </script>
 
 @endsection

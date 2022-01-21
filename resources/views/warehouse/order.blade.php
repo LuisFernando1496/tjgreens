@@ -82,12 +82,12 @@
                                 @forelse ($recompras as $compra)
                                     <tr>
                                         <td>{{$compra->id}}</td>
-                                        <td>{{$compra->inventario->name}}</td>
-                                        <td>${{$compra->inventario->price}}</td>
+                                        <td>{{$compra->inventario[0]->name}}</td>
+                                        <td>${{$compra->inventario[0]->price}}</td>
                                         <td>{{$compra->quantity}}</td>
-                                        <td>${{$compra->inventario->cost}}</td>
-                                        <td>{{$compra->inventario->marca->name}}</td>
-                                        <td>{{$compra->inventario->categoria->name}}</td>
+                                        <td>${{$compra->inventario[0]->cost}}</td>
+                                        <td>{{$compra->inventario[0]->marca->name}}</td>
+                                        <td>{{$compra->inventario[0]->categoria->name}}</td>
                                         <td>{{$compra->total}}</td>
                                         @php
                                             $total += $compra->total;
@@ -116,6 +116,12 @@
             </div>
         </div>
     </div>
+    <script>
+        window.print();
+        window.addEventListener("afterprint", function(event) {
+            window.close()
+        });
+    </script>
 
 </body>
 </html>

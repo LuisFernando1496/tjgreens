@@ -24,7 +24,7 @@ class Shopping extends Model
 
     public function oficina()
     {
-        return $this->belongsTo(BranchOffice::class,'id');
+        return $this->belongsTo(BranchOffice::class,'office_id','id');
     }
 
     public function usuario()
@@ -34,6 +34,6 @@ class Shopping extends Model
 
     public function productos()
     {
-        return $this->hasMany(InventoryShopping::class,'id');
+        return $this->hasMany(InventoryShopping::class);
     }
 }

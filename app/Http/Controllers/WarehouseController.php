@@ -42,7 +42,7 @@ class WarehouseController extends Controller
             $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->get();
             $categorias = Category::all();
             $carrito = Cart::where('user_id','=',$user->id)
-            ->where('status','=',true)->get();
+            ->where('status','=',true)->with(['inventario'])->get();
             $carritoCompras = CartShopping::where('user_id','=',$user->id)->where('status','=',true)->get();
             $marcas = Brand::all();
             $oficinas = BranchOffice::where('status','=',true)->get();
@@ -199,6 +199,15 @@ class WarehouseController extends Controller
         return view('warehouse.order',[
             'compras' => $inventario,
             'recompras' => $compras,
+        ]);
+    }
+
+    public function ticket($id)
+    {
+        $venta = Shipment::findOrFail($id);
+
+        return view('warehouse.ticket',[
+            'venta' => $venta
         ]);
     }
 }

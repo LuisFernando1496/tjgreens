@@ -418,8 +418,8 @@
                                         @forelse ($carrito as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ $item->inventario->name }}</td>
-                                                <td>${{ $item->inventario->price }}</td>
+                                                <td>{{ $item->inventario[0]->name ?? "" }}</td>
+                                                <td>${{ $item->inventario[0]->price ?? 0 }}</td>
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>${{ $item->subtotal }}</td>
                                                 <td>{{ $item->discount }}%</td>
@@ -520,8 +520,8 @@
                                         @forelse ($carritoCompras as $item)
                                             <tr>
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ $item->inventario->name }}</td>
-                                                <td>${{ $item->inventario->price }}</td>
+                                                <td>{{ $item->inventario[0]->name }}</td>
+                                                <td>${{ $item->inventario[0]->price }}</td>
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>${{ $item->subtotal }}</td>
                                                 <td>{{ $item->discount }}%</td>

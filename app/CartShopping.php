@@ -17,7 +17,7 @@ class CartShopping extends Model
 
     public function inventario()
     {
-        return $this->belongsTo(Inventory::class,'id');
+        return $this->hasMany(Inventory::class,'id','inventory_id');
     }
 
     public function usuario()
