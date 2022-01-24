@@ -295,23 +295,27 @@
             </div>
         </div>
     </div>
-    
+
+    <div id="cont2"></div>
+
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
                 <th scope="col">Codigo de barras</th>
+                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                <th scope="col">Sucursal</th>
+                @endif
                 <th scope="col">Nombre</th>
+                 <th scope="col">Marca</th>
+                <th scope="col">Categoria</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Costo</th>
                 <th scope="col">Precio 1</th>
                 <th scope="col">Precio 2</th>
                 <th scope="col">Precio 3</th>
                 <th scope="col">IVA</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Marca</th>
-                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                <th scope="col">Sucursal</th>
-                @endif
+               
+               
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -322,18 +326,21 @@
         <thead class="black white-text">
             <tr>
                 <th scope="col">Codigo de barras</th>
+                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                <th scope="col">Sucursal</th>
+                @endif
                 <th scope="col">Nombre</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Categoria</th>
                 <th scope="col">Stock</th>
                 <th scope="col">Costo</th>
                 <th scope="col">Precio 1</th>
                 <th scope="col">Precio 2</th>
                 <th scope="col">Precio 3</th>
                 <th scope="col">IVA</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Marca</th>
-                @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                <th scope="col">Sucursal</th>
-                @endif
+              
+               
+               
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -341,7 +348,16 @@
             @foreach ($products as $item)
                 <tr>
                     <th scope="row">{{$item->bar_code}}</th>
+                      @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                        @if($item->branch_office == null)
+                            <td>-</td>
+                        @else
+                            <td>{{$item->branch_office->name}}</td>
+                        @endif
+                    @endif
                     <td>{{$item->name}}</td>
+                    <td>{{$item->brand->name ?? '-'}}</td>
+                     <td>{{$item->category->name}}</td>
                     <td>{{$item->stock}}</td>
                     <td>${{$item->cost}}</td>
                     <td>${{$item->price_1}}</td>
@@ -361,15 +377,9 @@
                     @else
                         <td>{{$item->iva}}</td>
                     @endif
-                    <td>{{$item->category->name}}</td>
-                    <td>{{$item->brand->name ?? '-'}}</td>
-                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                        @if($item->branch_office == null)
-                            <td>-</td>
-                        @else
-                            <td>{{$item->branch_office->name}}</td>
-                        @endif
-                    @endif
+                   
+                    
+                  
                     <td>
                         <button onclick="llenar({{$item}})" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -419,20 +429,22 @@
                     //r = JSON.parse(result.data[0]);
                     //console.log(r);
                     result.data.forEach(function(element,index){
-                        console.log(result.data[index]);
+                        console.log(element);
+                      
                         document.getElementById("result2").innerHTML += //'<tr>'+
+                      
                                 '<tr class="item-resultC" style="cursor: grab;" data-id="'+element.id+'">'+
                                 '<td>'+element.bar_code+'</td>'+
+                                 '<td>'+element.branch_office_name+'</td>'+
                                 '<td>'+element.name+'</td>'+
+                                '<td>'+element.brands_name+'</td>'+
+                                '<td>'+element.categories_name+'</td>'+
                                 '<td>'+element.stock+'</td>'+
                                 '<td>'+element.cost+'</td>'+
                                 '<td>'+element.price_1+'</td>'+
                                 '<td>'+element.price_2+'</td>'+
                                 '<td>'+element.price_3+'</td>'+
                                 '<td>'+element.iva+'</td>'+
-                                '<td>'+element.categories_name+'</td>'+
-                                '<td>'+element.brands_name+'</td>'+
-                                '<td>'+element.branch_office_name+'</td>'+
                                 '<td>'+
                                     '<button onclick="llenar2('+element.id+')" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">'+
                                         '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
