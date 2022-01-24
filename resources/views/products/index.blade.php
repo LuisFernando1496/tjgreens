@@ -296,8 +296,11 @@
         </div>
     </div>
 
+<<<<<<< HEAD
     <div id="cont2"></div>
 
+=======
+>>>>>>> dd0c80949788c91d2188df7fcbb063b1f5757782
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
@@ -474,7 +477,7 @@
             }
         });
         document.getElementById("btnGuardar").addEventListener("click", function(){
-            if($('#bar_code').val()==""){        
+            if($('#bar_code').val()==""){
                 $('[data-toggle="tooltip_bar_code"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("bar_code").focus();
             }
@@ -587,14 +590,14 @@
                 //console.log(typeof(text));
                 result = JSON.parse(text);
                 if(result.success){
-                    document.getElementById("alertsuccess").innerHTML = 
+                    document.getElementById("alertsuccess").innerHTML =
                     '<div class="alert alert-success alert-dismissible fade show" role="alert">'+result.success+
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                             '<span aria-hidden="true">&times;</span>'+
                         '</button>'+
                     '</div>';
                 }else{
-                    document.getElementById("alerterror").innerHTML = 
+                    document.getElementById("alerterror").innerHTML =
                     '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+result.error+
                         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                             '<span aria-hidden="true">&times;</span>'+

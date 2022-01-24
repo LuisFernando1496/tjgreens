@@ -3,9 +3,14 @@
 
     <ul class="list-group list-group-flush overflow-auto">
         @auth
-            <!-- <a href="#" class="list-group-item list-group-item-action {{ strpos(Request::url(),'home') ? 'active' : '' }}">Inicio</a> -->
-            <a href="/caja" class="list-group-item list-group-item-action {{ strpos(Request::url(),'caja') ? 'active' : '' }}">Vender</a>
-            <a href="/sale" class="list-group-item list-group-item-action {{ strpos(Request::url(),'sale') ? 'active' : '' }}">Ventas</a>
+            @if (Auth::user()->rol_id != 4)
+                <!-- <a href="#" class="list-group-item list-group-item-action {{ strpos(Request::url(),'home') ? 'active' : '' }}">Inicio</a> -->
+                <a href="/caja" class="list-group-item list-group-item-action {{ strpos(Request::url(),'caja') ? 'active' : '' }}">Vender</a>
+                <a href="/sale" class="list-group-item list-group-item-action {{ strpos(Request::url(),'sale') ? 'active' : '' }}">Ventas</a>
+            @else
+
+            @endif
+
             @if(Auth::user()->rol_id === 1 || Auth::user()->rol_id === 3)
                 <a href="/initialCash" class="list-group-item list-group-item-action {{ strpos(Request::url(),'initialCash') ? 'active' : '' }}">Establecer monto Inicial</a>
                 <a href="/users" class="list-group-item list-group-item-action {{ strpos(Request::url(),'users') ? 'active' : '' }}">Usuarios</a>
@@ -29,6 +34,13 @@
                     <a href="/stock" class="list-group-item list-group-item-action {{ strpos(Request::url(),'stock') ? 'active' : '' }}">Stock</a>
                     <a href="" class="list-group-item list-group-item-action {{ strpos(Request::url(),'transfers') ? 'active' : '' }}">Reportes</a>
                 @endif
+            @endif
+
+            @if (Auth::user()->rol_id === 1 || Auth::user()->rol_id === 4)
+                <a href="{{route('almacen.index')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'almacen') ? 'active' : '' }}">Almacén</a>
+                <a href="{{route('almacen.ventas')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'ventas') ? 'active' : '' }}">Ventas</a>
+            @else
+
             @endif
         @endauth
     </ul>

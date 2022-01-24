@@ -24,5 +24,9 @@ class RolSeeder extends Seeder
         Rol::create([
             'name' => 'Gerente',
         ]);
+
+        Rol::create([
+            'name' => 'Almacén'
+        ]);
     }
 }
