@@ -296,11 +296,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-    <div id="cont2"></div>
-
-=======
->>>>>>> dd0c80949788c91d2188df7fcbb063b1f5757782
     <table class="display table table-striped table-bordered" style="width:100%" id="tabla2">
         <thead class="black white-text">
             <tr>
