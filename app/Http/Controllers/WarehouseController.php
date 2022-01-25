@@ -39,7 +39,11 @@ class WarehouseController extends Controller
             ]);
         } else {
             $almacen = Warehouse::where('user_id','=',$user->id)->get();
-            $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->get();
+            if (sizeof($almacen) < 1) {
+                $inventario = [];
+            } else {
+                $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->get();
+            }
             $categorias = Category::all();
             $carrito = Cart::where('user_id','=',$user->id)
             ->where('status','=',true)->with(['inventario'])->get();
