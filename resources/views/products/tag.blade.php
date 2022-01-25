@@ -44,8 +44,7 @@ td.precio,th.precio {
 .ticket {
     width: 150px;
     max-width: 150px;
-    border-style: dotted;
-}
+   
 img {
     max-width: inherit;
     width: inherit;

@@ -1155,18 +1155,18 @@
                                 if(JSON.parse(data).data.saletype == 1)
                                 { 
                                    console.log(JSON.parse(data).transfer.id);
-                                    $('#sendReprintId').val(JSON.parse(data).transfer.id)
-                                    $('#reprintFormSend').submit()
-                                    location.reload();  
+                                    // $('#sendReprintId').val(JSON.parse(data).transfer.id)
+                                    // $('#reprintFormSend').submit()
+                                    // location.reload();  
                                    
                                 //  reprintFormSend sendReprintId
                                 }
                                 else
                                 {
                                     console.log(JSON.parse(data));
-                                   $('#saleReprintId').val(JSON.parse(data).data.id)
-                                    $('#reprintForm').submit()
-                                    location.reload();
+                                //    $('#saleReprintId').val(JSON.parse(data).data.id)
+                                //     $('#reprintForm').submit()
+                                //     location.reload();
                                 }
                                 
                                 

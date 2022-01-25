@@ -121,6 +121,7 @@ class SaleController extends Controller
         $oficce = $request->all()["sale_type"];
         $total_cost_sale = 0;
         //traspaso con factura
+       
         if($oficce['saletype'] == 1)
         {
             DB::beginTransaction();
@@ -194,7 +195,7 @@ class SaleController extends Controller
             }
             
         }
-        //venta normal
+///////////////////////////////////////*****venta normal*******////////////////////////////////////////////////////
         if ($sale['client_id'] != null) {
             $client = Client::findOrFail($sale['client_id']);
             if ($sale['payment_type'] == 2) {

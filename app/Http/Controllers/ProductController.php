@@ -103,20 +103,18 @@ class ProductController extends Controller
         ->join('categories', 'products.category_id', 'categories.id')
         ->join('branch_offices','products.branch_office_id','branch_offices.id')
         ->where("products.bar_code", "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)
-        ->where("products.status", "=", true)
+        ->where("products.status", true)
         ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)
         ->where("branch_offices.status", "=", true)
+        ->where("products.status", true)
         ->orWhere('products.name', "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)
-        ->where("products.status", "=", true)
+        ->where("products.status", true)
         ->orWhere("brands.name", "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)
+        ->where("products.status", true)
         ->where("brands.status", "=", true)
         ->orWhere("categories.name", "LIKE", "%{$request->search}%")
-        ->where("products.stock", ">", 0)
         ->where("categories.status", "=", true)
+        ->where("products.status", true)
         ->select(
             "products.id as id",
             "products.expiration as expiration",
@@ -129,6 +127,7 @@ class ProductController extends Controller
             "products.product_key as product_key",
             "products.unit_product_key as unit_product_key",
             "products.name as name",
+            "products.status as borrado",
             "products.stock as stock",
             "products.bar_code as bar_code",
             "products.cost as cost",
@@ -322,6 +321,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+       
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             if ($product->image == null) {
                 $product->changeStatus();
