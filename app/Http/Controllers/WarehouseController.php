@@ -9,6 +9,7 @@ use App\CartShopping;
 use App\Category;
 use App\Inventory;
 use App\InventoryShopping;
+use App\Product;
 use App\Shipment;
 use App\Shopping;
 use App\User;
@@ -213,5 +214,18 @@ class WarehouseController extends Controller
         return view('warehouse.ticket',[
             'venta' => $venta
         ]);
+    }
+
+    public function buscadorP($codigo)
+    {
+        $producto = Product::where('bar_code','=',$codigo)->with(['categoria','brand'])->first();
+
+        if ($producto != null) {
+            return response()->json($producto);
+        }
+        else
+        {
+            return null;
+        }
     }
 }

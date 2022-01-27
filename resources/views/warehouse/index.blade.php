@@ -156,7 +156,10 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
-                            <h4 class="card-title">Almacén</h4>
+                            <input type="text" class="form-control" id="codigo">
+                        </div>
+                        <div class="col">
+                            <button id="search" class="btn btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#busquedaP"><i class="bi bi-search"></i></button>
                         </div>
                         <div class="col-2">
                             <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#inventarioModal">Agregar</button>
@@ -581,6 +584,64 @@
 
         </div>
 
+        <div class="modal fade" id="busquedaP" tabindex="-1" aria-labelledby="addInventario" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form action="{{route('inventario.store')}}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title">Agregar producto a Inventario</h5>
+                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="">Código de Barras</label>
+                                        <input type="text" class="form-control" required id="bar_code" name="bar_code">
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Nombre</label>
+                                        <input type="text" class="form-control" required id="name" name="name">
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Categoria</label>
+                                        <select name="category_id" id="category_ide" class="form-control" required>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="">Marca</label>
+                                        <select name="brand_id" id="brand_id" class="form-control" required>
+
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Stock</label>
+                                        <input type="number" class="form-control" min="0" required name="stock" id="stock">
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Costo</label>
+                                        <input type="numer" step="any" class="form-control" name="cost" id="cost" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="">Precio</label>
+                                        <input type="number" step="any" class="form-control" name="price" id="price" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <script>
             $(document).ready(function () {
                 $('.cantidad').on('change',function(){
@@ -680,6 +741,27 @@
                     var subtotal = $('#subtotalGeneralCompra').val();
                     var total = subtotal - (subtotal * porcentaje);
                     $('#totalGeneralCompra').val(total.toFixed(2));
+                });
+
+                $('#search').on('click',function (){
+                    var codigo = $('#codigo').val();
+
+                    $.get('/buscar-cdigo/'+codigo,function(data){
+                        if (data['id'] > 0) {
+                            console.log(data);
+                            $('#bar_code').val(data['bar_code']);
+                            $('#name').val(data['name']);
+                            $('#category_ide').empty();
+                            $('#brand_id').empty();
+                            $('#category_ide').append("<option value='"+data['categoria']['id']+"'>"+data['categoria']['name']+"</option>");
+                            $('#brand_id').append("<option value='"+data['brand']['id']+"'>"+data['brand']['name']+"</option>");
+                            $('#cost').val(data['cost']);
+                            $('#price').val(data['price_1']);
+                        } else {
+                            alert("No se encontro ningun producto");
+                        }
+
+                    });
                 });
 
 

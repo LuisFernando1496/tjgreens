@@ -139,6 +139,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::post('/reporteVentas',[ShoppingController::class,'ventas'])->name('reporte.ventas');
     Route::post('/reporteCompras',[ShoppingController::class,'compras'])->name('reporte.compras');
     Route::get('/ticket-venta/{id}',[WarehouseController::class,'ticket'])->name('generate.ticket');
+    Route::get('/buscar-cdigo/{codigo}',[WarehouseController::class,'buscadorP'])->name('buscar.codigo');
 
 });
 
