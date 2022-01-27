@@ -189,15 +189,25 @@ class WarehouseController extends Controller
     {
         $user = Auth::user();
         $hoy = date('Y-m-d');
+        $mod_date = strtotime($hoy."+ 1 days");
+        $tomorrow = date("d-m-Y",$mod_date);
+
+
         $almacen = Warehouse::where('user_id','=',$user->id)->get();
         $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)
         ->whereDate('created_at',$hoy)
         /*->orwhereDate('updated_at',$hoy)*/->get();
 
         $compra = Shopping::where('warehouse_id','=',$almacen[0]->id)
-        ->whereDate('created_at',$hoy)->get();
+        ->whereBetween('created_at',[$hoy,$tomorrow])->get();
+        //return $compra;
+        if (sizeof($compra) > 0) {
+            $compras = InventoryShopping::where('shopping_id','=',$compra[0]->id)->get();
+        } else {
+            $compras = [];
+        }
 
-        $compras = InventoryShopping::where('shopping_id','=',$compra[0]->id)->get();
+
         $totalCosto = 0;
         $totalPrecio = 0;
 

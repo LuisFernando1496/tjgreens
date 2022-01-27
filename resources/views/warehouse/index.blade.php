@@ -224,6 +224,7 @@
                                     <th>Precio</th>
                                     <th>Costo</th>
                                     <th>Acciones</th>
+                                    <th>Edición</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -245,7 +246,88 @@
                                                 data-bs-target="#addCompra{{ $inventario->id }}"><i
                                                     class="bi bi-bag-plus"></i></button>
                                         </td>
+                                        <td>
+                                            <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>
+                                        </td>
                                     </tr>
+
+
+                                    <div class="modal fade" id="modaledit{{ $inventario->id }}" tabindex="-1"
+                                        aria-labelledby="modaledit{{ $inventario->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <form action="{{ route('inventario.update', $inventario->id) }}" method="POST">
+                                                    @csrf @method('PATCH')
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Editar producto</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="">Código de barra</label>
+                                                                <input type="text" class="form-control" name="bar_code" value="{{$inventario->bar_code}}" required>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="">Nombre</label>
+                                                                <input type="text" class="form-control" name="name" value="{{$inventario->name}}" required>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="">Categoria</label>
+                                                                <select name="category_id" id="" class="form-control" required>
+                                                                    @forelse ($categorias as $categoria)
+                                                                        @if ($categoria->id == $inventario->category_id)
+                                                                            <option selected value="{{ $categoria->id }}">{{ $categoria->name }}</option>
+                                                                        @else
+                                                                            <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
+                                                                        @endif
+                                                                    @empty
+                                                                        <option value="">Sin categorias</option>
+                                                                    @endforelse
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <label for="">Marca</label>
+                                                                <select name="brand_id" id="" class="form-control" required>
+                                                                    @forelse ($marcas as $marca)
+                                                                        @if ($marca->id == $inventario->brand_id)
+                                                                            <option selected value="{{ $marca->id }}">{{ $marca->name }}</option>
+                                                                        @else
+                                                                            <option value="{{ $marca->id }}">{{ $marca->name }}</option>
+                                                                        @endif
+                                                                    @empty
+
+                                                                    @endforelse
+                                                                </select>
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="">Stock</label>
+                                                                <input type="number" class="form-control" name="stock" value="{{$inventario->stock}}">
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="">Precio</label>
+                                                                <input type="numer" class="form-control" step="any" name="price" value="{{$inventario->price}}">
+                                                            </div>
+                                                            <div class="col">
+                                                                <label for="">Costo</label>
+                                                                <input type="number" class="form-control" step="any" name="cost" value="{{$inventario->cost}}">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Cancelar</button>
+                                                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
 
                                     <div class="modal fade" id="addInventario{{ $inventario->id }}" tabindex="-1"
                                         aria-labelledby="addInventario{{ $inventario->id }}" aria-hidden="true">
