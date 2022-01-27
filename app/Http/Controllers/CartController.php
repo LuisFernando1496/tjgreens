@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\ShoppingCart;
+use Illuminate\Http\Response;
 
 class CartController extends Controller
 {
@@ -261,6 +262,10 @@ class CartController extends Controller
 
                 }
 
+                DB::table('inventories')->where('id','=',$inventario->id)->update([
+                    'stock' => $inventario->stock - $producto->quantity
+                ]);
+
             }
             DB::commit();
             return redirect()->route('almacen.ventas');
@@ -312,6 +317,35 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            DB::table('carts')->where('id','=',$id)->delete();
+            DB::commit();
+            return $this->successResponse();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+    }
+
+    public function eliminar($id)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table('cart_shoppings')->where('id','=',$id)->delete();
+            DB::commit();
+            return $this->successResponse();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+    }
+
+    public function successResponse($code = Response::HTTP_OK, $message = "Operación realizada exitosamente")
+    {
+        return response()->json([
+            'status_code' => $code,
+            'message' => $message,
+        ]);
     }
 }

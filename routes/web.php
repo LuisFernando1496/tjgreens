@@ -140,7 +140,8 @@ Route::group(['middleware'=>'auth'], function(){
     Route::post('/reporteCompras',[ShoppingController::class,'compras'])->name('reporte.compras');
     Route::get('/ticket-venta/{id}',[WarehouseController::class,'ticket'])->name('generate.ticket');
     Route::get('/buscar-cdigo/{codigo}',[WarehouseController::class,'buscadorP'])->name('buscar.codigo');
-
+    Route::delete('/eliminar/{id}',[CartController::class,'destroy'])->name('eliminar.carrito');
+    Route::delete('/delete-cart/{id}',[CartController::class,'eliminar'])->name('eliminar.shopping');
 });
 
 Route::get('/productos',[ProductController::class,'allProductos']);
