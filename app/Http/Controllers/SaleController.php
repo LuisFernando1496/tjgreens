@@ -46,7 +46,7 @@ class SaleController extends Controller
         }
 
         return view('sales.index', [
-            'sales' => $sales, 
+            'sales' => $sales,
             'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first()
         ]);
     }
@@ -114,19 +114,19 @@ class SaleController extends Controller
         branch_office
         'status','provincial_branch_office_id','destination_branch_office_id','user_id','details'
         */
-      
+
         $folioBranch = Sale::latest()->where('branch_office_id', Auth::user()->branchOffice->id)->pluck('folio_branch_office')->first();
         $sale = $request->all()["sale"];
         //return response()->json(['error'=>'Espere tantito,',$sale['comentario']]);
         $oficce = $request->all()["sale_type"];
         $total_cost_sale = 0;
         //traspaso con factura
-       
+
         if($oficce['saletype'] == 1)
         {
             DB::beginTransaction();
             try {
-                
+
                 $transfer = Transfer::create([
                     'status'=>'Transferido',
                     'provincial_branch_office_id' => Auth::user()->branch_office_id ,
@@ -134,13 +134,13 @@ class SaleController extends Controller
                     'user_id' => Auth::user()->id,
                     'details'=> 'Transferencia de Productos'
                 ]);
-               
+
                foreach ($request->all()["products"] as $key => $item) {
                     $product = Product::findOrFail($item['id']);
                     $product->stock = $product->stock - $item['quantity'];
                     $product->save();
                     $addProduct = Product::where('branch_office_id',$oficce['branch_office'])->where('bar_code',$product->bar_code)->first();
-                   
+
                     if(!empty($addProduct))
                     {
                       $addProduct->update([
@@ -169,7 +169,7 @@ class SaleController extends Controller
                         'status' => $product->status
                       ]);
                     }
-                   
+
                     SendProduct::create([
                         'product_id' => $item['id'],
                         'transfer_id' => $transfer->id,
@@ -180,9 +180,9 @@ class SaleController extends Controller
                         'total' => $item['total'],
                         'discount' => $item['discount']
                     ]);
-                   
+
                    // $total_cost_sale = $total_cost_sale + $newProductTraspace['total_cost'];
-                   
+
                 }
                 DB::commit();
                 return response()->json(['success' => true, 'data' =>$oficce, 'transfer'=>$transfer]);
@@ -193,7 +193,7 @@ class SaleController extends Controller
                 return response()->json(['error'=>'no se pudo realizar esta accion','data'=>$th]);
                 //throw $th;
             }
-            
+
         }
 ///////////////////////////////////////*****venta normal*******////////////////////////////////////////////////////
         if ($sale['client_id'] != null) {
@@ -201,7 +201,7 @@ class SaleController extends Controller
             if ($sale['payment_type'] == 2) {
                 if ($client->authorized_credit - $sale['cart_total'] >= 0) {
 
-                   
+
                     // $request['branch_office_id'] = Auth::user()->branch_office_id;
                     $sale['branch_office_id'] = Auth::user()->branch_office_id;
                     // $request['user_id'] = Auth::user()->id;
@@ -239,9 +239,9 @@ class SaleController extends Controller
                         //$sale->save();
                         foreach ($request->all()["products"] as $key => $item) {
                             $product = Product::findOrFail($item['id']);
-                       
+
                                 $product->stock = $product->stock - $item['quantity'];
-                         
+
                             $product->save();
                             $newProductInSale = [
                                 'product_id' => $item['id'],
@@ -303,9 +303,9 @@ class SaleController extends Controller
                     }
                     foreach ($request->all()["products"] as $key => $item) {
                         $product = Product::findOrFail($item['id']);
-                   
+
                             $product->stock = $product->stock - $item['quantity'];
-                      
+
                         $product->save();
                         $newProductInSale = [
                             'product_id' => $item['id'],
@@ -367,9 +367,9 @@ class SaleController extends Controller
                 }
                 foreach ($request->all()["products"] as $key => $item) {
                     $product = Product::findOrFail($item['id']);
-                 
+
                         $product->stock = $product->stock - $item['quantity'];
-                   
+
                     $product->save();
                     $newProductInSale = [
                         'product_id' => $item['id'],
@@ -402,9 +402,9 @@ class SaleController extends Controller
     public function search(Request $request)
     {
         $user = auth()->user();
-        
+
         if($user->rol_id == 2 || $user->rol_id == 3){
-           
+
                 $datas = Product::join('brands', 'products.brand_id', 'brands.id')
                 ->join('categories', 'products.category_id', 'categories.id')
                     ->where("products.name", "LIKE", "%{$request->search}%")
@@ -416,14 +416,14 @@ class SaleController extends Controller
                 {
                     $datas = Product::join('brands', 'products.brand_id', 'brands.id')
                      ->join('categories', 'products.category_id', 'categories.id')
-                
+
                     ->where("brands.name", "LIKE", "%{$request->search}%")
                     ->where("products.stock", ">", 0)->where("products.status", "=", true)
                     ->where('products.branch_office_id', Auth::user()->branch_office_id)
                     ->select('products.*', 'brands.name as brand_name', 'brands.id as brand_id','categories.name as category_name')
                     ->get();
                 }
-       
+
             return response()->json($datas);
         }
       if($user->rol_id == 1)
@@ -433,15 +433,15 @@ class SaleController extends Controller
                 ->join('branch_offices','products.branch_office_id','branch_offices.id')
                 ->where("products.name", "LIKE", "%{$request->search}%")
                 ->where("products.stock", ">", 0)->where("products.status", "=", true)
-                ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%") 
+                ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
                 ->orWhere("brands.name", "LIKE", "%{$request->search}%")
                 ->where("branch_offices.status",1)
                 ->select('products.*','products.cost as costo','branch_offices.name as office_name','brands.name as brand_name', 'brands.id as brand_id', 'categories.name as category_name', 'categories.id as category_id')
                 ->get();
-        
+
         return response()->json($datas);
       }
-           
+
     }
 
     public function searchClient(Request $request){
@@ -565,7 +565,7 @@ class SaleController extends Controller
         $details = ProductInSale::join('products', 'products.id', 'product_id')->where('sale_id', $id)->get();
         $sale = Sale::where('id', $id)->first();
         return view('sales.details', [
-            'details' => $details, 
+            'details' => $details,
             'sale' => $sale,
             'coment' => CommentSales::all(),
         ]);
@@ -580,6 +580,9 @@ class SaleController extends Controller
 
     public function showCaja()
     {
+        if (Auth::user()->rol_id == 4) {
+            return redirect()->route('almacen.index');
+        }
         $branches;
         $traspacing = BranchOffice::where('status',1)->get();
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
@@ -588,7 +591,7 @@ class SaleController extends Controller
             // return back()->withErrors(["error" => "No tienes permisos"]);
             $branches = [Auth::user()->branchOffice];
         }
-        $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City')); 
+        $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City'));
         $from = $d->format('Y-m-d');
         $to = date('Y-m-d', strtotime('-7 day', strtotime($from)));
         $ventas =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")

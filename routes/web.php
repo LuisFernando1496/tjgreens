@@ -142,6 +142,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/buscar-cdigo/{codigo}',[WarehouseController::class,'buscadorP'])->name('buscar.codigo');
     Route::delete('/eliminar/{id}',[CartController::class,'destroy'])->name('eliminar.carrito');
     Route::delete('/delete-cart/{id}',[CartController::class,'eliminar'])->name('eliminar.shopping');
+    Route::get('/buscarInventario/{palabra}',[InventoryController::class,'busqueda']);
 });
 
 Route::get('/productos',[ProductController::class,'allProductos']);

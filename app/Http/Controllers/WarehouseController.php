@@ -43,7 +43,7 @@ class WarehouseController extends Controller
             if (sizeof($almacen) < 1) {
                 $inventario = [];
             } else {
-                $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->get();
+                $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->paginate(10);
             }
             $categorias = Category::all();
             $carrito = Cart::where('user_id','=',$user->id)
