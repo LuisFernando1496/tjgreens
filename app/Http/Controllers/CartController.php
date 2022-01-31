@@ -229,6 +229,7 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $productos = InventoryShipment::where('shipment_id','=',$id)->get();
+        $venta = Shipment::findOrFail($id);
         try {
             DB::beginTransaction();
             DB::table('shipments')->where('id','=',$id)->update([
@@ -237,9 +238,9 @@ class CartController extends Controller
             foreach ($productos as $producto) {
                 $inventario = Inventory::findOrFail($producto->inventory_id);
 
-                $item = Product::where('name','=',$inventario->name)->where('category_id','=',$inventario->category_id)
-                ->where('brand_id','=',$inventario->brand_id)->where('branch_office_id','=',$user->branch_office_id)->get();
-
+                /*$item = Product::where('name','=',$inventario->name)->where('category_id','=',$inventario->category_id)
+                ->where('brand_id','=',$inventario->brand_id)->where('branch_office_id','=',$user->branch_office_id)->get();*/
+                $item = Product::where('bar_code',$inventario->bar_code)->where('branch_office_id','=',$venta->office_id)->get();
                 if (sizeof($item) > 0) {
                     //return $item;
                     DB::table('products')->where('id','=',$item[0]->id)->update([
@@ -257,7 +258,7 @@ class CartController extends Controller
                     $new->brand_id = $inventario->brand_id;
                     $new->status = true;
                     $new->stock = $producto->quantity;
-                    $new->branch_office_id = $user->branch_office_id;
+                    $new->branch_office_id = $venta->office_id;
                     $new->save();
 
                 }

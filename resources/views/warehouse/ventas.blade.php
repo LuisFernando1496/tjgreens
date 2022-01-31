@@ -36,17 +36,18 @@
                                 <th>Total</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
+                                <th>Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($ventas as $venta)
+                            @forelse ($sales as $venta)
                                 <tr>
                                     <td>{{$venta->id}}</td>
                                     <td>{{$venta->oficina->name}}</td>
                                     <td>{{$venta->type}}</td>
-                                    <td>${{$venta->subtotal}}</td>
+                                    <td>${{number_format($venta->subtotal,2,'.',',')}}</td>
                                     <td>{{$venta->discount}}%</td>
-                                    <td>${{$venta->total}}</td>
+                                    <td>${{number_format($venta->total,2,'.',',')}}</td>
                                     <td>{{$venta->status}}</td>
                                     <td>
                                         <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal{{$venta->id}}"><i class="bi bi-eye-fill"></i></button>
@@ -59,13 +60,18 @@
                                             <a href="{{route('generate.ticket',$venta->id)}}" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>
                                         @endif
                                     </td>
+                                    <td>
+                                        <form action="{{route('eliminar.traspaso',$venta->id)}}" method="POST">
+                                            @csrf @method('DELETE')
+                                            <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
+                                        </form>
+                                    </td>
                                 </tr>
-
                             @empty
-
                             @endforelse
                         </tbody>
                     </table>
+                    {{$sales->links()}}
 
                     @forelse ($ventas as $venta)
                         <div class="modal fade" id="ventModal{{$venta->id}}" tabindex="-1" aria-labelledby="addInventario{{$venta->id}}" aria-hidden="true">
@@ -94,14 +100,14 @@
                                                         <tr>
                                                             <td>{{$product->id}}</td>
                                                             <td>{{$product->inventario[0]->name}}</td>
-                                                            <td>${{$product->inventario[0]->price}}</td>
+                                                            <td>${{number_format($product->inventario[0]->price,2,'.',',')}}</td>
                                                             <td>{{$product->quantity}}</td>
                                                             @php
                                                                 $subtotal = ($product->quantity * $product->inventario[0]->price);
                                                             @endphp
                                                             <td>${{number_format($subtotal,2,'.',',')}}</td>
                                                             <td>{{$product->discount}}%</td>
-                                                            <td>${{$product->total}}</td>
+                                                            <td>${{number_format($product->total,2,'.',',')}}</td>
                                                         </tr>
                                                     @empty
 

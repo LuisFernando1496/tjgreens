@@ -44,6 +44,7 @@ class WarehouseController extends Controller
                 $inventario = [];
             } else {
                 $inventario = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->paginate(10);
+                $invetories = Inventory::where('warehouse_id','=',$almacen[0]->id)->with(['marca','categoria','almacen'])->get();
             }
             $categorias = Category::all();
             $carrito = Cart::where('user_id','=',$user->id)
@@ -58,7 +59,8 @@ class WarehouseController extends Controller
                 'marcas' => $marcas,
                 'carrito' => $carrito,
                 'carritoCompras' => $carritoCompras,
-                'oficinas' => $oficinas
+                'oficinas' => $oficinas,
+                'invetories' => $invetories
             ]);
         }
 
@@ -180,8 +182,10 @@ class WarehouseController extends Controller
     {
         $user = Auth::user();
         $ventas = Shipment::where('user_id','=',$user->id)->get();
+        $sales = Shipment::where('user_id','=',$user->id)->paginate(10);
         return view('warehouse.ventas',[
-            'ventas' => $ventas
+            'ventas' => $ventas,
+            'sales' => $sales
         ]);
     }
 
