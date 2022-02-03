@@ -1,26 +1,26 @@
-    <?php
+<?php
 
-    namespace App\Http\Controllers;
+namespace App\Http\Controllers;
 
-    use App\BranchOffice;
-    use App\Brand;
-    use App\Cart;
-    use App\CartShopping;
-    use App\Category;
-    use App\Inventory;
-    use App\InventoryShipment;
-    use App\InventoryShopping;
-    use App\Product;
-    use App\Shipment;
-    use App\Shopping;
-    use App\User;
-    use App\Warehouse;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
-    use Illuminate\Support\Facades\Date;
-    use Illuminate\Support\Facades\DB;
+use App\BranchOffice;
+use App\Brand;
+use App\Cart;
+use App\CartShopping;
+use App\Category;
+use App\Inventory;
+use App\InventoryShipment;
+use App\InventoryShopping;
+use App\Product;
+use App\Shipment;
+use App\Shopping;
+use App\User;
+use App\Warehouse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
 
-    class WarehouseController extends Controller
+class WarehouseController extends Controller
     {
         /**
          * Display a listing of the resource.
