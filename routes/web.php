@@ -49,6 +49,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('sale-detail-history/{id}', 'ClientController@showDetailsHistory');
     Route::post('abonar', 'ClientController@abonar');
     Route::post('reprint', 'SaleController@reprint');
+    Route::post('facturaVenta', 'SaleController@factura');
     Route::post('sendReprint', 'SaleController@sendReprint');
     Route::resource('marcas', 'BrandController');
     Route::resource('categorias', 'CategoryController');

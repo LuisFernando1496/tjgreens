@@ -85,6 +85,32 @@ class SaleController extends Controller
         return response()->json($buscar);
     }
 
+    public function factura(Request $request){
+        $sale = Sale::where('id', $request->sale_id)->with(['branchOffice.address', 'productsInSale.product'])->first();
+        $products = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+            ->join("users","users.id","=","sales.user_id")
+            ->join("products","products.id","=","product_in_sales.product_id")
+            ->join("brands","brands.id","=","products.brand_id")
+            ->join("categories","categories.id","=","products.category_id")
+            ->select("products.name as product_name",
+            "categories.name as category",
+            "brands.name as brand",
+            "product_in_sales.quantity as quantity",
+            "products.cost as cost",
+            "product_in_sales.sale_price as sale_price",
+            "sales.amount_discount as amount_discount",
+            "product_in_sales.total as total",
+            "users.name as name",
+            "users.last_name as last_name",
+            "product_in_sales.created_at as date",
+            "sales.branch_office_id"
+            )
+            ->where("sales.id", "=", $request->sale_id)
+            ->where("sales.status",  "=", true)
+            ->get();
+        return view('sales.factura', ['sale' => $sale, 'sales' => $products]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

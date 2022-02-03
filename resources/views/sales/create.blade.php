@@ -304,8 +304,8 @@
                                 <th scope="col">Categoría</th>
                                 <th scope="col">Stock</th>
                                 <th scope="col">Precio 1</th>
-                                <th scope="col">Precio 2</th>
-                                <th scope="col">Precio 3</th>
+                                <!--<th scope="col">Precio 2</th>
+                                <th scope="col">Precio 3</th>-->
                             </tr>
                         </thead>
                         <tbody id="searchResult">
@@ -752,11 +752,10 @@
                                             '<td>'+element.name+'</td>'+
                                             '<td>'+element.brand_name+'</td>'+
                                             '<td>'+element.category_name+'</td>'+
-                                            '<td>'+element.category_name+'</td>'+
                                             '<td>'+element.stock+'</td>'+
                                             '<td>'+element.price_1+'</td>'+
-                                            '<td>'+element.price_2+'</td>'+
-                                            '<td>'+element.price_3+'</td>'+
+                                            //'<td>'+element.price_2+'</td>'+
+                                            //'<td>'+element.price_3+'</td>'+
                                         '</tr>'
                                     );
                                     }
