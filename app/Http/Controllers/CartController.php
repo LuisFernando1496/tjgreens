@@ -276,6 +276,110 @@ class CartController extends Controller
         }
     }
 
+    public function devolucion()
+    {
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(5);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(8);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(9);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(10);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(11);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+    }
+
     /**
      * Display the specified resource.
      *

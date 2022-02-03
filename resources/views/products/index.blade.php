@@ -312,8 +312,8 @@
                 <th scope="col">Precio 2</th>
                 <th scope="col">Precio 3</th>
                 <th scope="col">IVA</th>
-               
-               
+
+
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -336,9 +336,9 @@
                 <th scope="col">Precio 2</th>
                 <th scope="col">Precio 3</th>
                 <th scope="col">IVA</th>
-              
-               
-               
+
+
+
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -375,9 +375,9 @@
                     @else
                         <td>{{$item->iva}}</td>
                     @endif
-                   
-                    
-                  
+
+
+
                     <td>
                         <button onclick="llenar({{$item}})" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -428,9 +428,9 @@
                     //console.log(r);
                     result.data.forEach(function(element,index){
                         console.log(element);
-                      
+
                         document.getElementById("result2").innerHTML += //'<tr>'+
-                      
+
                                 '<tr class="item-resultC" style="cursor: grab;" data-id="'+element.id+'">'+
                                 '<td>'+element.bar_code+'</td>'+
                                  '<td>'+element.branch_office_name+'</td>'+
@@ -562,16 +562,16 @@
                 body: JSON.stringify({
                     name: $('#name').val().toUpperCase(),
                     stock: parseInt($('#stock').val()),
-                    cost: parseInt($('#cost').val()),
+                    cost: $('#cost').val(),
                     expiration: $('#expiration').val(),
                     iva: parseInt($('#iva').val()),
                     product_key: parseInt($('#product_key').val()),
                     unit_product_key: parseInt($('#unit_product_key').val()),
                     lot: parseInt($('#lot').val()),
                     ieps: parseInt($('#ieps').val()),
-                    price_1: parseInt($('#price_1').val()),
-                    price_2: parseInt($('#price_2').val()),
-                    price_3: parseInt($('#price_3').val()),
+                    price_1: $('#price_1').val(),
+                    price_2: $('#price_2').val(),
+                    price_3: $('#price_3').val(),
                     bar_code: $('#bar_code').val(),
                     branch_office_id: $('#branch_office_id').find(':selected').val(),
                     category_id: $('#category_id').find(':selected').val(),
