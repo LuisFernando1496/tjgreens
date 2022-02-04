@@ -681,6 +681,29 @@ class ReportController extends Controller
             ->where("sales.branch_office_id","=",$tempId)
             ->whereBetween('sales.created_at',[$from, $to])
             ->get();
+            $ap =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+            ->join("users","users.id","=","sales.user_id")
+            ->join("products","products.id","=","product_in_sales.product_id")
+            ->join("brands","brands.id","=","products.brand_id")
+            ->join("categories","categories.id","=","products.category_id")
+            ->select(DB::raw("product_in_sales.product_id as product_id,
+            products.name as product_name,
+            brands.name as brand,
+            categories.name as category,
+            sum(product_in_sales.quantity) as quantity,
+            products.cost as cost,
+            product_in_sales.sale_price as sale_price,
+            product_in_sales.discount as discount,
+            sum(product_in_sales.total_cost) as total_cost,
+            sum(product_in_sales.total) as total,
+            users.name as seller,
+            users.last_name as seller_lastName,
+            product_in_sales.created_at as date"))
+            ->whereBetween('sales.created_at',[$from, $to])
+            ->where("sales.status",  "=", true)
+            ->where("sales.branch_office_id" , "=" , $tempId)
+            ->groupBy("product_in_sales.product_id","product_in_sales.sale_price")
+            ->get(); 
 
             $b = DB::table('branch_offices')
             ->distinct()
@@ -723,6 +746,7 @@ class ReportController extends Controller
             "user" => Auth::user(),
             "date" =>$date,
             "products"=>$p,
+            "ap" => $ap,
             "branchOffice" => $b,
             "to" => $to,
             "from" =>$showFrom]);

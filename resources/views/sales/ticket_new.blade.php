@@ -50,7 +50,7 @@ img {
 
 </style>
 <div class="ticket">
-    <img src="{{asset('/logo_inusual.png')}}" alt="Logotipo">
+   <img class="responsive-img" src="{{asset('/logo_inusual.jpeg')}}" />
     <p class="centrado">
         Calle {{$sale->branchOffice->address->street}},Numero {{$sale->branchOffice->address->ext_number}} <br>
         Colonia {{$sale->branchOffice->address->suburb}} <br>
@@ -87,8 +87,6 @@ img {
         Pago en efectivo
         @elseif($sale->payment_type == 1)
         Pago con tarjeta
-        @elseif($sale->payment_type == 3)
-        Pago mixto
         @else
         Pago a crédito
         @endif
@@ -109,12 +107,11 @@ img {
         Total: ${{number_format($subtotal,2,'.',',')}} <br>
         ============ <br>--}}
     </div>
-    <br>
+   <br>
     <div class="centrado">
  <img  src="{{asset('/qr-tj.svg')}}" style="width: 100px; height:100px" alt="Logotipo">
     </div>
-   
-    <p class="centrado" >¡GRACIAS POR SU COMPRA!</p>
+    <p class="centrado">¡GRACIAS POR SU COMPRA!</p>
     <p class="centrado">Este ticket no es comprobante fiscal y se incluirá en la venta del día</p>
 </div>
 </body>
