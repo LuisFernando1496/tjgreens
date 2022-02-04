@@ -450,8 +450,7 @@
                                         <label for="">Cantidad</label>
                                         <input name="quantity" type="number"
                                             class="form-control cantidadCompra" required
-                                            data-id="{{ $inventario->id }}" min="1"
-                                            max="{{ $inventario->stock }}" value="1">
+                                            data-id="{{ $inventario->id }}" min="1" value="1">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -994,23 +993,29 @@
                         console.log(data);
                         $('#inventarios').empty();
                         data.forEach(element => {
-                            $('#inventarios').append("<tr>"+
-                                "<td>"+element['id']+"</td>"+
-                                "<td>"+element['bar_code']+"</td>"+
-                                "<td>"+element['name']+"</td>"+
-                                "<td>"+element['categoria']['name']+"</td>"+
-                                "<td>"+element['marca']['name']+"</td>"+
-                                "<td>"+element['stock']+"</td>"+
-                                "<td>"+element['price']+"</td>"+
-                                "<td>"+element['cost']+"</td>"+
-                                "<td>"+
-                                    "<button type='button' class='btn btn-outline-secondary' data-bs-toggle='modal' data-bs-target='#addInventario"+element['id']+"'><i class='bi bi-bag-plus-fill'></i></button>"+
-                                    "<button type='button' class='btn btn-outline-success' data-bs-toggle='modal' data-bs-target='#addCompra"+element['id']+"'><i class='bi bi-bag-plus'></i></button>"+
-                                "</td>"+
-                                "<td>"+
-                                    "<button class='btn btn-outline-primary' type='button' data-bs-toggle='modal' data-bs-target='#modaledit"+element['id']+"'><i class='bi bi-pencil'></i></button>"+
-                                "</td>"+
-                            "</tr>");
+                            $('#inventarios').append('<tr>'+
+                                '<td>'+element['id']+'</td>'+
+                                '<td>'+element['bar_code']+'</td>'+
+                                '<td>'+element['name']+'</td>'+
+                                '<td>'+element['categoria']['name']+'</td>'+
+                                '<td>'+element['marca']['name']+'</td>'+
+                                '<td>'+element['stock']+'</td>'+
+                                '<td>'+element['price']+'</td>'+
+                                '<td>'+element['cost']+'</td>'+
+                                '<td>'+
+                                    '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<form action="{{route("inventario.delete",'+element['id']+')}}" method="POST">'+
+                                        '@csrf @method("DELETE")'+
+                                        '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                    '</form>'+
+                                '</td>'+
+                            '</tr>');
                         });
                     });
                 });
