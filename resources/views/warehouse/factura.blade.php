@@ -24,8 +24,8 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h5 class="card-title">Factura de Venta {{ $venta->id }}</h5>
-                        <p class="card-text">Factura de venta realizada por {{ $venta->usuario->name }}
-                            {{ $venta->usuario->last_name }}, en la fecha {{ $venta->created_at }}</p>
+                        <p class="card-text">Factura de venta realizada por {{ $venta->usuario[0]->name }}
+                            {{ $venta->usuario[0]->last_name }}, en la fecha {{ $venta->created_at }}</p>
                     </div>
                 </div>
             </div>

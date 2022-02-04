@@ -29,7 +29,7 @@ class Shipment extends Model
 
     public function usuario()
     {
-        return $this->belongsTo(User::class,'id');
+        return $this->hasMany(User::class,'id','user_id');
     }
 
     public function productos()

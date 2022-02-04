@@ -126,6 +126,7 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::post('/inventario',[InventoryController::class,'store'])->name('inventario.store');
     Route::patch('/inventario/{id}',[InventoryController::class,'update'])->name('inventario.update');
+    Route::delete('/invnetario/{id}',[InventoryController::class,'destroy'])->name('inventario.delete');
 
     Route::post('/addInventario/{id}',[CartController::class,'store'])->name('add');
     Route::get('/getCarrito',[CartController::class,'index']);
