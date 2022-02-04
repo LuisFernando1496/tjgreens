@@ -56,15 +56,21 @@
                 </table>
                 <hr>
                 <h5 class="card-title">Productos</h5>
+                @php
+                    $costo_total = 0;
+                    $precio_total = 0;
+                @endphp
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th>Producto</th>
                             <th>Marca</th>
                             <th>Categoria</th>
-                            <th>Precio</th>
-                            <th>Costo</th>
                             <th>Cantidad</th>
+                            <th>Costo Unitario</th>
+                            <th>Costo Total</th>
+                            <th>Precio Unitario</th>
+                            <th>Precio Total</th>
                             <th>Subtotal</th>
                             <th>Descuento (%)</th>
                             <th>Total</th>
@@ -76,9 +82,19 @@
                                 <td>{{$inventario->inventario[0]->name}}</td>
                                 <td>{{$inventario->inventario[0]->marca->name}}</td>
                                 <td>{{$inventario->inventario[0]->categoria->name}}</td>
-                                <td>${{number_format($inventario->inventario[0]->price,2,'.',',')}}</td>
-                                <td>${{number_format($inventario->inventario[0]->cost,2,'.',',')}}</td>
                                 <td>{{$inventario->quantity}}</td>
+                                <td>${{number_format($inventario->inventario[0]->cost,2,'.',',')}}</td>
+                                @php
+                                    $ct = $inventario->quantity * $inventario->inventario[0]->cost;
+                                    $costo_total += $ct;
+                                @endphp
+                                <td>${{number_format($ct,2,'.',',')}}</td>
+                                <td>${{number_format($inventario->inventario[0]->price,2,'.',',')}}</td>
+                                @php
+                                    $pt = $inventario->quantity * $inventario->inventario[0]->price;
+                                    $precio_total += $pt;
+                                @endphp
+                                <td>${{number_format($pt,2,'.',',')}}</td>
                                 @php
                                     $subtotal = $inventario->quantity * $inventario->inventario[0]->price;
                                 @endphp
@@ -89,6 +105,16 @@
                         @empty
 
                         @endforelse
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Costo Total:</td>
+                            <td>${{number_format($costo_total,2,'.',',')}}</td>
+                            <td>Precio Total:</td>
+                            <td>${{number_format($precio_total,2,'.',',')}}</td>
+                        </tr>
                     </tbody>
                 </table>
                 <hr>
