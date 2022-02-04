@@ -35,7 +35,9 @@
                                 <th>Descuento %</th>
                                 <th>Total</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th>Realizado</th>
+                                <th>Detalles</th>
+                                <th>Ticket</th>
                                 <th>Factura</th>
                                 <th>Eliminar</th>
                             </tr>
@@ -50,8 +52,11 @@
                                     <td>{{$venta->discount}}%</td>
                                     <td>${{number_format($venta->total,2,'.',',')}}</td>
                                     <td>{{$venta->status}}</td>
+                                    <td style="font-size: 10px">{{$venta->usuario[0]->name}} {{ $venta->usuario[0]->last_name }} - {{$venta->created_at}}</td>
                                     <td>
                                         <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal{{$venta->id}}"><i class="bi bi-eye-fill"></i></button>
+                                    </td>
+                                    <td>
                                         @if ($venta->status == "En proceso")
                                             <form action="{{route('venta.pagada',$venta->id)}}" method="POST">
                                                 @csrf @method('PATCH')
