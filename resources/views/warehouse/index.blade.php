@@ -989,10 +989,13 @@
 
                 $('#buscarInve').on('click',function(){
                     var palabra = $('#inputBusqueda').val();
+
                     $.get('/buscarInventario/'+palabra,function (data){
                         console.log(data);
                         $('#inventarios').empty();
                         data.forEach(element => {
+                            var id = element['id'];
+                            var url = '{{route("inventario.delete",'+id+')}}';
                             $('#inventarios').append('<tr>'+
                                 '<td>'+element['id']+'</td>'+
                                 '<td>'+element['bar_code']+'</td>'+
@@ -1010,7 +1013,7 @@
                                     '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
                                 '</td>'+
                                 '<td>'+
-                                    '<form action="{{route("inventario.delete",'+element['id']+')}}" method="POST">'+
+                                    '<form action="/inventario/'+id+'" method="POST">'+
                                         '@csrf @method("DELETE")'+
                                         '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
                                     '</form>'+
