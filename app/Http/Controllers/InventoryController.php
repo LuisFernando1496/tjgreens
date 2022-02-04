@@ -161,4 +161,10 @@ class InventoryController extends Controller
     {
         //
     }
+
+    public function busqueda($palabra)
+    {
+        $inventario = Inventory::where('name','LIKE',"%$palabra%")->with(['marca','categoria','almacen'])->get();
+        return response()->json($inventario);
+    }
 }

@@ -14,12 +14,12 @@ class Warehouse extends Model
 
     public function oficina()
     {
-        return $this->belongsTo(BranchOffice::class,'id');
+        return $this->belongsTo(BranchOffice::class,'office_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class,'id','user_id');
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function inventarios()

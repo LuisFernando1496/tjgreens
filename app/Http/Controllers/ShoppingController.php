@@ -8,6 +8,7 @@ use App\Shopping;
 use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ShoppingController extends Controller
 {
@@ -141,6 +142,14 @@ class ShoppingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            DB::table('shipments')->where('id',$id)->delete();
+            DB::commit();
+            return redirect()->route('almacen.index');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $th;
+        }
     }
 }

@@ -19,12 +19,12 @@ class Inventory extends Model
 
     public function marca()
     {
-        return $this->belongsTo(Brand::class,'id');
+        return $this->belongsTo(Brand::class,'brand_id');
     }
 
     public function categoria()
     {
-        return $this->belongsTo(Category::class,'id');
+        return $this->belongsTo(Category::class,'category_id');
     }
 
     public function almacen()

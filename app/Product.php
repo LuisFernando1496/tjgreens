@@ -25,13 +25,18 @@ class Product extends Model
         'brand_id',
         'status',
         'provider_id'];
-     
+
     public function branch_office(){
         return $this->belongsTo(BranchOffice::class);
     }
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function categoria()
+    {
+        return $this->belongsTo(Category::class,'category_id');
     }
 
     public function brand(){
@@ -41,7 +46,7 @@ class Product extends Model
     public function url(){
         return $this->id ? 'productos.update' : 'productos.store';
     }
- 
+
     public function method(){
         return $this->id ? 'PUT' : 'POST';
     }

@@ -321,7 +321,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-       
+
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
             if ($product->image == null) {
                 $product->changeStatus();

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\ShoppingCart;
+use Illuminate\Http\Response;
 
 class CartController extends Controller
 {
@@ -228,6 +229,7 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $productos = InventoryShipment::where('shipment_id','=',$id)->get();
+        $venta = Shipment::findOrFail($id);
         try {
             DB::beginTransaction();
             DB::table('shipments')->where('id','=',$id)->update([
@@ -236,9 +238,9 @@ class CartController extends Controller
             foreach ($productos as $producto) {
                 $inventario = Inventory::findOrFail($producto->inventory_id);
 
-                $item = Product::where('name','=',$inventario->name)->where('category_id','=',$inventario->category_id)
-                ->where('brand_id','=',$inventario->brand_id)->where('branch_office_id','=',$user->branch_office_id)->get();
-
+                /*$item = Product::where('name','=',$inventario->name)->where('category_id','=',$inventario->category_id)
+                ->where('brand_id','=',$inventario->brand_id)->where('branch_office_id','=',$user->branch_office_id)->get();*/
+                $item = Product::where('bar_code',$inventario->bar_code)->where('branch_office_id','=',$venta->office_id)->get();
                 if (sizeof($item) > 0) {
                     //return $item;
                     DB::table('products')->where('id','=',$item[0]->id)->update([
@@ -256,10 +258,14 @@ class CartController extends Controller
                     $new->brand_id = $inventario->brand_id;
                     $new->status = true;
                     $new->stock = $producto->quantity;
-                    $new->branch_office_id = $user->branch_office_id;
+                    $new->branch_office_id = $venta->office_id;
                     $new->save();
 
                 }
+
+                DB::table('inventories')->where('id','=',$inventario->id)->update([
+                    'stock' => $inventario->stock - $producto->quantity
+                ]);
 
             }
             DB::commit();
@@ -268,6 +274,110 @@ class CartController extends Controller
             DB::rollBack();
             return $th;
         }
+    }
+
+    public function devolucion()
+    {
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(5);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(8);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(9);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(10);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
+        try {
+            DB::beginTransaction();
+            $venta = Shipment::findOrFail(11);
+            $productos = InventoryShipment::where('shipment_id','=',$venta->id)->get();
+            foreach ($productos as $item) {
+                $inventario = Inventory::findOrFail($item->inventory_id);
+                $producto = Product::where('branch_office_id','=',$venta->office_id)->where('bar_code','=',$inventario->bar_code)->get();
+                if (sizeof($item) > 0) {
+                    DB::table('products')->where('id','=',$producto[0]->id)->update([
+                        'stock' => $producto[0]->stock - $item->quantity
+                    ]);
+                }
+
+            }
+            DB::commit();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+
     }
 
     /**
@@ -312,6 +422,35 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            DB::table('carts')->where('id','=',$id)->delete();
+            DB::commit();
+            return $this->successResponse();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+    }
+
+    public function eliminar($id)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table('cart_shoppings')->where('id','=',$id)->delete();
+            DB::commit();
+            return $this->successResponse();
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
+    }
+
+    public function successResponse($code = Response::HTTP_OK, $message = "Operación realizada exitosamente")
+    {
+        return response()->json([
+            'status_code' => $code,
+            'message' => $message,
+        ]);
     }
 }

@@ -42,18 +42,18 @@
                             <div data-toggle="tooltip_cost" class="alert-danger"></div>
                         </div>
 
-                        <div class="form-group my-3 mx-3">
+                        {{--<div class="form-group my-3 mx-3">
                             <label for="expiration">Caducidad</label>
                             <input class="form-control" type="date" name="expiration" id="expiration" placeholder="25/09/2021" >
                             <div data-toggle="tooltip_expiration" class="alert-danger"></div>
-                        </div>
+                        </div>--}}
 
                         <div class="form-group my-3 mx-3">
                             <label for="price">Precio 1</label>
                             <input class="form-control" step="any" type="number" name="price_1" id="price_1" placeholder="Precio 1" required>
                             <div data-toggle="tooltip_price_1" class="alert-danger"></div>
                         </div>
-                        <div class="form-group my-3 mx-3">
+                        {{--<div class="form-group my-3 mx-3">
                             <label for="price">Precio 2</label>
                             <input class="form-control"  step="any" type="number" name="price_2" id="price_2" placeholder="Precio 2">
                             <div data-toggle="tooltip_price_2" class="alert-danger"></div>
@@ -62,7 +62,7 @@
                             <label for="price">Precio 3</label>
                             <input class="form-control"  step="any" type="number" name="price_3" id="price_3" placeholder="Precio 3">
                             <div data-toggle="tooltip_price_3" class="alert-danger"></div>
-                        </div>
+                        </div>--}}
                          {{-- <div class="form-group my-3 mx-3">
                             <label for="iva">Iva</label>
                             <input class="form-control" type="number" step="any" name="iva" id="iva" placeholder="1.6" required>
@@ -177,22 +177,22 @@
                             <input class="form-control"  step="any" type="number" name="cost" id="cost_edit" placeholder="Costo" required>
                         </div>
 
-                        <div class="form-group my-3 mx-3">
+                        {{--<div class="form-group my-3 mx-3">
                             <label for="expiration">Caducidad</label>
                             <input class="form-control" type="date" name="expiration" id="expiration_edit" placeholder="25/09/2021" >
-                        </div>
+                        </div>--}}
                         <div class="form-group my-3 mx-3">
                             <label for="price">Precio 1</label>
                             <input class="form-control" type="number" name="price_1" id="price_1_edit" placeholder="Precio 1" required>
                         </div>
-                        <div class="form-group my-3 mx-3">
+                        {{--<div class="form-group my-3 mx-3">
                             <label for="price">Precio 2</label>
                             <input class="form-control" type="number" name="price_2" id="price_2_edit" placeholder="Precio 2">
                         </div>
                         <div class="form-group my-3 mx-3">
                             <label for="price">Precio 3</label>
                             <input class="form-control" type="number" name="price_3" id="price_3_edit" placeholder="Precio 3">
-                        </div>
+                        </div>--}}
                      {{--    <div class="form-group my-3 mx-3">
                             <label for="iva">Iva</label>
                             <input class="form-control" type="number" step="any" name="iva" id="iva_edit" placeholder="1.6" required>
@@ -309,11 +309,9 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Costo</th>
                 <th scope="col">Precio 1</th>
-                <th scope="col">Precio 2</th>
-                <th scope="col">Precio 3</th>
                 <th scope="col">IVA</th>
-               
-               
+
+
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -333,12 +331,10 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Costo</th>
                 <th scope="col">Precio 1</th>
-                <th scope="col">Precio 2</th>
-                <th scope="col">Precio 3</th>
                 <th scope="col">IVA</th>
-              
-               
-               
+
+
+
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -359,25 +355,15 @@
                     <td>{{$item->stock}}</td>
                     <td>${{$item->cost}}</td>
                     <td>${{$item->price_1}}</td>
-                    @if($item->price_2)
-                        <td>${{$item->price_2}}</td>
-                    @else
-                        <td>----</td>
-                    @endif
-                    @if($item->price_3)
-                        <td>${{$item->price_3}}</td>
-                    @else
-                        <td>---</td>
-                    @endif
 
                     @if($item->iva == null)
                         <td>-</td>
                     @else
                         <td>{{$item->iva}}</td>
                     @endif
-                   
-                    
-                  
+
+
+
                     <td>
                         <button onclick="llenar({{$item}})" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -428,9 +414,9 @@
                     //console.log(r);
                     result.data.forEach(function(element,index){
                         console.log(element);
-                      
+
                         document.getElementById("result2").innerHTML += //'<tr>'+
-                      
+
                                 '<tr class="item-resultC" style="cursor: grab;" data-id="'+element.id+'">'+
                                 '<td>'+element.bar_code+'</td>'+
                                  '<td>'+element.branch_office_name+'</td>'+
@@ -440,8 +426,8 @@
                                 '<td>'+element.stock+'</td>'+
                                 '<td>'+element.cost+'</td>'+
                                 '<td>'+element.price_1+'</td>'+
-                                '<td>'+element.price_2+'</td>'+
-                                '<td>'+element.price_3+'</td>'+
+                                //'<td>'+element.price_2+'</td>'+
+                                //'<td>'+element.price_3+'</td>'+
                                 '<td>'+element.iva+'</td>'+
                                 '<td>'+
                                     '<button onclick="llenar2('+element.id+')" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">'+
@@ -492,11 +478,6 @@
                 return document.getElementById("cost").focus();
             }
             $('[data-toggle="tooltip_cost"]').tooltip().prop("hidden", true);
-            if($('#expiration').val()==""){
-                $('[data-toggle="tooltip_expiration"]').tooltip().text("Campo vacio, Llenar!");
-                return document.getElementById("expiration").focus();
-            }
-            $('[data-toggle="tooltip_expiration"]').tooltip().prop("hidden", true);
             if($('#iva').val()==""){
                 $('[data-toggle="tooltip_iva"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("iva").focus();
@@ -527,16 +508,6 @@
                 return document.getElementById("price_1").focus();
             }
             $('[data-toggle="tooltip_price_1"]').tooltip().prop("hidden", true);
-            if($('#price_2').val()==""){
-                $('[data-toggle="tooltip_price_2"]').tooltip().text("Campo vacio, Llenar!");
-                return document.getElementById("price_2").focus();
-            }
-            $('[data-toggle="tooltip_price_2"]').tooltip().prop("hidden", true);
-            if($('#price_3').val()==""){
-                $('[data-toggle="tooltip_price_3"]').tooltip().text("Campo vacio, Llenar!");
-                return document.getElementById("price_3").focus();
-            }
-            $('[data-toggle="tooltip_price_3"]').tooltip().prop("hidden", true);
             if($('#branch_office_id').val()==""){
                 $('[data-toggle="tooltip_branch_office_id"]').tooltip().text("Campo vacio, Llenar!");
                 return document.getElementById("branch_office_id").focus();
@@ -562,16 +533,16 @@
                 body: JSON.stringify({
                     name: $('#name').val().toUpperCase(),
                     stock: parseInt($('#stock').val()),
-                    cost: parseInt($('#cost').val()),
+                    cost: $('#cost').val(),
                     expiration: $('#expiration').val(),
                     iva: parseInt($('#iva').val()),
                     product_key: parseInt($('#product_key').val()),
                     unit_product_key: parseInt($('#unit_product_key').val()),
                     lot: parseInt($('#lot').val()),
                     ieps: parseInt($('#ieps').val()),
-                    price_1: parseInt($('#price_1').val()),
-                    price_2: parseInt($('#price_2').val()),
-                    price_3: parseInt($('#price_3').val()),
+                    price_1: $('#price_1').val(),
+                    price_2: $('#price_2').val(),
+                    price_3: $('#price_3').val(),
                     bar_code: $('#bar_code').val(),
                     branch_office_id: $('#branch_office_id').find(':selected').val(),
                     category_id: $('#category_id').find(':selected').val(),
@@ -627,14 +598,14 @@
         document.getElementById('stock_edit').value = item.stock
         document.getElementById('cost_edit').value = item.cost
         document.getElementById('price_1_edit').value = item.price_1
-        document.getElementById('price_2_edit').value = item.price_2
-        document.getElementById('price_3_edit').value = item.price_3
+        //document.getElementById('price_2_edit').value = item.price_2
+        //document.getElementById('price_3_edit').value = item.price_3
         document.getElementById('bar_code_edit').value = item.bar_code
         document.getElementById('branch_office_id_edit').value = item.branch_office_id
         document.getElementById('provider_id_edit').value = item.provider_id
         document.getElementById('category_id_edit').value = item.category_id
         document.getElementById('brand_id_edit').value = item.brand_id
-        document.getElementById('expiration_edit').value = item.expiration
+        //document.getElementById('expiration_edit').value = item.expiration
         document.getElementById('iva_edit').value = item.iva
         document.getElementById('product_key_edit').value = item.product_key
         document.getElementById('unit_product_key_edit').value = item.unit_product_key
@@ -649,15 +620,15 @@
         document.getElementById('stock_edit').value = item.stock
         document.getElementById('cost_edit').value = item.cost
         document.getElementById('price_1_edit').value = item.price_1
-        document.getElementById('price_2_edit').value = item.price_2
-        document.getElementById('price_3_edit').value = item.price_3
+        //document.getElementById('price_2_edit').value = item.price_2
+        //document.getElementById('price_3_edit').value = item.price_3
         document.getElementById('bar_code_edit').value = item.bar_code
         document.getElementById('branch_office_id_edit').value = item.branch_office.id
         document.getElementById('provider_id_edit').value = item.provider_id
         document.getElementById('category_id_edit').value = item.category_id
         document.getElementById('brand_id_edit').value = item.brand_id
         //console.log(item.provider_id);
-        document.getElementById('expiration_edit').value = item.expiration
+        //document.getElementById('expiration_edit').value = item.expiration
         document.getElementById('iva_edit').value = item.iva
         document.getElementById('product_key_edit').value = item.product_key
         document.getElementById('unit_product_key_edit').value = item.unit_product_key
