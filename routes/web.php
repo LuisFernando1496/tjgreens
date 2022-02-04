@@ -132,6 +132,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::post('/concluir',[CartController::class,'concluir'])->name('concluir');
     Route::patch('/venta-pagada/{id}',[CartController::class,'pagado'])->name('venta.pagada');
 
+
     Route::get('/getOrder',[WarehouseController::class,'generateOrder'])->name('getOrder');
 
     Route::post('/addCompra/{id}',[CartController::class,'addcart'])->name('addCompra');
@@ -140,6 +141,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::post('/reporteVentas',[ShoppingController::class,'ventas'])->name('reporte.ventas');
     Route::post('/reporteCompras',[ShoppingController::class,'compras'])->name('reporte.compras');
     Route::get('/ticket-venta/{id}',[WarehouseController::class,'ticket'])->name('generate.ticket');
+    Route::get('/factura-venta/{id}',[WarehouseController::class,'factura'])->name('generate.factura');
     Route::get('/buscar-cdigo/{codigo}',[WarehouseController::class,'buscadorP'])->name('buscar.codigo');
     Route::delete('/eliminar/{id}',[CartController::class,'destroy'])->name('eliminar.carrito');
     Route::delete('/delete-cart/{id}',[CartController::class,'eliminar'])->name('eliminar.shopping');

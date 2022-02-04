@@ -36,6 +36,7 @@
                                 <th>Total</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
+                                <th>Factura</th>
                                 <th>Eliminar</th>
                             </tr>
                         </thead>
@@ -58,6 +59,11 @@
                                             </form>
                                         @else
                                             <a href="{{route('generate.ticket',$venta->id)}}" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($venta->status != "En proceso")
+                                            <a href="{{route('generate.factura',$venta->id)}}" target="blank" class="btn btn-outline-success" type="button"><i class="bi bi-receipt-cutoff"></i></a>
                                         @endif
                                     </td>
                                     <td>

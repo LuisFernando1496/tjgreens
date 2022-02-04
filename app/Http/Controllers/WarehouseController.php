@@ -29,41 +29,45 @@ class WarehouseController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-        $this->devolucion();
-        if ($user->rol_id == 1) {
-            $almacenes = Warehouse::with(['oficina', 'user', 'inventarios'])
-                ->where('office_id', '=', $user->branch_office_id)->paginate();
-            $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', $user->branch_office_id)->get();
+        try {
+            $user = Auth::user();
+            //$this->devolucion();
+            if ($user->rol_id == 1) {
+                $almacenes = Warehouse::with(['oficina', 'user', 'inventarios'])
+                    ->where('office_id', '=', $user->branch_office_id)->paginate();
+                $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', $user->branch_office_id)->get();
 
-            return view('warehouse.index', [
-                'almacenes' => $almacenes,
-                'usuarios' => $usuarios
-            ]);
-        } else {
-            $almacen = Warehouse::where('user_id', '=', $user->id)->get();
-            if (sizeof($almacen) < 1) {
-                $inventario = [];
+                return view('warehouse.index', [
+                    'almacenes' => $almacenes,
+                    'usuarios' => $usuarios
+                ]);
             } else {
-                $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->paginate(10);
-                $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->get();
+                $almacen = Warehouse::where('user_id', '=', $user->id)->get();
+                if (sizeof($almacen) < 1) {
+                    $inventario = [];
+                } else {
+                    $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->paginate(10);
+                    $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->get();
+                }
+                $categorias = Category::all();
+                $carrito = Cart::where('user_id', '=', $user->id)
+                    ->where('status', '=', true)->with(['inventario'])->get();
+                $carritoCompras = CartShopping::where('user_id', '=', $user->id)->where('status', '=', true)->get();
+                $marcas = Brand::all();
+                $oficinas = BranchOffice::where('status', '=', true)->get();
+                return view('warehouse.index', [
+                    'almacenes' => $almacen,
+                    'inventarios' => $inventario,
+                    'categorias' => $categorias,
+                    'marcas' => $marcas,
+                    'carrito' => $carrito,
+                    'carritoCompras' => $carritoCompras,
+                    'oficinas' => $oficinas,
+                    'invetories' => $invetories
+                ]);
             }
-            $categorias = Category::all();
-            $carrito = Cart::where('user_id', '=', $user->id)
-                ->where('status', '=', true)->with(['inventario'])->get();
-            $carritoCompras = CartShopping::where('user_id', '=', $user->id)->where('status', '=', true)->get();
-            $marcas = Brand::all();
-            $oficinas = BranchOffice::where('status', '=', true)->get();
-            return view('warehouse.index', [
-                'almacenes' => $almacen,
-                'inventarios' => $inventario,
-                'categorias' => $categorias,
-                'marcas' => $marcas,
-                'carrito' => $carrito,
-                'carritoCompras' => $carritoCompras,
-                'oficinas' => $oficinas,
-                'invetories' => $invetories
-            ]);
+        } catch (\Error $th) {
+            return $th;
         }
     }
 
@@ -324,6 +328,14 @@ class WarehouseController extends Controller
         $venta = Shipment::findOrFail($id);
 
         return view('warehouse.ticket', [
+            'venta' => $venta
+        ]);
+    }
+
+    public function factura($id)
+    {
+        $venta = Shipment::findOrFail($id);
+        return view('warehouse.factura',[
             'venta' => $venta
         ]);
     }
