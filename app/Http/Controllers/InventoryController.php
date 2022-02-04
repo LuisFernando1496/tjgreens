@@ -159,8 +159,17 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            DB::table('inventories')->where('id','=',$id)->delete();
+            DB::commit();
+            return redirect()->route('almacen.index');
+        } catch (\Error $th) {
+            DB::rollBack();
+            return $th;
+        }
     }
+
 
     public function busqueda($palabra)
     {

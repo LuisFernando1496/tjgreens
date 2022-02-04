@@ -235,6 +235,7 @@
                                         <th>Costo</th>
                                         <th>Acciones</th>
                                         <th>Edición</th>
+                                        <th>Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody id="inventarios">
@@ -258,6 +259,12 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>
+                                            </td>
+                                            <td>
+                                                <form action="{{route('inventario.delete',$inventario->id)}}" method="POST">
+                                                    @csrf @method('DELETE')
+                                                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @empty
