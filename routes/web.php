@@ -30,7 +30,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/registro', 'UserController@create');
-Route::post('/registro', 'UserController@store');
+Route::post('/registro', 'UserController@store'); 
 Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::resource('user', 'UserController'); 
