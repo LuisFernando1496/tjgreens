@@ -33,32 +33,15 @@
         <hr>
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Detalle de venta</h4>
+                <h4 class="card-title">Detalle de venta con N° {{$venta->id}}</h4>
             </div>
             <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Folio:</th>
-                            <th>Subtotal:</th>
-                            <th>Descuento:</th>
-                            <th>Total:</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{$venta->id}}</td>
-                            <td>${{number_format($venta->subtotal,2,'.',',')}}</td>
-                            <td>{{$venta->discount}}%</td>
-                            <td>${{number_format($venta->total,2,'.',',')}}</td>
-                        </tr>
-                    </tbody>
-                </table>
                 <hr>
                 <h5 class="card-title">Productos</h5>
                 @php
                     $costo_total = 0;
                     $precio_total = 0;
+                    $suma = 0;
                 @endphp
                 <table class="table table-hover">
                     <thead>
@@ -96,11 +79,14 @@
                                 @endphp
                                 <td>${{number_format($pt,2,'.',',')}}</td>
                                 @php
-                                    $subtotal = $inventario->quantity * $inventario->inventario[0]->price;
+                                    $subtotal = $inventario->quantity * $inventario->inventario[0]->cost;
+                                    $descuentot = $inventario->discount / 100;
+                                    $tt = $subtotal - ($subtotal * $descuentot);
+                                    $suma += $tt;
                                 @endphp
                                 <td>${{number_format($subtotal,2,'.',',')}}</td>
                                 <td>{{$inventario->discount}}%</td>
-                                <td>${{number_format($inventario->total,2,'.',',')}}</td>
+                                <td>${{number_format($tt,2,'.',',')}}</td>
                             </tr>
                         @empty
 
@@ -110,10 +96,13 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td>Costo Total:</td>
-                            <td>${{number_format($costo_total,2,'.',',')}}</td>
-                            <td>Precio Total:</td>
-                            <td>${{number_format($precio_total,2,'.',',')}}</td>
+                            <td><b>Costo Total:</b></td>
+                            <td><b>${{number_format($costo_total,2,'.',',')}}</b></td>
+                            <td><b>Precio Total:</b></td>
+                            <td><b>${{number_format($precio_total,2,'.',',')}}</b></td>
+                            <td></td>
+                            <td><b>Total:</b></td>
+                            <td><b>${{number_format($suma,2,'.',',')}}</b></td>
                         </tr>
                     </tbody>
                 </table>
