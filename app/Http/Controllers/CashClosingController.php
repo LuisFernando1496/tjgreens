@@ -60,12 +60,18 @@ class CashClosingController extends Controller
     {
         DB::beginTransaction();
         try {
-            if(CashClosing::where('user_id','=',Auth::user()->id)->where('status','=',false)->count() == 0 && Box::find($request->box_id)->status = true){
+            //return back()->withErrors(['error'=>CashClosing::where('user_id','=',Auth::user()->id)->where('status','=',false)->count()]);
+            //return back()->withErrors(['error'=>Box::find($request->box_id)->number, Box::find($request->box_id)->status, Box::find($request->box_id)->id]);
+            if(CashClosing::where('user_id','=',Auth::user()->id)->where('status','=',false)->count() == 0 && Box::find($request->box_id)->status == true){
                 $request["user_id"] = Auth::user()->id;
                 $tempBox = Box::find($request->box_id);
-                $tempBox->status = false;
+                //return back()->withErrors(['error'=>$tempBox->status]);
+                //$tempBox->status = true;
                 $tempBox->save();
                 $request['initial_cash'] = InitialCash::all()->pluck('amount')->first();
+                $branchOffice = BranchOffice::where("name", "=", $request->branch_office_id)->where("status", "=", true)->get();
+                $request['branch_office_id'] = $branchOffice[0]->id;
+                //return back()->withErrors(['error'=>$branchOffice[0]->id]);
                 CashClosing::create($request->all());
                 DB::commit();
                 return redirect('caja');

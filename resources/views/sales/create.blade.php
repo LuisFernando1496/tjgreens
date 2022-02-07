@@ -528,14 +528,15 @@
                 @csrf
                 <div class="form-group">
                     <label for="branch_office_id">Sucursal</label>
-                    <select class="custom-select" id="branch_office_id" name="branch_office_id">
+                    <input type="text" readonly class="form-control" value="{{$userAuth[0]->name}}" id="branch_office_id" name="branch_office_id">
+                    {{--<select class="custom-select" id="branch_office_id" name="branch_office_id">
                         @foreach ($branches as $branch)
                             <option value="{{$branch->id}}">{{$branch->name}}</option>
                         @endforeach
-                    </select>
+                    </select>--}}
                 </div>
                 <div class="form-group">
-                    <label for="box_id">Cajad</label>
+                    <label for="box_id">Caja</label>
                     <select class="custom-select" id="box_id" name="box_id" required>
                     </select>
                 </div>
@@ -555,6 +556,8 @@
 @push('scripts')
     <script type="application/javascript">
         $(document).ready(function() {
+            getBoxes();
+            //console.log("bacnh: "+$('#branch_office_id').val());
          //   document.getElementById("search").focus();
             let result = [];
             let generalSubtotal = 0;
@@ -639,10 +642,10 @@
                 }
             });
 
-            if($('#branch_office_id').val()!==undefined){
+            /*if($('#branch_office_id').val()!==undefined){
                 console.log('holaaaaa');
                 getBoxes();
-            }
+            }*/
             if(user_id ==1 || user_id==3)
             {
                 type_sale_id.style.display= "inline-block";
@@ -754,8 +757,6 @@
                                             '<td>'+element.category_name+'</td>'+
                                             '<td>'+element.stock+'</td>'+
                                             '<td>'+element.price_1+'</td>'+
-                                            //'<td>'+element.price_2+'</td>'+
-                                            //'<td>'+element.price_3+'</td>'+
                                         '</tr>'
                                     );
                                     }
@@ -768,8 +769,6 @@
                                             '<td>'+element.category_name+'</td>'+
                                             '<td>'+element.stock+'</td>'+
                                             '<td>'+element.price_1+'</td>'+
-                                            '<td>'+element.price_2+'</td>'+
-                                            '<td>'+element.price_3+'</td>'+
                                         '</tr>'
                                     );
                                     }
@@ -1182,8 +1181,8 @@
                 });
             }
             function getBoxes(){
+                console.log("obtener caja"+ $('#branch_office_id').val());
                 $('#box_id').empty();
-               
                 $.ajax({
                     url: "/getBox/"+$('#branch_office_id').val(),
                     headers: {
@@ -1191,10 +1190,13 @@
                     },
                     type: 'GET',
                     contentType: "application/json; charset=iso-8859-1",
-                    data: null,
+                    //data: null,
+                    data: {'search':$('#branch_office_id').val()},
                     dataType: 'html',
                     success: function(data) {
                         let boxes=JSON.parse(data);
+                        console.log("data: "+boxes[0].id);
+                        console.log("data: "+boxes[0].number);
                         if(boxes.length!==0){
                        
                             $('#openBoxButton').prop('disabled',false);
@@ -1296,9 +1298,9 @@
             $('#additional_discount').keyup(function(){
                 update();
             })
-            $('#branch_office_id').change(function (){
+            /*$('#branch_office_id').change(function (){
                 getBoxes();
-            });
+            });*/
             $('.category').click( function() {
                 let idCategory = $(this).data('category');
                 let url = "/sale/productsCategory/" +  idCategory;

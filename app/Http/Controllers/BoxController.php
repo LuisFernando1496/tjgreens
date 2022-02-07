@@ -26,9 +26,13 @@ class BoxController extends Controller
     }
 
 
-    public function getAvailableBoxByBranchOfficeId(BranchOffice $branchOffice)
+    public function getAvailableBoxByBranchOfficeId(Request $request)//(BranchOffice $branchOffice)
     {
-        return Box::where("branch_office_id","=",$branchOffice->id)->get();
+        //return Response()->json("Hola mundo");
+        $branchOffice = BranchOffice::where("name", "=", $request->search)->where("status","=",true)->get();
+        $data = Box::where("branch_office_id","=",$branchOffice[0]->id)->where("status","=",true)->get();
+        return response()->json($data);
+        //return Box::where("branch_office_id","=",$branchOffice->id)->get();
     }
 
     /**
