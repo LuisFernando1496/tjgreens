@@ -314,7 +314,7 @@ class SaleController extends Controller
                     $shopping_cart_id = new AppShoppingCart();
                     $shopping_cart_id->save();
                     //AGREGAR PRODUCTOS DE LA VENTA
-                    $comments = $sale['comentario'];
+                    $comments = $oficce['comentario'];
                     $sale['shopping_cart_id'] = $shopping_cart_id->id;
                     if ($sale['card_ingress'] == null){
                         $sale['card_ingress'] = 0;

@@ -100,7 +100,10 @@ img {
         Subtotal:  ${{number_format($sale->cart_subtotal,2,'.',',')}}
         =========================
         <br>
-        Total: ${{number_format($sale->cart_total,2,'.',',')}}
+        Total: ${{number_format($sale->cart_total,2,'.',',')}} <br>
+        @if($sale->turned != 0)
+        Cambio: ${{$sale->turned}} <br>
+        @endif
         {{--Pago con tarjeta : $0.00 <br>
         Descuento: $0.00 <br>
         ============ <br>

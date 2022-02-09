@@ -758,12 +758,27 @@
                                         <input type="number" name="total" class="form-control" step="any"
                                             id="totalGeneralCompra" readonly value="{{ $total }}">
                                     </div>
+                                    @forelse ($carritoCompras as $key => $item)
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="productsId[]" class="form-control" step="any"
+                                            id="productsId" readonly value="{{$item->inventory_id}}">
+                                    </div>
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="quantityProducts[]" class="form-control" step="any"
+                                            id="quantityProducts" readonly value="{{$item->quantity}}">
+                                    </div>
+                                    @empty
+
+                                    @endforelse
+
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Comprar</button>
+                            <button type="submit" id="btnModalComprar" class="btn btn-primary">Comprar</button>
                         </div>
                     </form>
                 </div>
@@ -970,6 +985,10 @@
                         alert('Error');
                         location.reload();
                     });
+                });
+
+                $('#btnModalComprar').on('click', function(){
+                    $('#carritoCompraModal').modal('hide');
                 });
 
                 $('.eliminar').on('click', function() {

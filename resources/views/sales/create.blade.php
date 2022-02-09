@@ -1121,12 +1121,12 @@
                     sale : {
                         payment_type: $('#payment_type').find(':selected').val(),
                         amount_discount: totalDiscount,
-                        discount: parseInt($('#additional_discount').val()),
+                        discount: parseFloat($('#additional_discount').val()),
                         cart_subtotal: generalSubtotal,
                         cart_total: totalSale,
-                        turned: parseInt($('#turned').text()),
-                        ingress: parseInt($('#ingress').val()),
-                        card_ingress: parseInt($('#cardIngress').val()),
+                        turned: parseFloat($('#turned').text()),
+                        ingress: parseFloat($('#ingress').val()),
+                        card_ingress: parseFloat($('#cardIngress').val()),
                         client_id: $('#client_id').find(':selected').val(),
                     },
                     products:items,
@@ -1153,18 +1153,18 @@
                                 if(JSON.parse(data).data.saletype == 1)
                                 { 
                                    console.log(JSON.parse(data).transfer.id);
-                                    // $('#sendReprintId').val(JSON.parse(data).transfer.id)
-                                    // $('#reprintFormSend').submit()
-                                    // location.reload();  
+                                    $('#sendReprintId').val(JSON.parse(data).transfer.id)
+                                    $('#reprintFormSend').submit()
+                                    location.reload();  
                                    
                                 //  reprintFormSend sendReprintId
                                 }
                                 else
                                 {
                                     console.log(JSON.parse(data));
-                                //    $('#saleReprintId').val(JSON.parse(data).data.id)
-                                //     $('#reprintForm').submit()
-                                //     location.reload();
+                                    $('#saleReprintId').val(JSON.parse(data).data.id)
+                                    $('#reprintForm').submit()
+                                    location.reload();
                                 }
                                 
                                 
