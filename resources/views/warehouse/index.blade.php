@@ -259,6 +259,7 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>
+                                                <a href="{{route('codigoAlmacen', $inventario)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>
                                             </td>
                                             <td>
                                                 <form action="{{route('inventario.delete',$inventario->id)}}" method="POST">

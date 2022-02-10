@@ -350,4 +350,12 @@ class WarehouseController extends Controller
             return null;
         }
     }
+
+    public function codigoAlmacen(Inventory $almacen)
+    {
+        //return $almacen;
+        return view('products.tag',[
+            'product' => $almacen,
+        ]);
+    }
 }
