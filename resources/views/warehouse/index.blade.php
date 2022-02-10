@@ -222,7 +222,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="tabla1">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -274,6 +274,26 @@
                                 </tbody>
                             </table>
                             {{$inventarios->links()}}
+
+                            <table class="table table-hover" id="tabla2" hidden>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Categoria</th>
+                                        <th>Marca</th>
+                                        <th>Stock</th>
+                                        <th>Precio</th>
+                                        <th>Costo</th>
+                                        <th>Acciones</th>
+                                        <th>Edición</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventarios2">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1007,16 +1027,62 @@
                     });
                 });
 
+                document.getElementById("inputBusqueda").addEventListener("keyup", function(){
+                    if (document.getElementById("inputBusqueda").value.length >= 1){
+                        $("#tabla1").prop('hidden', true);
+                        $("#tabla2").prop('hidden', false);
+                        var palabra = $('#inputBusqueda').val();
+                        $.get('/buscarInventario/'+palabra,function (data){
+                            //console.log(data);
+                            $('#inventarios2').empty();
+                            data.forEach(element => {
+                                var id = element['id'];
+                                var url = '{{route("inventario.delete",'+id+')}}';
+                                $('#inventarios2').append('<tr>'+
+                                    '<td>'+element['id']+'</td>'+
+                                    '<td>'+element['bar_code']+'</td>'+
+                                    '<td>'+element['name']+'</td>'+
+                                    '<td>'+element['categoria']['name']+'</td>'+
+                                    '<td>'+element['marca']['name']+'</td>'+
+                                    '<td>'+element['stock']+'</td>'+
+                                    '<td>'+element['price']+'</td>'+
+                                    '<td>'+element['cost']+'</td>'+
+                                    '<td>'+
+                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                        '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<form action="/inventario/'+id+'" method="POST">'+
+                                            '@csrf @method("DELETE")'+
+                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                        '</form>'+
+                                    '</td>'+
+                                '</tr>');
+                            });
+                        });
+                    }else{
+                        $("#tabla1").prop('hidden', false);
+                        $("#tabla2").prop('hidden', true);
+                        document.getElementById("inventarios2").innerHTML = "";
+                    }
+                });
+
                 $('#buscarInve').on('click',function(){
+                    $("#tabla1").prop('hidden', true);
+                    $("#tabla2").prop('hidden', false);
                     var palabra = $('#inputBusqueda').val();
 
                     $.get('/buscarInventario/'+palabra,function (data){
-                        console.log(data);
-                        $('#inventarios').empty();
+                        //console.log(data);
+                        $('#inventarios2').empty();
                         data.forEach(element => {
                             var id = element['id'];
                             var url = '{{route("inventario.delete",'+id+')}}';
-                            $('#inventarios').append('<tr>'+
+                            $('#inventarios2').append('<tr>'+
                                 '<td>'+element['id']+'</td>'+
                                 '<td>'+element['bar_code']+'</td>'+
                                 '<td>'+element['name']+'</td>'+
@@ -1031,6 +1097,7 @@
                                 '</td>'+
                                 '<td>'+
                                     '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
                                 '</td>'+
                                 '<td>'+
                                     '<form action="/inventario/'+id+'" method="POST">'+
