@@ -314,7 +314,7 @@ class SaleController extends Controller
                     $shopping_cart_id = new AppShoppingCart();
                     $shopping_cart_id->save();
                     //AGREGAR PRODUCTOS DE LA VENTA
-                    $comments = $sale['comentario'];
+                    $comments = $oficce['comentario'];
                     $sale['shopping_cart_id'] = $shopping_cart_id->id;
                     if ($sale['card_ingress'] == null){
                         $sale['card_ingress'] = 0;
@@ -437,6 +437,7 @@ class SaleController extends Controller
                     ->where("products.stock", ">", 0)->where("products.status", "=", true)
                     ->where('products.branch_office_id', Auth::user()->branch_office_id)
                     ->select('products.*', 'brands.name as brand_name', 'brands.id as brand_id','categories.name as category_name')
+                    ->orderBy('products.name', 'ASC')
                     ->get();
                 if(count($datas) == 0)
                 {
@@ -447,6 +448,7 @@ class SaleController extends Controller
                     ->where("products.stock", ">", 0)->where("products.status", "=", true)
                     ->where('products.branch_office_id', Auth::user()->branch_office_id)
                     ->select('products.*', 'brands.name as brand_name', 'brands.id as brand_id','categories.name as category_name')
+                    ->orderBy('products.name', 'ASC')
                     ->get();
                 }
 
@@ -463,6 +465,7 @@ class SaleController extends Controller
                 ->orWhere("brands.name", "LIKE", "%{$request->search}%")
                 ->where("branch_offices.status",1)
                 ->select('products.*','products.cost as costo','branch_offices.name as office_name','brands.name as brand_name', 'brands.id as brand_id', 'categories.name as category_name', 'categories.id as category_id')
+                ->orderBy('products.name', 'ASC')
                 ->get();
 
         return response()->json($datas);
@@ -643,8 +646,9 @@ class SaleController extends Controller
             ->groupBy("product_in_sales.product_id","product_in_sales.sale_price")
             ->orderBy('quantity', 'DESC')
             ->get();
+        $userBranchOficce = BranchOffice::where('id', "=", Auth::user()->branch_office_id)->get();
         if (CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->count() == 0) {
-            return view('sales.create', ["branches" => $branches, 'traspacing'=>  $traspacing]);
+            return view('sales.create', ["branches" => $branches, 'traspacing'=>  $traspacing, "userAuth" => $userBranchOficce,]);
         } else {
             return view('sales.create', [
                 'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first(),
@@ -653,6 +657,7 @@ class SaleController extends Controller
                 'clients' => Client::where('status', true)->get(),
                 'traspacing' =>  $traspacing,
                 "ventasS" => $ventas,
+                "userAuth" => $userBranchOficce,
             ]);
         }
     }
