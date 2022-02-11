@@ -147,7 +147,7 @@ class CashClosingController extends Controller
                 $flag = true;
                 $request["status"]=true;
                 $box = Box::find($cashClosing->box_id);
-                $box->status = false;
+                //$box->status = false;
                 $box->save();
                 $cashClosing->end_cash = $request->end_cash;
                 $cashClosing->status = true;

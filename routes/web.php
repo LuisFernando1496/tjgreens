@@ -116,6 +116,7 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::get('/stock','ProductController@stock');
 
+    Route::get('/codigoAlmacen/{almacen}','WarehouseController@codigoAlmacen')->name('codigoAlmacen');
     Route::get('/tag/{product}','ProductController@tag')->name('tag');
 
     Route::get('/almacen',[WarehouseController::class,'index'])->name('almacen.index');
