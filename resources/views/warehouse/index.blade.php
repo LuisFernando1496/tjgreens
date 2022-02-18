@@ -718,16 +718,17 @@
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tablita">
+                                    <tbody id="tablita2">
                                         @php
                                             $total = 0;
                                         @endphp
                                         @forelse ($carritoCompras as $item)
                                             <tr>
+                                                <td hidden class="idProduct">{{$item->inventory_id}}</td>
                                                 <td>{{ $item->id }}</td>
                                                 <td>{{ $item->inventario[0]->name }}</td>
                                                 <td>${{ $item->inventario[0]->price }}</td>
-                                                <td>{{ $item->quantity }}</td>
+                                                <td class="quantityProduct">{{ $item->quantity }}</td>
                                                 <td>${{ $item->subtotal }}</td>
                                                 <td>{{ $item->discount }}%</td>
                                                 <td>${{ $item->total }}</td>
@@ -750,14 +751,14 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="">Sucursal</label>
-                                        <select name="office_id" id="" class="form-control" required>
+                                        <select name="office_id" id="office_id" class="form-control" required>
                                             <option selected value="{{ Auth::user()->branch_office_id }}">
                                                 {{ Auth::user()->branchOffice->name }}</option>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <label for="">Tipo Pago</label>
-                                        <select name="type" id="type" class="form-control" required>
+                                        <select name="type" id="typePaymnet" class="form-control" required>
                                             <option value="">--Seleccionar--</option>
                                             <option value="Efectivo">Efectivo</option>
                                             <option value="Tarjeta">Tarjeta</option>
@@ -783,12 +784,12 @@
                                     <div class="col" hidden>
                                         <label for="">id</label>
                                         <input type="number" name="productsId[]" class="form-control" step="any"
-                                            id="productsId" readonly value="{{$item->inventory_id}}">
+                                             readonly value="{{$item->inventory_id}}">
                                     </div>
                                     <div class="col" hidden>
                                         <label for="">id</label>
                                         <input type="number" name="quantityProducts[]" class="form-control" step="any"
-                                            id="quantityProducts" readonly value="{{$item->quantity}}">
+                                             readonly value="{{$item->quantity}}">
                                     </div>
                                     @empty
 
@@ -1009,7 +1010,46 @@
                 });
 
                 $('#btnModalComprar').on('click', function(){
-                    $('#carritoCompraModal').modal('hide');
+                    if($('#typePaymnet').find(':selected').val() != ""){
+                        $('#carritoCompraModal').modal('hide');
+                        let idsP = [];
+                        let quaP = [];
+                        $('#tablita2').children().each(function (){
+                            idsP.push(parseInt($(this).find('.idProduct').text()));
+                            quaP.push(parseInt($(this).find('.quantityProduct').text()));
+                        });
+                        let request = {
+                            office_id: $('#office_id').find(':selected').val(),
+                            type: $('#typePaymnet').find(':selected').val(),
+                            subtotal: parseFloat($('#subtotalGeneralCompra').val()),
+                            discount: parseFloat($('#descuentoGeneralCompra').val()),
+                            total: parseFloat($('#totalGeneralCompra').val()),
+                            productsId: idsP,
+                            quantityProducts: quaP,
+                            bandera: 0,
+                        };
+                        request = [];
+                        $.ajax({
+                            url: "/concluirCompra",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data:JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {                                                
+                                console.log("exito");
+                                setTimeout(location.reload(), 10000);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                                setTimeout(alert("Exito en la venta"),3000);
+                                location.reload();
+                            },
+                        });
+
+                    }
                 });
 
                 $('.eliminar').on('click', function() {

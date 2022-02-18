@@ -186,7 +186,12 @@ class CartController extends Controller
 
     public function concluirCompra(Request $request)
     {
-        return Excel::download(new WarehouseExport($request), 'ventaAlmacen.xlsx');
+        /*if($request->bandera){
+            return redirect()->route('almacen.index');
+        }else{*/
+            return Excel::download(new WarehouseExport($request), 'ventaAlmacen.xlsx');
+        //}
+        //
     }
 
     public function pagado($id)
