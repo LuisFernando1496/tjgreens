@@ -1150,34 +1150,24 @@
                         if(JSON.parse(data).success){
                             //console.log(JSON.parse(data).data.products_in_sale)
                             console.log('success')
-                                if(JSON.parse(data).data.saletype == 1)
-                                { 
-<<<<<<< HEAD
+                                if(JSON.parse(data).data.saletype == 1){ 
                                   // console.log(JSON.parse(data).transfer.id);
-                                     $('#sendReprintId').val(JSON.parse(data).transfer.id)
-                                     $('#reprintFormSend').submit()
-                                     location.reload();  
-=======
-                                   console.log(JSON.parse(data).transfer.id);
                                     $('#sendReprintId').val(JSON.parse(data).transfer.id)
                                     $('#reprintFormSend').submit()
                                     location.reload();  
->>>>>>> 5c9dcb8e27f60a3952211c9d67d50f74c4d142f2
-                                   
+                                   /*console.log(JSON.parse(data).transfer.id);
+                                    $('#sendReprintId').val(JSON.parse(data).transfer.id)
+                                    $('#reprintFormSend').submit()
+                                    location.reload();  */
                                 //  reprintFormSend sendReprintId
-                                }
-                                else
-                                {
-<<<<<<< HEAD
+                                }else{
                                    // console.log(JSON.parse(data));
                                    $('#saleReprintId').val(JSON.parse(data).data.id)
                                      $('#reprintForm').submit()
-=======
                                     console.log(JSON.parse(data));
-                                    $('#saleReprintId').val(JSON.parse(data).data.id)
+                                    /*$('#saleReprintId').val(JSON.parse(data).data.id)
                                     $('#reprintForm').submit()
->>>>>>> 5c9dcb8e27f60a3952211c9d67d50f74c4d142f2
-                                    location.reload();
+                                    location.reload();*/
                                 }
                                 
                                 
