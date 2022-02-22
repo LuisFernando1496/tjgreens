@@ -13,6 +13,7 @@ use App\Product;
 use App\Shipment;
 use App\Shopping;
 use App\Warehouse;
+use App\BranchOffice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -87,6 +88,7 @@ class WarehouseExport implements FromView //implements FromCollection
                     'compra' => $traspaso,
                     'cantidad' => $this->dataGlobal->quantityProducts,
                     'title' => "Traspaso",
+                    'sucursal' => BranchOffice::where("id", "=", $this->dataGlobal->office_id)->where("status", "=", true)->select("name")->get(),
                 ]);
             } catch (\Error $th) {
                 DB::rollBack();

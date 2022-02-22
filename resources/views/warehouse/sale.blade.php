@@ -14,6 +14,9 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title" style="text-align: center">{{$title}}</h4>
+                @if($title == "Traspaso")
+                <h4>Sucursal destino {{$sucursal[0]->name}} </h4>
+                @endif
             </div>
             <div class="card-body">
                 <table class="table table-hover table-bordered">
