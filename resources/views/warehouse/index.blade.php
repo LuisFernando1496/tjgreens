@@ -656,7 +656,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="">Tipo Pago</label>
-                                        <select name="type" id="type" class="form-control" required>
+                                        <select name="type" id="typeTranferencia" class="form-control" required>
                                             <option value="">--Seleccionar--</option>
                                             <option value="Efectivo">Efectivo</option>
                                             <option value="Tarjeta">Tarjeta</option>
@@ -678,12 +678,30 @@
                                         <input type="number" name="total" class="form-control" step="any"
                                             id="totalGeneral" readonly value="{{ $total }}">
                                     </div>
+                                    @forelse ($carrito as $key => $item)
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="productsId[]" class="form-control" step="any"
+                                             readonly value="{{$item->inventory_id}}">
+                                    </div>
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="quantityProducts[]" class="form-control" step="any"
+                                             readonly value="{{$item->quantity}}">
+                                    </div>
+                                    @empty
+
+                                    @endforelse
+                                    <div class="col" hidden>
+                                        <input type="number" name="transferencia" class="form-control" step="any"
+                                             readonly value="1">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Transferir</button>
+                            <button type="submit" id="btnModaltransferir" class="btn btn-primary">Transferir</button>
                         </div>
                     </form>
                 </div>
@@ -1045,6 +1063,33 @@
                             error: function(e) {
                                 console.log("ERROR", e);
                                 setTimeout(alert("Exito en la venta"),3000);
+                                location.reload();
+                            },
+                        });
+
+                    }
+                });
+
+                $('#btnModaltransferir').on('click', function(){
+                    if($('#typeTranferencia').find(':selected').val() != ""){
+                        $('#carritoModal').modal('hide');
+                        request = [];
+                        $.ajax({
+                            url: "/concluir",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data:JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {                                                
+                                console.log("exito");
+                                setTimeout(location.reload(), 10000);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                                setTimeout(alert("Transferencia exitosa!"), 3000);
                                 location.reload();
                             },
                         });

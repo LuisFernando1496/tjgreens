@@ -147,7 +147,13 @@ class CartController extends Controller
 
     public function concluir(Request $request)
     {
-        $user = Auth::user();
+        return Excel::download(new WarehouseExport($request), 'transferenciaAlmacen.xlsx');
+        /*if($request->transferencia){
+            return 0;
+        }else{
+            return 123;
+        }*/
+        /*$user = Auth::user();
         $almacen = Warehouse::where('user_id','=',$user->id)->get();
         $carrito = Cart::where('user_id','=',$user->id)->where('status','=',true)->get();
         try {
@@ -181,17 +187,12 @@ class CartController extends Controller
         } catch (\Error $th) {
             DB::rollBack();
             return $th;
-        }
+        }*/
     }
 
     public function concluirCompra(Request $request)
     {
-        /*if($request->bandera){
-            return redirect()->route('almacen.index');
-        }else{*/
-            return Excel::download(new WarehouseExport($request), 'ventaAlmacen.xlsx');
-        //}
-        //
+        return Excel::download(new WarehouseExport($request), 'ventaAlmacen.xlsx');
     }
 
     public function pagado($id)

@@ -1150,21 +1150,24 @@
                         if(JSON.parse(data).success){
                             //console.log(JSON.parse(data).data.products_in_sale)
                             console.log('success')
-                                if(JSON.parse(data).data.saletype == 1)
-                                { 
-                                   console.log(JSON.parse(data).transfer.id);
+                                if(JSON.parse(data).data.saletype == 1){ 
+                                  // console.log(JSON.parse(data).transfer.id);
                                     $('#sendReprintId').val(JSON.parse(data).transfer.id)
                                     $('#reprintFormSend').submit()
                                     location.reload();  
-                                   
+                                   /*console.log(JSON.parse(data).transfer.id);
+                                    $('#sendReprintId').val(JSON.parse(data).transfer.id)
+                                    $('#reprintFormSend').submit()
+                                    location.reload();  */
                                 //  reprintFormSend sendReprintId
-                                }
-                                else
-                                {
+                                }else{
+                                   // console.log(JSON.parse(data));
+                                   $('#saleReprintId').val(JSON.parse(data).data.id)
+                                     $('#reprintForm').submit()
                                     console.log(JSON.parse(data));
-                                    $('#saleReprintId').val(JSON.parse(data).data.id)
+                                    /*$('#saleReprintId').val(JSON.parse(data).data.id)
                                     $('#reprintForm').submit()
-                                    location.reload();
+                                    location.reload();*/
                                 }
                                 
                                 
