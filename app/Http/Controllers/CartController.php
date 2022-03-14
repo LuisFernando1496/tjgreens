@@ -98,8 +98,9 @@ class CartController extends Controller
         }
     }
 
-    public function addcart(Request $request,$id)
+    public function addcart(Request $request, $id)
     {
+        //return $id;
         $user = Auth::user();
         $search = CartShopping::where('inventory_id','=',$id)->where('status','=',true)->get();
         if (sizeof($search) > 0) {

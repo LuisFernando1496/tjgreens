@@ -32,10 +32,9 @@ Auth::routes();
 Route::get('/registro', 'UserController@create');
 Route::post('/registro', 'UserController@store'); 
 Route::get('/home', 'HomeController@index')->name('home');
-
+//Route::get('/cambiarPass', 'UserController@cambiarPass');
 //Route::resource('user', 'UserController'); 
-Route::group(['middleware'=>'auth'], function(){
-
+Route::group(['middleware'=>'auth'], function(){  
     //Rutas AJAX
     Route::get('/users-ajax',[UserController::class,'ajaxget']);
 

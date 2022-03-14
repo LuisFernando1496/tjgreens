@@ -342,8 +342,13 @@ class WarehouseController extends Controller
 
     public function buscadorP($codigo)
     {
-        $producto = Product::where('bar_code', '=', $codigo)->orWhere('name', 'LIKE', $codigo)->with(['categoria', 'brand'])->first();
-
+        //$producto = Product::join("branch_offices","branch_offices.id","=","products.branch_office_id")
+        $producto = Product::where('bar_code', '=', $codigo)
+        ->orWhere('name', 'LIKE', $codigo)
+        ->with(['categoria', 'brand'])
+        ->first();
+        //$p = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+            //->join("users","users.id","=","sales.user_id")
         if ($producto != null) {
             return response()->json($producto);
         } else {

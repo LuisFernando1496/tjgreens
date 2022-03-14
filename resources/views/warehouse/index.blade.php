@@ -442,6 +442,8 @@
                 </div>
 
             </div>
+
+
             <div class="modal fade" id="addCompra{{ $inventario->id }}" tabindex="-1"
                 aria-labelledby="addInventario{{ $inventario->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -744,12 +746,16 @@
                                             <tr>
                                                 <td hidden class="idProduct">{{$item->inventory_id}}</td>
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ $item->inventario[0]->name }}</td>
-                                                <td>${{ $item->inventario[0]->price }}</td>
-                                                <td class="quantityProduct">{{ $item->quantity }}</td>
-                                                <td>${{ $item->subtotal }}</td>
-                                                <td>{{ $item->discount }}%</td>
-                                                <td>${{ $item->total }}</td>
+                                                <td class="nameItem">{{ $item->inventario[0]->name }}</td>
+                                                <td class="priceItem">${{ $item->inventario[0]->price }}</td>
+                                                <td hidden class="quantityProduct">{{ $item->quantity }}</td>
+                                                <td hidden class="subtotalItem">{{ $item->subtotal }}</td>
+                                                <td hidden class="discountItem">{{ $item->discount }}</td>
+                                                <td hidden class="totalItem">{{ $item->total }}</td>
+                                                <td >{{ $item->quantity }}</td>
+                                                <td >${{ $item->subtotal }}</td>
+                                                <td >{{ $item->discount }}%</td>
+                                                <td >${{ $item->total }}</td>
                                                 <td>
                                                     <button class="btn btn-outline-danger eliminar" type="button"
                                                         data-id="{{ $item->id }}"><i
@@ -1030,13 +1036,38 @@
                 $('#btnModalComprar').on('click', function(){
                     if($('#typePaymnet').find(':selected').val() != ""){
                         $('#carritoCompraModal').modal('hide');
+
                         let idsP = [];
                         let quaP = [];
                         $('#tablita2').children().each(function (){
-                            idsP.push(parseInt($(this).find('.idProduct').text()));
-                            quaP.push(parseInt($(this).find('.quantityProduct').text()));
+                            //idsP.push(parseInt($(this).find('.idProduct').text()));
+                            //quaP.push(parseInt($(this).find('.quantityProduct').text()));
+                            let id = parseInt($(this).find('.idProduct').text());
+                            let request = {
+                                quantity: parseFloat($(this).find('.quantityProduct').text()),
+                                subtotal: parseFloat($(this).find('.subtotalItem').text()),
+                                discount: parseFloat($(this).find('.discountItem').text()),
+                                total: parseFloat($(this).find('.totalItem').text()),
+                            }
+                            $.ajax({
+                            url: "/addInventario/"+id,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data:JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {                                                
+                                console.log("exito", data);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                            },
                         });
-                        let request = {
+
+                        });
+                        /*let request = {
                             office_id: $('#office_id').find(':selected').val(),
                             type: $('#typePaymnet').find(':selected').val(),
                             subtotal: parseFloat($('#subtotalGeneralCompra').val()),
@@ -1045,7 +1076,7 @@
                             productsId: idsP,
                             quantityProducts: quaP,
                             bandera: 0,
-                        };
+                        };*/
                         request = [];
                         $.ajax({
                             url: "/concluirCompra",
@@ -1066,7 +1097,6 @@
                                 location.reload();
                             },
                         });
-
                     }
                 });
 
@@ -1112,6 +1142,10 @@
                     });
                 });
 
+                /*document.getElementById("codigo").addEventListener("keyup", function(){
+
+                });*/
+
                 document.getElementById("inputBusqueda").addEventListener("keyup", function(){
                     if (document.getElementById("inputBusqueda").value.length >= 1){
                         $("#tabla1").prop('hidden', true);
@@ -1133,6 +1167,8 @@
                                     '<td>'+element['price']+'</td>'+
                                     '<td>'+element['cost']+'</td>'+
                                     '<td>'+
+                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                        'data-bs-target="#addInventario"><i class="bi bi-bag-plus-fill"></i></button>'+
                                         '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
                                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                     '</td>'+

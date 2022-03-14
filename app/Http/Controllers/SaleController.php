@@ -40,9 +40,13 @@ class SaleController extends Controller
     {
 
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->orderBy('id','DESC')->paginate(10);
+            $sales = Sale::where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])
+            ->orderBy('id','DESC')
+            ->paginate(10);
         } else {
-            $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)->with(['productsInSale.product.category', 'branchOffice', 'user'])->paginate(10);
+            $sales = Sale::where('branch_office_id', Auth::user()->branch_office_id)->where('status', true)
+            ->with(['productsInSale.product.category', 'branchOffice', 'user'])
+            ->paginate(10);
         }
 
         return view('sales.index', [

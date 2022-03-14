@@ -68,7 +68,7 @@ img {
         @else
         Precio: {{$product->price}}  <br>
         @endif
-        Precio en dolar: {{$product->cost * 0.049}}  <br>
+        Costo en dolar: {{$product->cost * 0.049}}  <br>
     </p>
 </div>
 </body>
