@@ -27,7 +27,10 @@ class ProductController extends Controller
     public function index()
     {
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $products = Product::where('status', true)->paginate(10);//->get();
+            $products = Product::where('status', true)
+            ->orderBy('name', 'ASC')
+            //->orderBy('id','DESC')
+            ->paginate(10);//->get();
             //$products = Product::where('status', true)->get();
             $offices = BranchOffice::where('status', true)->get();
             $providers = Provider::all();

@@ -63,9 +63,12 @@ img {
     <p class="centrado1">
         {!! DNS1D::getBarcodeHTML($product->bar_code, 'C39')!!}  <br>
         
+        @if($product->price_1)
         Precio 1: {{$product->price_1}}  <br>
-        Precio 2: {{$product->price_2}}  <br>
-        Precio 3: {{$product->price_3}}  <br>
+        @else
+        Precio: {{$product->price}}  <br>
+        @endif
+        Costo en dolar: {{$product->cost * 0.049}}  <br>
     </p>
 </div>
 </body>

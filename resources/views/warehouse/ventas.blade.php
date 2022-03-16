@@ -11,7 +11,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <div class="row">
+                <div class="row"> 
                     <div class="col">
                         <h4 class="card-title">Ventas de almacén</h4>
                     </div>

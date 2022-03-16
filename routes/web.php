@@ -30,12 +30,11 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('/registro', 'UserController@create');
-Route::post('/registro', 'UserController@store');
+Route::post('/registro', 'UserController@store'); 
 Route::get('/home', 'HomeController@index')->name('home');
-
-//Route::resource('user', 'UserController');
-Route::group(['middleware'=>'auth'], function(){
-
+//Route::get('/cambiarPass', 'UserController@cambiarPass');
+//Route::resource('user', 'UserController'); 
+Route::group(['middleware'=>'auth'], function(){  
     //Rutas AJAX
     Route::get('/users-ajax',[UserController::class,'ajaxget']);
 
@@ -116,6 +115,7 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::get('/stock','ProductController@stock');
 
+    Route::get('/codigoAlmacen/{almacen}','WarehouseController@codigoAlmacen')->name('codigoAlmacen');
     Route::get('/tag/{product}','ProductController@tag')->name('tag');
 
     Route::get('/almacen',[WarehouseController::class,'index'])->name('almacen.index');

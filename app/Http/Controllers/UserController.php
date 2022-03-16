@@ -34,6 +34,21 @@ class UserController extends Controller
         }
     }
 
+    /*public function cambiarPass(){
+        $user = User::first();
+        //return $user;
+        DB::beginTransaction();
+        try {
+            $user->password = "Pass1234";
+            $user->update();
+            DB::commit();
+            return 1;
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return 0;
+        }
+    }*/
+
     public function ajaxget()
     {
         $user = Auth::user();

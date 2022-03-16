@@ -222,7 +222,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="tabla1">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -259,6 +259,7 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>
+                                                <a href="{{route('codigoAlmacen', $inventario)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>
                                             </td>
                                             <td>
                                                 <form action="{{route('inventario.delete',$inventario->id)}}" method="POST">
@@ -273,6 +274,26 @@
                                 </tbody>
                             </table>
                             {{$inventarios->links()}}
+
+                            <table class="table table-hover" id="tabla2" hidden>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Categoria</th>
+                                        <th>Marca</th>
+                                        <th>Stock</th>
+                                        <th>Precio</th>
+                                        <th>Costo</th>
+                                        <th>Acciones</th>
+                                        <th>Edición</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventarios2">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -421,6 +442,8 @@
                 </div>
 
             </div>
+
+
             <div class="modal fade" id="addCompra{{ $inventario->id }}" tabindex="-1"
                 aria-labelledby="addInventario{{ $inventario->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -635,7 +658,7 @@
                                     </div>
                                     <div class="col">
                                         <label for="">Tipo Pago</label>
-                                        <select name="type" id="type" class="form-control" required>
+                                        <select name="type" id="typeTranferencia" class="form-control" required>
                                             <option value="">--Seleccionar--</option>
                                             <option value="Efectivo">Efectivo</option>
                                             <option value="Tarjeta">Tarjeta</option>
@@ -657,12 +680,30 @@
                                         <input type="number" name="total" class="form-control" step="any"
                                             id="totalGeneral" readonly value="{{ $total }}">
                                     </div>
+                                    @forelse ($carrito as $key => $item)
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="productsId[]" class="form-control" step="any"
+                                             readonly value="{{$item->inventory_id}}">
+                                    </div>
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="quantityProducts[]" class="form-control" step="any"
+                                             readonly value="{{$item->quantity}}">
+                                    </div>
+                                    @empty
+
+                                    @endforelse
+                                    <div class="col" hidden>
+                                        <input type="number" name="transferencia" class="form-control" step="any"
+                                             readonly value="1">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Transferir</button>
+                            <button type="submit" id="btnModaltransferir" class="btn btn-primary">Transferir</button>
                         </div>
                     </form>
                 </div>
@@ -697,19 +738,24 @@
                                             <th>Acciones</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tablita">
+                                    <tbody id="tablita2">
                                         @php
                                             $total = 0;
                                         @endphp
                                         @forelse ($carritoCompras as $item)
                                             <tr>
+                                                <td hidden class="idProduct">{{$item->inventory_id}}</td>
                                                 <td>{{ $item->id }}</td>
-                                                <td>{{ $item->inventario[0]->name }}</td>
-                                                <td>${{ $item->inventario[0]->price }}</td>
-                                                <td>{{ $item->quantity }}</td>
-                                                <td>${{ $item->subtotal }}</td>
-                                                <td>{{ $item->discount }}%</td>
-                                                <td>${{ $item->total }}</td>
+                                                <td class="nameItem">{{ $item->inventario[0]->name }}</td>
+                                                <td class="priceItem">${{ $item->inventario[0]->price }}</td>
+                                                <td hidden class="quantityProduct">{{ $item->quantity }}</td>
+                                                <td hidden class="subtotalItem">{{ $item->subtotal }}</td>
+                                                <td hidden class="discountItem">{{ $item->discount }}</td>
+                                                <td hidden class="totalItem">{{ $item->total }}</td>
+                                                <td >{{ $item->quantity }}</td>
+                                                <td >${{ $item->subtotal }}</td>
+                                                <td >{{ $item->discount }}%</td>
+                                                <td >${{ $item->total }}</td>
                                                 <td>
                                                     <button class="btn btn-outline-danger eliminar" type="button"
                                                         data-id="{{ $item->id }}"><i
@@ -729,14 +775,14 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="">Sucursal</label>
-                                        <select name="office_id" id="" class="form-control" required>
+                                        <select name="office_id" id="office_id" class="form-control" required>
                                             <option selected value="{{ Auth::user()->branch_office_id }}">
                                                 {{ Auth::user()->branchOffice->name }}</option>
                                         </select>
                                     </div>
                                     <div class="col">
                                         <label for="">Tipo Pago</label>
-                                        <select name="type" id="type" class="form-control" required>
+                                        <select name="type" id="typePaymnet" class="form-control" required>
                                             <option value="">--Seleccionar--</option>
                                             <option value="Efectivo">Efectivo</option>
                                             <option value="Tarjeta">Tarjeta</option>
@@ -758,12 +804,27 @@
                                         <input type="number" name="total" class="form-control" step="any"
                                             id="totalGeneralCompra" readonly value="{{ $total }}">
                                     </div>
+                                    @forelse ($carritoCompras as $key => $item)
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="productsId[]" class="form-control" step="any"
+                                             readonly value="{{$item->inventory_id}}">
+                                    </div>
+                                    <div class="col" hidden>
+                                        <label for="">id</label>
+                                        <input type="number" name="quantityProducts[]" class="form-control" step="any"
+                                             readonly value="{{$item->quantity}}">
+                                    </div>
+                                    @empty
+
+                                    @endforelse
+
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Comprar</button>
+                            <button type="submit" id="btnModalComprar" class="btn btn-primary">Comprar</button>
                         </div>
                     </form>
                 </div>
@@ -972,6 +1033,100 @@
                     });
                 });
 
+                $('#btnModalComprar').on('click', function(){
+                    if($('#typePaymnet').find(':selected').val() != ""){
+                        $('#carritoCompraModal').modal('hide');
+
+                        let idsP = [];
+                        let quaP = [];
+                        $('#tablita2').children().each(function (){
+                            //idsP.push(parseInt($(this).find('.idProduct').text()));
+                            //quaP.push(parseInt($(this).find('.quantityProduct').text()));
+                            let id = parseInt($(this).find('.idProduct').text());
+                            let request = {
+                                quantity: parseFloat($(this).find('.quantityProduct').text()),
+                                subtotal: parseFloat($(this).find('.subtotalItem').text()),
+                                discount: parseFloat($(this).find('.discountItem').text()),
+                                total: parseFloat($(this).find('.totalItem').text()),
+                            }
+                            $.ajax({
+                            url: "/addInventario/"+id,
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data:JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {                                                
+                                console.log("exito", data);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                            },
+                        });
+
+                        });
+                        /*let request = {
+                            office_id: $('#office_id').find(':selected').val(),
+                            type: $('#typePaymnet').find(':selected').val(),
+                            subtotal: parseFloat($('#subtotalGeneralCompra').val()),
+                            discount: parseFloat($('#descuentoGeneralCompra').val()),
+                            total: parseFloat($('#totalGeneralCompra').val()),
+                            productsId: idsP,
+                            quantityProducts: quaP,
+                            bandera: 0,
+                        };*/
+                        request = [];
+                        $.ajax({
+                            url: "/concluirCompra",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data:JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {                                                
+                                console.log("exito");
+                                setTimeout(location.reload(), 10000);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                                setTimeout(alert("Exito en la venta"),3000);
+                                location.reload();
+                            },
+                        });
+                    }
+                });
+
+                $('#btnModaltransferir').on('click', function(){
+                    if($('#typeTranferencia').find(':selected').val() != ""){
+                        $('#carritoModal').modal('hide');
+                        request = [];
+                        $.ajax({
+                            url: "/concluir",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data:JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {                                                
+                                console.log("exito");
+                                setTimeout(location.reload(), 10000);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                                setTimeout(alert("Transferencia exitosa!"), 3000);
+                                location.reload();
+                            },
+                        });
+
+                    }
+                });
+
                 $('.eliminar').on('click', function() {
                     var id = $(this).data('id');
                     var ajxReq = $.ajax('/delete-cart/'+id, {
@@ -987,16 +1142,68 @@
                     });
                 });
 
+                /*document.getElementById("codigo").addEventListener("keyup", function(){
+
+                });*/
+
+                document.getElementById("inputBusqueda").addEventListener("keyup", function(){
+                    if (document.getElementById("inputBusqueda").value.length >= 1){
+                        $("#tabla1").prop('hidden', true);
+                        $("#tabla2").prop('hidden', false);
+                        var palabra = $('#inputBusqueda').val();
+                        $.get('/buscarInventario/'+palabra,function (data){
+                            //console.log(data);
+                            $('#inventarios2').empty();
+                            data.forEach(element => {
+                                var id = element['id'];
+                                var url = '{{route("inventario.delete",'+id+')}}';
+                                $('#inventarios2').append('<tr>'+
+                                    '<td>'+element['id']+'</td>'+
+                                    '<td>'+element['bar_code']+'</td>'+
+                                    '<td>'+element['name']+'</td>'+
+                                    '<td>'+element['categoria']['name']+'</td>'+
+                                    '<td>'+element['marca']['name']+'</td>'+
+                                    '<td>'+element['stock']+'</td>'+
+                                    '<td>'+element['price']+'</td>'+
+                                    '<td>'+element['cost']+'</td>'+
+                                    '<td>'+
+                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                        'data-bs-target="#addInventario"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                        '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<form action="/inventario/'+id+'" method="POST">'+
+                                            '@csrf @method("DELETE")'+
+                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                        '</form>'+
+                                    '</td>'+
+                                '</tr>');
+                            });
+                        });
+                    }else{
+                        $("#tabla1").prop('hidden', false);
+                        $("#tabla2").prop('hidden', true);
+                        document.getElementById("inventarios2").innerHTML = "";
+                    }
+                });
+
                 $('#buscarInve').on('click',function(){
+                    $("#tabla1").prop('hidden', true);
+                    $("#tabla2").prop('hidden', false);
                     var palabra = $('#inputBusqueda').val();
 
                     $.get('/buscarInventario/'+palabra,function (data){
-                        console.log(data);
-                        $('#inventarios').empty();
+                        //console.log(data);
+                        $('#inventarios2').empty();
                         data.forEach(element => {
                             var id = element['id'];
                             var url = '{{route("inventario.delete",'+id+')}}';
-                            $('#inventarios').append('<tr>'+
+                            $('#inventarios2').append('<tr>'+
                                 '<td>'+element['id']+'</td>'+
                                 '<td>'+element['bar_code']+'</td>'+
                                 '<td>'+element['name']+'</td>'+
@@ -1011,6 +1218,7 @@
                                 '</td>'+
                                 '<td>'+
                                     '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
                                 '</td>'+
                                 '<td>'+
                                     '<form action="/inventario/'+id+'" method="POST">'+

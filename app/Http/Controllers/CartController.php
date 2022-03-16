@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\ShoppingCart;
 use Illuminate\Http\Response;
+use Excel;
+use App\Exports\WarehouseExport;
 
 class CartController extends Controller
 {
@@ -96,8 +98,9 @@ class CartController extends Controller
         }
     }
 
-    public function addcart(Request $request,$id)
+    public function addcart(Request $request, $id)
     {
+        //return $id;
         $user = Auth::user();
         $search = CartShopping::where('inventory_id','=',$id)->where('status','=',true)->get();
         if (sizeof($search) > 0) {
@@ -145,7 +148,13 @@ class CartController extends Controller
 
     public function concluir(Request $request)
     {
-        $user = Auth::user();
+        return Excel::download(new WarehouseExport($request), 'transferenciaAlmacen.xlsx');
+        /*if($request->transferencia){
+            return 0;
+        }else{
+            return 123;
+        }*/
+        /*$user = Auth::user();
         $almacen = Warehouse::where('user_id','=',$user->id)->get();
         $carrito = Cart::where('user_id','=',$user->id)->where('status','=',true)->get();
         try {
@@ -179,50 +188,12 @@ class CartController extends Controller
         } catch (\Error $th) {
             DB::rollBack();
             return $th;
-        }
+        }*/
     }
 
     public function concluirCompra(Request $request)
     {
-        $user = Auth::user();
-        $almacen = Warehouse::where('user_id','=',$user->id)->get();
-        $carrito = CartShopping::where('user_id','=',$user->id)->where('status',true)->get();
-        try {
-            DB::beginTransaction();
-            $compra = new Shopping();
-            $compra->warehouse_id = $almacen[0]->id;
-            $compra->office_id = $request->office_id;
-            $compra->total = $request->total;
-            $compra->type = $request->type;
-            $compra->subtotal = $request->subtotal;
-            $compra->discount = $request->discount;
-            $compra->user_id = $user->id;
-            $compra->save();
-
-            foreach ($carrito as $cart) {
-                $product = new InventoryShopping();
-                $product->inventory_id = $cart->inventory_id;
-                $product->shopping_id = $compra->id;
-                $product->quantity = $cart->quantity;
-                $product->total = $cart->total;
-                $product->discount = $cart->discount;
-                $product->save();
-
-                DB::table('cart_shoppings')->where('id','=',$cart->id)->update([
-                    'status' => false
-                ]);
-                $inventario = Inventory::findOrFail($cart->inventory_id);
-                DB::table('inventories')->where('id','=',$cart->inventory_id)->update([
-                    'stock' => $inventario->stock + $cart->quantity
-                ]);
-            }
-            DB::commit();
-            return redirect()->route('almacen.index');
-
-        } catch (\Error $th) {
-            DB::rollBack();
-            return $th;
-        }
+        return Excel::download(new WarehouseExport($request), 'ventaAlmacen.xlsx');
     }
 
     public function pagado($id)
