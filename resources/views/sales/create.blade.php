@@ -123,12 +123,12 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
-            
+
             <div class="row my-4">
-                
+
                 <div class="col-md-4">
                     <div class="input-group">
                         <input type="text" id="bar_code" class="form-control" placeholder="Código de barra"/>
@@ -153,9 +153,9 @@
                                 </svg>
                             </button>
                         </div>
-                    </div>  
+                    </div>
                 </div>
-                
+
                 <div class="col-md-2">
                     <div class="col-md-12">
                         <button type="button" id="masVendido" data-toggle="modal" data-target="#masvendidoModal" class="btn btn-primary btn-block">Más Vendido</button>
@@ -185,7 +185,7 @@
                                                 </svg>
                                             </button>
                                         </div>
-                                    </div>  
+                                    </div>
                                 </div>
 
                                 <!--table-->
@@ -193,7 +193,7 @@
                                     <table id="resultTableClient"class="table table-sm table-hover table-responsive-lg overflow-auto my-2">
                                         <thead>
                                             <!--<tr>
-                                                <th>Resultado de búsqueda 
+                                                <th>Resultado de búsqueda
                                             </tr>-->
                                             <tr>
                                                 <th scope="col">Nombre</th>
@@ -288,7 +288,7 @@
                     <table id="resultTable"class="table table-sm table-hover table-responsive-lg overflow-auto my-2" hidden>
                         <thead>
                             <tr>
-                                <th>Resultado de búsqueda 
+                                <th>Resultado de búsqueda
                                     <button id="cleanSearchButton" class="ml-2 btn btn-outline-secondary btn-sm"><small>LIMPIAR</small></button>
                                 </th>
                             </tr>
@@ -298,7 +298,7 @@
                                 @if (Auth::user()->rol_id==1)
                                      <th scope="col">Sucursal</th>
                                 @endif
-                               
+
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Marca</th>
                                 <th scope="col">Categoría</th>
@@ -337,10 +337,10 @@
                                                 <th scope="col"></th>
                                             </tr>
                                         </thead>
-                                        <tbody id="shoppingList">         
+                                        <tbody id="shoppingList">
                                         </tbody>
-                                    </table>     
-                                </div>    
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -390,7 +390,7 @@
                                         </div>
                                     </div> --}}
                                 </div>
-                              
+
                                 <div class="col-md-12 my-2">
                                     <div class="row mx-2">
                                         <div class="col-md-12" id="type_sale_id" style="display:none">
@@ -400,7 +400,7 @@
                                                     <option value="0" selected disabled>Seleciona una opcion</option>
                                                     <option value="1">Traspaso</option>
                                                     <option value="2">Venta</option>
-                                                </select>   
+                                                </select>
                                             </div>
                                         </div>
                                         <div id="sale_trasp" style="display:none">
@@ -410,13 +410,13 @@
                                                     <select class="custom-select" id="branch_office">
                                                         @foreach ( $traspacing as $item)
                                                             @if (Auth::user()->branchOffice->id != $item->id )
-                                                                <option value="{{$item->id}}">{{$item->name}}</option>   
+                                                                <option value="{{$item->id}}">{{$item->name}}</option>
                                                             @endif
-                                                           
+
                                                         @endforeach
-                                                        
-                                                     
-                                                    </select>   
+
+
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -429,7 +429,7 @@
                                                     <option value="1">Tarjeta</option>
                                                     <option value="2">Crédito</option>
                                                     <option value="3">Pago Mixto</option>
-                                                </select>   
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -481,7 +481,7 @@
                                                 <label for="ingress">Pago con</label>
                                                 <input type="number" step="any" min="0" class="form-control" id="ingress" required/>
                                             </div>
-                                   
+
                                     </div>
                                     <div class="pt-1">
                                         <div class="row mx-2">
@@ -505,9 +505,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>
-            </form> 
+            </form>
         </div>
     @else
         <div class="card p-4 mx-5">
@@ -566,7 +566,7 @@
             const sale_public = document.getElementById('sale_public');
             const type_sale_id = document.getElementById('type_sale_id');
             const user_id = document.getElementById('user_id').value;
-           
+
             // let client= document.getElementById('client');
 
             $('#payment_type').change( function() {
@@ -596,7 +596,7 @@
                         $('#paymentButton').prop('disabled',false);
                     }
                     // client.style.visibility = 'visible';
-                }   
+                }
             });
             $('#client_id').change( function() {
                 //console.log($( "#client_id option:selected" ).val());
@@ -605,7 +605,7 @@
                     if($( "#client_id option:selected" ).val()==""){
                         console.log($( "#client_id option:selected" ).val());
                         $('#paymentButton').prop('disabled',true);
-                        
+
                     }else{
                         console.log($( "#client_id option:selected" ).val());
                         $('#paymentButton').prop('disabled',false);
@@ -681,14 +681,14 @@
                                     addClient($(this).data('id'));
                                     $('#clientModal').modal('hide');
                                 });
-                            }   
+                            }
                             else{
                                 $('#searchResultClient').append(
                                     '<tr class="item-result">'+
                                         '<td colspan="8">No se encontraron resultados</td>'+
                                     '</tr>'
                                 );
-                            } 
+                            }
                         },
                         error: function(e) {
                             console.log("ERROR", e);
@@ -715,7 +715,7 @@
                             addProduct(result[0].id);
                         }else{
                             alert("No se encontraron resultados!");
-                        } 
+                        }
                     },
                     error: function(e) {
                         console.log("ERROR", e);
@@ -773,21 +773,21 @@
                                         '</tr>'
                                     );
                                     }
-                                   
+
                                 });
                                 $('.item-result').off();
                                 $('.item-result').click(function() {
                                     $('#resultTable').prop('hidden',true);
                                     addProduct($(this).data('id'));
                                 });
-                            }   
+                            }
                             else{
                                 $('#searchResult').append(
                                     '<tr class="item-result">'+
                                         '<td colspan="8">No se encontraron resultados</td>'+
                                     '</tr>'
                                 );
-                            } 
+                            }
                         },
                         error: function(e) {
                             console.log("ERROR", e);
@@ -802,7 +802,7 @@
                 //$("#client_id").val(client.name);
                 $('#searchClient').val('');
                 $("#client_id option[value="+ client.id +"]").attr("selected",true);
-                
+
             }
 
             function addProduct(idProduct){
@@ -865,25 +865,25 @@
                             '</td>'+
                         '</tr>'
                     );
-                    
+
                     $('.observable').off();
                     $('.price').off();
-                    
+
                     $('.price').change(function(){
-                        update(); 
+                        update();
                     });
                     $('.observable').change(function(){
-                        update(); 
+                        update();
                     });
                     $('.observable').keyup(function(){
-                        update(); 
+                        update();
                     });
                 }
                 $('.btn-delete').click(function(){
-                    $('#product'+$(this).data('id')).remove(); 
-                    update(); 
+                    $('#product'+$(this).data('id')).remove();
+                    update();
                 });
-                update(); 
+                update();
             }
             function searchByBarcode(itemButton){
                 $('#searchResult').empty();
@@ -945,7 +945,7 @@
                     }
                     if(discount<0||discount>99 || quantity===''){
                         $(this).find('.discount-tooltip').text('Descuento inválido.');
-                    }    
+                    }
                     generalSubtotal+=quantity*price;
                     generalSubtotal= ((Math.round( (generalSubtotal) * 10000) / 10000));
                     if(!parseInt($('#additional_discount').val())>0){
@@ -956,12 +956,12 @@
                             discountWarning = true;
                         }
                     }
-                   
+
                     subtotal=price*quantity;
                     subtotal=((Math.round( (subtotal) * 10000) / 10000));
                     totalSale+=subtotal;
                     totalSaleUSD+=subtotal;//20;
-                    
+
                     $(this).find('.subtotal').text(subtotal);
                 });
                 if(!parseInt($('#additional_discount').val())>0){
@@ -991,9 +991,9 @@
                 $('#totalSale').text(totalSale.toFixed(2));
                 $('#totalSaleUSD').text(totalSaleUSD.toFixed(2));
                 // if ($('#payment_type').val() == 1) {
-                //     $('#ingress').val(totalSale.toFixed(2));    
+                //     $('#ingress').val(totalSale.toFixed(2));
                 // }else{
-                //     $('#ingress').text(totalSale.toFixed(2));    
+                //     $('#ingress').text(totalSale.toFixed(2));
                 // }
                 if (document.getElementById("USD").checked == true) {
                     console.log("aqui1");
@@ -1033,10 +1033,10 @@
                         $('#turned').text(turned.toFixed(2));
                     }
                     else{
-                        
+
                     }*/
                 }
-                
+
                 if(shoppingListForm.checkValidity() && totalSale!==0){
                     $('#paymentButton').prop('disabled',false);
                 }
@@ -1055,12 +1055,12 @@
                     addNotification('discount-warning','Los descuentos mayores a 10% necesitan autorización del gerente');
                     $('#paymentButton').attr('data-toggle','modal');
                     $('#paymentButton').attr('data-target','#authorizationModal');
-                    
+
                 }
                 else{
                     $('#paymentButton').click(function(){
                         pay();
-                    }); 
+                    });
                     $('#paymentButton').removeAttr('data-toggle','modal');
                     $('#paymentButton').removeAttr('data-target','#authorizationModal');
                 }
@@ -1071,7 +1071,7 @@
                 else{
                     $('#notificationsCount').prop('hidden',false);
                 }
-                
+
             }
             function addNotification(notificationClass,content){
                 notificationsCount++;
@@ -1147,17 +1147,17 @@
                     contentType: "application/json; charset=iso-8859-1",
                     data:JSON.stringify(request),
                     dataType: 'html',
-                    success: function(data) {                                                
+                    success: function(data) {
                         if(JSON.parse(data).success){
                             //console.log(JSON.parse(data).data.products_in_sale)
                             console.log('success')
                                 if(JSON.parse(data).data.saletype == 1)
-                                { 
+                                {
                                    console.log(JSON.parse(data).transfer.id);
                                     // $('#sendReprintId').val(JSON.parse(data).transfer.id)
                                     // $('#reprintFormSend').submit()
-                                    // location.reload();  
-                                   
+                                    location.reload();
+
                                 //  reprintFormSend sendReprintId
                                 }
                                 else
@@ -1165,16 +1165,16 @@
                                     console.log(JSON.parse(data));
                                 //    $('#saleReprintId').val(JSON.parse(data).data.id)
                                 //     $('#reprintForm').submit()
-                                //     location.reload();
+                                    location.reload();
                                 }
-                                
-                                
-                     }   
+
+
+                     }
                         else{
                             alert(data);
                             $('#paymentButton').prop('disabled',false);
                             console.log(JSON.parse(data));
-                        } 
+                        }
                     },
                     error: function(e) {
                         console.log("ERROR", e);
@@ -1183,7 +1183,7 @@
             }
             function getBoxes(){
                 $('#box_id').empty();
-               
+
                 $.ajax({
                     url: "/getBox/"+$('#branch_office_id').val(),
                     headers: {
@@ -1196,7 +1196,7 @@
                     success: function(data) {
                         let boxes=JSON.parse(data);
                         if(boxes.length!==0){
-                       
+
                             $('#openBoxButton').prop('disabled',false);
                         }
                         boxes.forEach((box)=>{
@@ -1225,7 +1225,7 @@
                         $('#searchResult').empty();
                     }
                 }
-            }); 
+            });
             $('#searchClient').keyup( function(event) {
                 if(event.keyCode===13){
                     if($(this).val().length!==0){
@@ -1235,7 +1235,7 @@
                         $('#searchResultClient').empty();
                     }
                 }
-            }); 
+            });
             $('#cleanSearchButton').click(function(){
                 $('#search').val('');
                 $('searchResult').empty();
@@ -1257,7 +1257,7 @@
                         searchByBarcode();
                     }
                 }
-            }); 
+            });
             $('#cardIngress').keyup( function(event) {
                 update();
             });
@@ -1283,10 +1283,10 @@
                         if(JSON.parse(data).success){
                             $('.alert-warning').prop('hidden',true)
                             pay();
-                        }   
+                        }
                         else{
                             $('.alert-warning').prop('hidden',false)
-                        } 
+                        }
                     },
                     error: function(e) {
                         console.log("ERROR", e);
@@ -1315,7 +1315,7 @@
                         result=JSON.parse(data);
                         let row = '#row'+idCategory;
                         $(row).empty();
-                        if(result.length!==0){   
+                        if(result.length!==0){
                             result.forEach(product => {
                                 $(row).append(
                                 '  <div class="col-md-2">'+
@@ -1336,7 +1336,7 @@
                                     $('#addedProductAlert').prop('hidden',true);
                                 }, 2500);
                             })
-                        }   
+                        }
                         else{
                             $(row).append(
                             '<div class="col-md-12 d-flex justify-content-center">'+
@@ -1345,7 +1345,7 @@
                                 '</div>'+
                             '</div>'
                             );
-                        } 
+                        }
                     },
                     error: function(e) {
                         console.log("ERROR", e);
@@ -1355,28 +1355,28 @@
             $('#reloadButton').click(function (){
                 location.reload();
             });
-        }); 
+        });
       const  selectSale = (valor) =>
         {
             const sale_trasp = document.getElementById('sale_trasp');
             const sale_public = document.getElementById('sale_public');
             const paymentButton = document.getElementById('paymentButton');
-           
-           
+
+
           if(valor == 1)
           {
                     sale_public.style.display = 'none';
                     sale_trasp.style.display= "inline-block";
                     paymentButton.innerText = 'Enviar';
                     paymentButton.disabled = false;
-          
+
           }
           if(valor == 2)
           {
             sale_public.style.display = "inline-block";
             sale_trasp.style.display= 'none';
             paymentButton.innerText = 'Pagar';
-            
+
           }
         }
     </script>
