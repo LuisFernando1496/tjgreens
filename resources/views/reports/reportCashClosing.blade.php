@@ -61,6 +61,8 @@
                     <th style="font-size: 14px" class="backgroundColor">CANTIDAD</th>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <th style="font-size: 14px" class="backgroundColor">COSTO</th>  
+                    <th style="font-size: 14px" class="backgroundColor">TIPO DE PAGO</th>  
+
                     @endif
                     <th style="font-size: 14px" class="backgroundColor">PRECIO <br/> PÚBLICO</th>
                     <th style="font-size: 14px" class="backgroundColor">DESCUENTO</th>
@@ -69,8 +71,25 @@
                     @endif
                     <th style="font-size: 14px" class="backgroundColor">TOTAL</th>
                 </tr>
+                @php
+
+                $tipo=0;
+                $efectivoVenta = 0;
+
+                
+                @endphp
                 @foreach ($products as $p)
                 @if ($b->id == $p->sale->branch_office_id )
+                @php
+                
+                if($p->payment_type == 0){
+                    $efectivoVenta += $p->total;
+                    $tipo = 'Efectivo';
+                }
+               if($p->payment_type == 1){
+                $tipo = 'Electronico';
+               }
+               @endphp
                 <tr>
                     
                     <td>{{$p->product->name}}</td>
@@ -83,6 +102,7 @@
                     <td>{{$p->quantity}}</td>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <td>${{$p->product->cost}}</td>
+                    <td>{{$tipo}}</td>
                     @endif
                     <td>${{$p->sale_price}}</td>
                     <td>${{($p->sale_price * (($p->PD/100)  ) ) * $p->quantity}}</td>

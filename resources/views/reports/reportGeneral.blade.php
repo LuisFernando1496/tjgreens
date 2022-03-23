@@ -126,13 +126,9 @@
             <table style="width: 100%; margin-top:20px;">
                 @if (Auth::user()->rol_id == 1)
                     
+              
                 <tr>
-                    <th colspan="10" class="backgroundColor">
-                        SUCURSAL
-                    </th>
-                </tr>
-                <tr>
-                    <td colspan="10">
+                    <td colspan="10" class="backgroundColor">
                         RESUMEN GENERAL
                     </td>
                 </tr>
@@ -140,14 +136,10 @@
                 
                 <tr>
                     <th colspan="8" class="backgroundColor">
-                        SUCURSAL
+                        RESUMEN GENERAL
                     </th>
                 </tr>
-                <tr>
-                    <td colspan="8">
-                        RESUMEN GENERAL
-                    </td>
-                </tr>
+                
                     
                 @endif
                 <tr>
@@ -206,7 +198,7 @@
                 @if (Auth::user()->rol_id == 1 )
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td colspan="3">${{$cash->subtotal + $card->subtotal}}</td>
+                    <td colspan="3">${{number_format($cash->subtotal + $card->subtotal,2)}}</td>
                     {{-- <th>INVERSIÓN</th>
                     <td>${{$cash->costo + $card->costo}}</td> --}}
 
@@ -214,17 +206,17 @@
                 @else
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td colspan="3">${{$cash->subtotal + $card->subtotal}}</td>
+                    <td colspan="3">${{number_format($cash->subtotal + $card->subtotal,2)}}</td>
                 </tr>
                 @endif
 
                 <tr>
                     <th>DINERO EFECTIVO</th>
-                    <td colspan="3">${{$cash->total}}</td>
+                    <td colspan="3">${{number_format($cash->total,2)}}</td>
                 </tr>
                 <tr>
                     <th>DINERO ELECTRÓNICO</th>
-                    <td colspan="3">${{$card->total}}</td>
+                    <td colspan="3">${{number_format($card->total,2)}}</td>
                 </tr>
                 <tr>
                     {{-- <th>GANANCIA</th>
