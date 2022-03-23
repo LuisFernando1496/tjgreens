@@ -59,9 +59,10 @@
                     <th style="font-size: 14px" class="backgroundColor">CATEGORÍA</th>
                     <th style="font-size: 14px" class="backgroundColor">MARCA</th>
                     <th style="font-size: 14px" class="backgroundColor">CANTIDAD</th>
+                    <th style="font-size: 14px" class="backgroundColor">TIPO DE PAGO</th>  
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <th style="font-size: 14px" class="backgroundColor">COSTO</th>  
-                    <th style="font-size: 14px" class="backgroundColor">TIPO DE PAGO</th>  
+                   
 
                     @endif
                     <th style="font-size: 14px" class="backgroundColor">PRECIO <br/> PÚBLICO</th>
@@ -100,9 +101,10 @@
                     <td>{{$p->product->brand->name }}</td>
                     @endif
                     <td>{{$p->quantity}}</td>
+                    <td>{{$tipo}}</td>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                     <td>${{$p->product->cost}}</td>
-                    <td>{{$tipo}}</td>
+                    
                     @endif
                     <td>${{$p->sale_price}}</td>
                     <td>${{($p->sale_price * (($p->PD/100)  ) ) * $p->quantity}}</td>
