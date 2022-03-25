@@ -22,14 +22,14 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="closeBox/{{$box->id}}" target="_blank" method="POST" onsubmit="closeModal()">
+                <form action="closeBox/{{$box->id}}" id="closeForm"  method="POST" onsubmit="closeModal()">
                     @csrf
                     <div class="modal-body">
                         ¿Está seguro de cerrar su caja?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">CANCELAR</button>
-                        <button type="submit" class="btn btn-primary">CERRAR CAJA</button>
+                        <button type="submit" onclick="desPdf(event, id= {{$box->id}})" class="btn btn-primary">CERRAR CAJA</button>
                     </div>
                 </form>
             </div>
@@ -397,7 +397,15 @@
 
             });
         }
-        console.log('fin')
+        console.log('fin');
+       
     }
+    const desPdf = (event,id) => {
+           event.preventDefault();
+           document.getElementById('closeForm').submit();
+           window.open(`closeBoxPdf/${id}`);
+        
+           
+        }
 </script>
 @endpush

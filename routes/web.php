@@ -85,6 +85,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::resource('cashClosing','CashClosingController');
     Route::resource('initialCash','InitialCashController');
     Route::post('closeBox/{cashClosing}','CashClosingController@closeBox');
+    Route::get('closeBoxPdf/{id}','CashClosingController@closeBoxPdf');
     Route::post('/validatePromotion', 'UserController@checkAdmin');
     Route::get('getBox/{branchOffice}','BoxController@getAvailableBoxByBranchOfficeId');
 

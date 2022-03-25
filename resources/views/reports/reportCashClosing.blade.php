@@ -1,7 +1,7 @@
 <html>
     <head>
         <style type="text/css">
-            table {
+              table {
                 border-collapse: collapse;
             }
 
@@ -9,6 +9,7 @@
                 border: 1px solid black;
                 text-align: center;
                 border-color: #424242;
+                font-size: 12px;
             }
             .backgroundColor{
                 background: red;
@@ -33,23 +34,23 @@
             <table style="width: 100%; margin-top:20px;">
                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <tr>
-                    <th colspan="9" class="backgroundColor">
+                    <th colspan="10" class="backgroundColor">
                         SUCURSAL
                     </th>
                 </tr>
                 <tr>
-                    <td colspan="9">
+                    <td colspan="10">
                         {{$b->name}}
                     </td>
                 </tr>
                 @else
                 <tr>
-                    <th colspan="7" class="backgroundColor">
+                    <th colspan="8" class="backgroundColor">
                         SUCURSAL
                     </th>
                 </tr>
                 <tr>
-                    <td colspan="7">
+                    <td colspan="8">
                         {{$b->name}}
                     </td>
                 </tr>
@@ -197,10 +198,10 @@
                     <td colspan="3">${{$card->expense}}</td>
                 </tr>
                 -->
-            </table> --}}
+            </table> 
 
             <h5 style="margin: 20px;">REPORTE GENERADO POR {{strtoupper($user->name)}}</h5>
-            <h5 style="margin: 5px;">{{$date}}</h5>
+            <h5 style="margin: 5px;">{{$date}}</h5>--}} -->
             
         </div>
     </body>

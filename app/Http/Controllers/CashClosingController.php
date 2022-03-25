@@ -27,6 +27,7 @@ use App\Exports\InventExport;
 use App\Exports\InventByBranchOfficeIdExport;
 use Excel;
 use App\ProductInSale;
+use Barryvdh\DomPDF\PDF as DomPDFPDF;
 
 class CashClosingController extends Controller
 {
@@ -233,6 +234,97 @@ class CashClosingController extends Controller
             "products"=>$p,
             "branchOffice" => $b,
             "worker" => $tempCashClosing->user]);
+        }
+    }
+    public function closeBoxPdf(Request $request,$id)
+    {      
+        $flag = false;
+        $cashClosing = CashClosing::find($id);
+        $closeTime = new DateTime('NOW',new DateTimeZone('America/Mexico_City'));  
+        
+        $gastoCaja = Expense::select(DB::raw('sum(price * quantity) as total'))->where('cash_closing_id',$cashClosing->id)->first()->total;        
+        $ventaCaja = Sale::where('cash_closing_id',$cashClosing->id)->where('payment_type',1)->where('status',true)->sum('cart_total');
+        $endCash = $ventaCaja + $cashClosing->initial_cash - $gastoCaja;
+        
+        $request["end_cash"] = $endCash;
+        
+      
+                $flag = true;
+               
+
+        if($flag){
+            $tempCashClosing = $cashClosing;
+            $data = Sale::join("cash_closings" ,"cash_closings.id", "=" ,"sales.cash_closing_id")
+            ->leftjoin("expenses", "expenses.cash_closing_id", "=" ,"cash_closings.id")
+            ->select(DB::raw(" SUM(sales.total_cost) as costo,
+            cash_closings.initial_cash as caja_inicial,
+            cash_closings.end_cash as caja_final,
+            SUM(amount_discount) as descuento,
+            SUM(cart_subtotal) as subtotal,
+            sum(cart_total) as total,
+            sales.payment_type,
+            sum(expenses.price) as expense"))
+            ->where("sales.branch_office_id", "=", $tempCashClosing->branch_office_id)
+            ->where("sales.cash_closing_id" , "=" , $tempCashClosing->id)
+            ->where("sales.status",  "=", true)
+            ->groupBy("sales.payment_type")
+            ->get();
+
+
+            $p = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+            ->select("*","product_in_sales.discount As PD")
+            ->where("sales.status",  "=", true)
+            ->where("sales.cash_closing_id" , "=" , $tempCashClosing->id)
+            ->get();
+
+            $b = DB::table('branch_offices')
+            ->distinct()
+            ->where("branch_offices.id", "=", $tempCashClosing->branch_office_id)
+            ->get();
+            
+            $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City')); 
+            $date =  $d->format('Y-m-d H:m:s');
+            //$pin = ProductsInSale::where();
+            $d0 = new Request();
+            $d1 = new Request();
+            $d0["subtotal"] = 0;
+            $d0["total"] = 0;
+            $d0["descuento"] = 0;
+            $d0["costo"] = 0;
+            $d1["subtotal"] = 0;
+            $d1["total"] = 0;
+            $d1["descuento"] = 0;
+            $d1["costo"] = 0;
+            $d1["expense"] = 0;
+
+            try {
+                $d0 = $data[0];
+                if($data[0]->payment_type == 1){
+                    $d1["total"] = $d0["total"];
+                    $d0["total"] = 0;
+
+                }
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+
+            try {
+                $d1 = $data[1];
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+
+            $d0["caja_inicial"] = $tempCashClosing->initial_cash;
+           
+             view()->share(["cash" => $d0,
+            "card" => $d1,
+            "user" => Auth::user(),
+            "date" =>$date,
+            "products"=>$p,
+            "branchOffice" => $b,
+            "worker" => $tempCashClosing->user]);
+            $pdf = PDF::loadView('reports.reportCashClosing');
+            return $pdf->download("corteCaja-$date.pdf");
         }
     }
 
