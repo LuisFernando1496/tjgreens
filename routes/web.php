@@ -154,6 +154,8 @@ Route::group(['middleware'=>'auth'], function(){
 Route::get('/productos',[ProductController::class,'allProductos']);
 Route::get('/productos/{name}',[ProductController::class,'searchProduct']);
 
-
+Route::get('corte', function () {
+    return view('solicitarCorte');
+}); 
 // Route::post('/upload-image', 'ImageController@store');
 // Route::get('/image/{image}', 'ImageController@show');
