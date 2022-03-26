@@ -133,9 +133,9 @@
                 -->
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td>${{$cash->subtotal + $card->subtotal}}</td>
+                    <td>${{number_format($cash->subtotal + $card->subtotal,2)}}</td>
                     <th>DINERO EFECTIVO</th>
-                    <td>${{$efectivoVenta}}</td>
+                    <td>${{number_format($efectivoVenta,2)}}</td>
                     <!--
                     <th>INVERSIÓN</th>
                     <td>${{$cash->costo + $card->costo}}</td>
@@ -144,7 +144,7 @@
                 <tr>
                     
                     <th>DINERO ELECTRÓNICO</th>
-                    <td>${{$electronicoVenta }}</td>
+                    <td>${{number_format($electronicoVenta,2) }}</td>
                     <th>DESCUENTOS</th>
                     <td>${{$cash->descuento + $card->descuento}}</td>
                     
