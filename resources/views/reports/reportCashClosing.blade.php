@@ -77,7 +77,7 @@
 
                 $tipo=0;
                 $efectivoVenta = 0;
-
+                $electronicoVenta = 0;
                 
                 @endphp
                 @foreach ($products as $p)
@@ -90,6 +90,7 @@
                 }
                if($p->payment_type == 1){
                 $tipo = 'Electronico';
+                $electronicoVenta += $p->total;
                }
                @endphp
                 <tr>
@@ -134,7 +135,7 @@
                     <th>TOTAL VENTAS</th>
                     <td>${{$cash->subtotal + $card->subtotal}}</td>
                     <th>DINERO EFECTIVO</th>
-                    <td>${{$cash->total}}</td>
+                    <td>${{$efectivoVenta}}</td>
                     <!--
                     <th>INVERSIÓN</th>
                     <td>${{$cash->costo + $card->costo}}</td>
@@ -143,7 +144,7 @@
                 <tr>
                     
                     <th>DINERO ELECTRÓNICO</th>
-                    <td>${{$card->total }}</td>
+                    <td>${{$electronicoVenta }}</td>
                     <th>DESCUENTOS</th>
                     <td>${{$cash->descuento + $card->descuento}}</td>
                     
