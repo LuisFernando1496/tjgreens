@@ -36,7 +36,7 @@ class WarehouseController extends Controller
                 $almacenes = Warehouse::with(['oficina', 'user', 'inventarios'])
                     ->where('office_id', '=', $user->branch_office_id)->paginate();
                 $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', $user->branch_office_id)->get();
-
+                return $usuarios;
                 return view('warehouse.index', [
                     'almacenes' => $almacenes,
                     'usuarios' => $usuarios
@@ -49,6 +49,7 @@ class WarehouseController extends Controller
                     $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->paginate(10);
                     $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->get();
                 }
+                return $inventario;
                 $categorias = Category::all();
                 $carrito = Cart::where('user_id', '=', $user->id)
                     ->where('status', '=', true)->with(['inventario'])->get();
