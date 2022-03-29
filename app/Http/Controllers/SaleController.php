@@ -616,54 +616,57 @@ class SaleController extends Controller
         if (Auth::user()->rol_id == 4) {
             return redirect()->route('almacen.index');
         }
-        $branches;
-        $traspacing = BranchOffice::where('status',1)->get();
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            $branches = BranchOffice::all();
-        } else {
-            // return back()->withErrors(["error" => "No tienes permisos"]);
-            $branches = [Auth::user()->branchOffice];
+        else {
+            $branches;
+            $traspacing = BranchOffice::where('status',1)->get();
+            if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+                $branches = BranchOffice::all();
+            } else {
+                // return back()->withErrors(["error" => "No tienes permisos"]);
+                $branches = [Auth::user()->branchOffice];
+            }
+            $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City'));
+            $from = $d->format('Y-m-d');
+            $to = date('Y-m-d', strtotime('-7 day', strtotime($from)));
+            $ventas =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+                ->join("users","users.id","=","sales.user_id")
+                ->join("products","products.id","=","product_in_sales.product_id")
+                ->join("brands","brands.id","=","products.brand_id")
+                ->join("categories","categories.id","=","products.category_id")
+                ->select(DB::raw("product_in_sales.product_id as product_id,
+                products.name as product_name,
+                brands.name as brand,
+                categories.name as category,
+                sum(product_in_sales.quantity) as quantity,
+                products.cost as cost,
+                product_in_sales.sale_price as sale_price,
+                product_in_sales.discount as discount,
+                sum(product_in_sales.total_cost) as total_cost,
+                sum(product_in_sales.total) as total,
+                users.name as seller,
+                users.last_name as seller_lastName,
+                product_in_sales.created_at as date"))
+                ->whereBetween('sales.created_at',[$to, $from])
+                ->where("sales.status",  "=", true)
+                ->groupBy("product_in_sales.product_id","product_in_sales.sale_price")
+                ->orderBy('quantity', 'DESC')
+                ->get();
+            $userBranchOficce = BranchOffice::where('id', "=", Auth::user()->branch_office_id)->get();
+            if (CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->count() == 0) {
+                return view('sales.create', ["branches" => $branches, 'traspacing'=>  $traspacing, "userAuth" => $userBranchOficce,]);
+            } else {
+                return view('sales.create', [
+                    'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first(),
+                    "branches" => $branches,
+                    'categories' => Category::all(),
+                    'clients' => Client::where('status', true)->get(),
+                    'traspacing' =>  $traspacing,
+                    "ventasS" => $ventas,
+                    "userAuth" => $userBranchOficce,
+                ]);
+            }
         }
-        $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City'));
-        $from = $d->format('Y-m-d');
-        $to = date('Y-m-d', strtotime('-7 day', strtotime($from)));
-        $ventas =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
-            ->join("users","users.id","=","sales.user_id")
-            ->join("products","products.id","=","product_in_sales.product_id")
-            ->join("brands","brands.id","=","products.brand_id")
-            ->join("categories","categories.id","=","products.category_id")
-            ->select(DB::raw("product_in_sales.product_id as product_id,
-            products.name as product_name,
-            brands.name as brand,
-            categories.name as category,
-            sum(product_in_sales.quantity) as quantity,
-            products.cost as cost,
-            product_in_sales.sale_price as sale_price,
-            product_in_sales.discount as discount,
-            sum(product_in_sales.total_cost) as total_cost,
-            sum(product_in_sales.total) as total,
-            users.name as seller,
-            users.last_name as seller_lastName,
-            product_in_sales.created_at as date"))
-            ->whereBetween('sales.created_at',[$to, $from])
-            ->where("sales.status",  "=", true)
-            ->groupBy("product_in_sales.product_id","product_in_sales.sale_price")
-            ->orderBy('quantity', 'DESC')
-            ->get();
-        $userBranchOficce = BranchOffice::where('id', "=", Auth::user()->branch_office_id)->get();
-        if (CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->count() == 0) {
-            return view('sales.create', ["branches" => $branches, 'traspacing'=>  $traspacing, "userAuth" => $userBranchOficce,]);
-        } else {
-            return view('sales.create', [
-                'box' => CashClosing::where('user_id', '=', Auth::user()->id)->where('status', '=', false)->first(),
-                "branches" => $branches,
-                'categories' => Category::all(),
-                'clients' => Client::where('status', true)->get(),
-                'traspacing' =>  $traspacing,
-                "ventasS" => $ventas,
-                "userAuth" => $userBranchOficce,
-            ]);
-        }
+
     }
 }
 
