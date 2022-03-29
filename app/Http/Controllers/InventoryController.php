@@ -173,7 +173,7 @@ class InventoryController extends Controller
 
     public function busqueda($palabra)
     {
-        $inventario = Inventory::where('name','LIKE',"%$palabra%")
+        $inventario = Inventory::where('name','LIKE',"%$palabra%")->orWhere('bar_code','=',"%$palabra%")
         ->with(['marca','categoria','almacen'])
         ->get();
         return response()->json($inventario);
