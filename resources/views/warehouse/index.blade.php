@@ -926,10 +926,6 @@
                     $('#total' + id).val(total);
                 });
 
-                $.get('/getCarrito', function(data) {
-
-                });
-
                 $('#descuentoGeneral').keyup(function(e) {
                     var descuento = $(this).val();
                     var porcentaje = descuento / 100;
