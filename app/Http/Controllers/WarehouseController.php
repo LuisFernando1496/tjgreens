@@ -49,11 +49,11 @@ class WarehouseController extends Controller
                     $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->paginate(10);
                     $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->get();
                 }
-                return $inventario;
                 $categorias = Category::all();
                 $carrito = Cart::where('user_id', '=', $user->id)
                     ->where('status', '=', true)->with(['inventario'])->get();
                 $carritoCompras = CartShopping::where('user_id', '=', $user->id)->where('status', '=', true)->get();
+                return $carrito;
                 $marcas = Brand::all();
                 $oficinas = BranchOffice::where('status', '=', true)->get();
                 return view('warehouse.index', [
