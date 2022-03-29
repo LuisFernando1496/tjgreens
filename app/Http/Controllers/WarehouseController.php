@@ -55,7 +55,6 @@ class WarehouseController extends Controller
                 $carritoCompras = CartShopping::where('user_id', '=', $user->id)->where('status', '=', true)->get();
                 $marcas = Brand::all();
                 $oficinas = BranchOffice::where('status', '=', true)->get();
-                return $oficinas;
                 return view('warehouse.index', [
                     'almacenes' => $almacen,
                     'inventarios' => $inventario,
