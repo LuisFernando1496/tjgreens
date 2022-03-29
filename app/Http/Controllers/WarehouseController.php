@@ -15,7 +15,7 @@ use App\Shipment;
 use App\Shopping;
 use App\User;
 use App\Warehouse;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -66,7 +66,7 @@ class WarehouseController extends Controller
                     'invetories' => $invetories
                 ]);
             }
-        } catch (\Error $th) {
+        } catch (\Throwable $th) {
             return $th;
         }
     }
