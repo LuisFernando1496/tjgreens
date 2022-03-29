@@ -222,58 +222,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            <table class="table table-hover" id="tabla1">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Código</th>
-                                        <th>Nombre</th>
-                                        <th>Categoria</th>
-                                        <th>Marca</th>
-                                        <th>Stock</th>
-                                        <th>Precio</th>
-                                        <th>Costo</th>
-                                        <th>Acciones</th>
-                                        <th>Edición</th>
-                                        <th>Eliminar</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="inventarios">
-                                    @forelse ($inventarios as $inventario)
-                                        <tr>
-                                            <td>{{ $inventario->id }}</td>
-                                            <td>{{ $inventario->bar_code }}</td>
-                                            <td>{{ $inventario->name }}</td>
-                                            <td>{{ $inventario->categoria->name }}</td>
-                                            <td>{{ $inventario->marca->name }}</td>
-                                            <td>{{ $inventario->stock }}</td>
-                                            <td>${{ $inventario->price }}</td>
-                                            <td>${{ $inventario->cost }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                                    data-bs-target="#addInventario{{ $inventario->id }}"><i
-                                                        class="bi bi-bag-plus-fill"></i></button>
-                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                                    data-bs-target="#addCompra{{ $inventario->id }}"><i
-                                                        class="bi bi-bag-plus"></i></button>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>
-                                                <a href="{{route('codigoAlmacen', $inventario)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>
-                                            </td>
-                                            <td>
-                                                <form action="{{route('inventario.delete',$inventario->id)}}" method="POST">
-                                                    @csrf @method('DELETE')
-                                                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-
-                                    @endforelse
-                                </tbody>
-                            </table>
-                            {{$inventarios->links()}}
+                            
 
                             <table class="table table-hover" id="tabla2" hidden>
                                 <thead>
