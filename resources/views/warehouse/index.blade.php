@@ -222,7 +222,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            
+
 
                             <table class="table table-hover" id="tabla2" hidden>
                                 <thead>
@@ -875,9 +875,6 @@
                     $('#total' + id).val(total);
                 });
 
-                $.get('/getCarrito', function(data) {
-
-                });
 
                 $('#descuentoGeneral').keyup(function(e) {
                     var descuento = $(this).val();
@@ -1116,8 +1113,6 @@
                                     '<td>'+element['price']+'</td>'+
                                     '<td>'+element['cost']+'</td>'+
                                     '<td>'+
-                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
-                                        'data-bs-target="#addInventario"><i class="bi bi-bag-plus-fill"></i></button>'+
                                         '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
                                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                     '</td>'+
