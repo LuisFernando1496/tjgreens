@@ -29,6 +29,7 @@ class WarehouseController extends Controller
      */
     public function index()
     {
+        
         try {
             $user = Auth::user();
             //$this->devolucion();
@@ -36,12 +37,13 @@ class WarehouseController extends Controller
                 $almacenes = Warehouse::with(['oficina', 'user', 'inventarios'])
                     ->where('office_id', '=', $user->branch_office_id)->paginate();
                 $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', $user->branch_office_id)->get();
-                return $usuarios;
+              //  return $usuarios;
                 return view('warehouse.index', [
                     'almacenes' => $almacenes,
                     'usuarios' => $usuarios
                 ]);
             } else {
+                return 'hola';
                 $almacen = Warehouse::where('user_id', '=', $user->id)->get();
                 if (sizeof($almacen) < 1) {
                     $inventario = [];
