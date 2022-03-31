@@ -29,7 +29,7 @@
 
 <body>
     <div class="d-flex" id="wrapper">
-        
+
         @include('layouts.menu')
         <div id="page-content-wrapper">
             @include('layouts.navbar')
@@ -38,30 +38,6 @@
                     @yield('content')
                     @guest
 
-                    @else
-                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Notificaciones</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="card">
-                                            <div class="card-header">
-                                            Notificación
-                                            </div>
-                                            <div class="card-body">
-                                            <h5 class="card-title">Titulo</h5>
-                                            <p class="card-text">Mensaje</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     @endguest
                 </main>
 
