@@ -1,14 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js">
-    </script>
+   
 
 
     @if (Auth::user()->rol_id == 1)
@@ -844,65 +837,65 @@
         </div>
 
         <script>
-            $(document).ready(function() {
+            $(document).ready(function() {   });
                 $('.cantidad').on('change', function() {
-                    var id = $(this).data('id');
-                    var precio = $('#price' + id).val();
-                    var cantidad = $(this).val();
-                    var subtotal = cantidad * precio;
-                    var descuento = $('#descuento' + id).val();
+                   let id = $(this).data('id');
+                   let precio = $('#price' + id).val();
+                   let cantidad = $(this).val();
+                   let subtotal = cantidad * precio;
+                   let descuento = $('#descuento' + id).val();
                     $('#subtotal' + id).val(subtotal);
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
+                   let porcentaje = descuento / 100;
+                   let total = subtotal - (subtotal * porcentaje);
                     $('#total' + id).val(total);
                 });
 
                 $('.descuento').on('change', function() {
-                    var id = $(this).data('id');
-                    var descuento = $(this).val();
-                    var subtotal = $('#subtotal' + id).val();
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
+                   let id = $(this).data('id');
+                   let descuento = $(this).val();
+                   let subtotal = $('#subtotal' + id).val();
+                   let porcentaje = descuento / 100;
+                   let total = subtotal - (subtotal * porcentaje);
                     $('#total' + id).val(total);
                 });
 
                 $('.descuento').keyup(function(e) {
-                    var id = $(this).data('id');
-                    var descuento = $(this).val();
-                    var subtotal = $('#subtotal' + id).val();
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
+                    let id = $(this).data('id');
+                    let descuento = $(this).val();
+                    let subtotal = $('#subtotal' + id).val();
+                    let porcentaje = descuento / 100;
+                    let total = subtotal - (subtotal * porcentaje);
                     $('#total' + id).val(total);
                 });
 
 
                 $('#descuentoGeneral').keyup(function(e) {
-                    var descuento = $(this).val();
-                    var porcentaje = descuento / 100;
-                    var subtotal = $('#subtotalGeneral').val();
-                    var total = subtotal - (subtotal * porcentaje);
+                    let descuento = $(this).val();
+                    let porcentaje = descuento / 100;
+                    let subtotal = $('#subtotalGeneral').val();
+                    let total = subtotal - (subtotal * porcentaje);
                     $('#totalGeneral').val(total.toFixed(2));
                 });
 
                 $('#descuentoGeneral').on('change', function() {
-                    var descuento = $(this).val();
-                    var porcentaje = descuento / 100;
-                    var subtotal = $('#subtotalGeneral').val();
-                    var total = subtotal - (subtotal * porcentaje);
+                    let descuento = $(this).val();
+                    let porcentaje = descuento / 100;
+                    let subtotal = $('#subtotalGeneral').val();
+                    let total = subtotal - (subtotal * porcentaje);
                     $('#totalGeneral').val(total.toFixed(2));
                 });
 
 
 
                 $('.cantidadCompra').on('change', function() {
-                    var id = $(this).data('id');
-                    var precio = $('#cost' + id).val();
-                    var cantidad = $(this).val();
-                    var subtotal = cantidad * precio;
-                    var descuento = $('#descuentoCompra' + id).val();
+                   let id = $(this).data('id');
+                   let precio = $('#cost' + id).val();
+                   let cantidad = $(this).val();
+                   let subtotal = cantidad * precio;
+                   let descuento = $('#descuentoCompra' + id).val();
                     $('#subtotalCompra' + id).val(subtotal);
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
+                   let porcentaje = descuento / 100;
+                   let total = subtotal - (subtotal * porcentaje);
                     $('#totalCompra' + id).val(total);
                 });
 
@@ -1176,7 +1169,7 @@
                 });
 
 
-            });
+         
         </script>
 
     @endif

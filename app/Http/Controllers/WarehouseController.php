@@ -63,7 +63,7 @@ class WarehouseController extends Controller
                     'carrito' => $carrito,
                     'carritoCompras' => $carritoCompras,
                     'oficinas' => $oficinas,
-                    'invetories' => $invetories
+                    'invetories' => $invetories 
                 ]);
             }
         } catch (\Throwable $th) {
