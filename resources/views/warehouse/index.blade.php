@@ -837,7 +837,7 @@
         </div>
 
         <script>
-            $(document).ready(function() {   });
+            $(document).ready(function() {  
                 $('.cantidad').on('change', function() {
                    let id = $(this).data('id');
                    let precio = $('#price' + id).val();
@@ -1167,7 +1167,7 @@
                         });
                     });
                 });
-
+            });
 
          
         </script>
