@@ -56,6 +56,23 @@ class LoginController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+    public function redirectPath(){
+        
+        if(auth()->user()->rol_id== 1){
+            return 'caja';
+        }
+        if(auth()->user()->rol_id== 2){
+            return 'caja';
+        }
+        if(auth()->user()->rol_id== 3){
+            return 'caja';
+        }
+        if(auth()->user()->rol_id== 4){
+            return 'almacen';
+        }
+     }
+        
+
     public function login(Request $request)
     {
         // return $this->validateLogin($request);

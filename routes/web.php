@@ -24,7 +24,9 @@ use Illuminate\Support\Facades\Route;
 //Route::get('/', 'HomeController@mensajes');
 
 Route::get('/', function () {
-    return redirect('caja');
+   
+    return redirect('login');
+    
 });
 
 
