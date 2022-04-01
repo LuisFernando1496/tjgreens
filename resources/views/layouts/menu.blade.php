@@ -38,7 +38,7 @@
 
             @if (Auth::user()->rol_id === 1 || Auth::user()->rol_id === 4)
                 <a href="{{route('almacen.index')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'almacen') ? 'active' : '' }}">Almacén</a>
-                <a href="{{route('almacen.ventas')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'ventas') ? 'active' : '' }}">Ventas</a>
+                <a href="{{route('almacen.ventas')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'ventas') ? 'active' : '' }}">Ventas de Almacén</a>
             @else
 
             @endif

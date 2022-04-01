@@ -36,8 +36,8 @@ class WarehouseController extends Controller
             if ($user->rol_id == 1) {
                 $almacenes = Warehouse::with(['oficina', 'user', 'inventarios'])
                     ->where('office_id', '=', $user->branch_office_id)->paginate();
-                $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', $user->branch_office_id)->get();
-              //  return $usuarios;
+                $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', 1)->get();
+               // return $usuarios;
                 return view('warehouse.index', [
                     'almacenes' => $almacenes,
                     'usuarios' => $usuarios

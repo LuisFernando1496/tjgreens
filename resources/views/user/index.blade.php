@@ -307,8 +307,6 @@
                 <th scope="col">Correo electrónico</th>
                 <th scope="col">Nombre(s)</th>
                 <th scope="col">Apellido(s)</th>
-                <th scope="col">RFC</th>
-                <th scope="col">CURP</th>
                 <th scope="col">Teléfono</th>
                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <th scope="col">Sucursal</th>
@@ -323,8 +321,6 @@
                 <th scope="row">{{$item->email}}</th>
                 <td>{{$item->name}}</td>
                 <td>{{$item->last_name}}</td>
-                <td>{{$item->rfc}}</td>
-                <td>{{$item->curp}}</td>
                 <td>{{$item->phone}}</td>
                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <td>{{$item->branchOffice->name}}</td>
@@ -432,8 +428,8 @@
 
         document.getElementById('name_edit').value = item.name
         document.getElementById('last_name_edit').value = item.last_name
-        document.getElementById('rfc_edit').value = item.rfc
-        document.getElementById('curp_edit').value = item.curp
+        // document.getElementById('rfc_edit').value = item.rfc
+        // document.getElementById('curp_edit').value = item.curp
         document.getElementById('phone_edit').value = item.phone
         document.getElementById('email_edit').value = item.email
         document.getElementById('street_edit').value = item.address.street
