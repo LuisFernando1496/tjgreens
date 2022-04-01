@@ -44,12 +44,12 @@ class WarehouseController extends Controller
                 ]);
             } else {
                 
-                $almacen = Warehouse::where('user_id', '=', $user->id)->get();
+                $almacen = Warehouse::where('user_id', '=', $user->id)->paginate(10);
                 if (sizeof($almacen) < 1) {
                     $inventario = [];
                 } else {
-                    $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->get();
-                    $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->get();
+                    $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->paginate(5);
+                    $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->paginate(5);
                 }
                 $categorias = Category::all();
                 $carrito = Cart::where('user_id', '=', $user->id)
@@ -57,7 +57,7 @@ class WarehouseController extends Controller
                 $carritoCompras = CartShopping::where('user_id', '=', $user->id)->where('status', '=', true)->get();
                 $marcas = Brand::all();
                 $oficinas = BranchOffice::where('status', '=', true)->get();
-               
+             //  return $inventario;
                 return view('warehouse.index', [
                     'almacenes' => $almacen,
                     'inventarios' => $inventario,
@@ -66,7 +66,7 @@ class WarehouseController extends Controller
                     'carrito' => $carrito,
                     'carritoCompras' => $carritoCompras,
                     'oficinas' => $oficinas,
-                    'invetories' => $invetories 
+                    'invetories' => $invetories,
                 ]);
             }
         } catch (\Throwable $th) {
