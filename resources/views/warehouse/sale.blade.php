@@ -14,8 +14,14 @@
         <div class="card">
             <div class="card-header">
                 <h4 class="card-title" style="text-align: center">{{$title}}</h4>
-                @if($title == "Traspaso")
+                @if($title == "Traspaso" && $compra->office_id != 0)
                 <h4>Sucursal destino {{$sucursal[0]->name}} </h4>
+                @endif
+                @if($title == "Traspaso" && $compra->office_id == 0)
+                <h4>Cliente privado</h4>
+                @endif
+                @if($title == "Venta" && $compra->office_id == 0)
+                <h4>Venta a Cliente Privado</h4>
                 @endif
             </div>
             <div class="card-body">

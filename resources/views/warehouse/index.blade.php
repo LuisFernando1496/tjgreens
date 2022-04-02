@@ -645,6 +645,7 @@
                                             @empty
 
                                             @endforelse
+                                            <option value="0">Cliente privado</option>
                                         </select>
                                     </div>
                                     <div class="col">
@@ -814,6 +815,12 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="1" id="checkTransferir">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    ¿Transferir a Carrito de ventas?
+                                </label>
+                            </div>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" id="btnModalComprar" class="btn btn-primary">Comprar</button>
                         </div>
@@ -1025,74 +1032,100 @@
                 });
 
                 $('#btnModalComprar').on('click', function(){
-                    if($('#typePaymnet').find(':selected').val() != ""){
-                        $('#carritoCompraModal').modal('hide');
+                    if ($('#checkTransferir').is(':checked') ) {
+                        if($('#typePaymnet').find(':selected').val() != ""){
+                            $('#carritoCompraModal').modal('hide');
+                            let idsP = [];
+                            let quaP = [];
+                            $('#tablita2').children().each(function (){
+                                //idsP.push(parseInt($(this).find('.idProduct').text()));
+                                //quaP.push(parseInt($(this).find('.quantityProduct').text()));
+                                let id = parseInt($(this).find('.idProduct').text());
+                                let request = {
+                                    quantity: parseFloat($(this).find('.quantityProduct').text()),
+                                    subtotal: parseFloat($(this).find('.subtotalItem').text()),
+                                    discount: parseFloat($(this).find('.discountItem').text()),
+                                    total: parseFloat($(this).find('.totalItem').text()),
+                                }
+                                $.ajax({
+                                url: "/addInventario/"+id,
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                type: 'POST',
+                                contentType: "application/json; charset=iso-8859-1",
+                                data:JSON.stringify(request),
+                                dataType: 'html',
+                                success: function(data) {
+                                    console.log("exito", data);
+                                },
+                                error: function(e) {
+                                    console.log("ERROR", e);
+                                },
+                            });
 
-                        let idsP = [];
-                        let quaP = [];
-                        $('#tablita2').children().each(function (){
-                            //idsP.push(parseInt($(this).find('.idProduct').text()));
-                            //quaP.push(parseInt($(this).find('.quantityProduct').text()));
-                            let id = parseInt($(this).find('.idProduct').text());
-                            let request = {
-                                quantity: parseFloat($(this).find('.quantityProduct').text()),
-                                subtotal: parseFloat($(this).find('.subtotalItem').text()),
-                                discount: parseFloat($(this).find('.discountItem').text()),
-                                total: parseFloat($(this).find('.totalItem').text()),
-                            }
+                            });
+                            /*let request = {
+                                office_id: $('#office_id').find(':selected').val(),
+                                type: $('#typePaymnet').find(':selected').val(),
+                                subtotal: parseFloat($('#subtotalGeneralCompra').val()),
+                                discount: parseFloat($('#descuentoGeneralCompra').val()),
+                                total: parseFloat($('#totalGeneralCompra').val()),
+                                productsId: idsP,
+                                quantityProducts: quaP,
+                                bandera: 0,
+                            };*/
+                            request = [];
                             $.ajax({
-                            url: "/addInventario/"+id,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            type: 'POST',
-                            contentType: "application/json; charset=iso-8859-1",
-                            data:JSON.stringify(request),
-                            dataType: 'html',
-                            success: function(data) {
-                                console.log("exito", data);
-                            },
-                            error: function(e) {
-                                console.log("ERROR", e);
-                            },
-                        });
-
-                        });
-                        /*let request = {
-                            office_id: $('#office_id').find(':selected').val(),
-                            type: $('#typePaymnet').find(':selected').val(),
-                            subtotal: parseFloat($('#subtotalGeneralCompra').val()),
-                            discount: parseFloat($('#descuentoGeneralCompra').val()),
-                            total: parseFloat($('#totalGeneralCompra').val()),
-                            productsId: idsP,
-                            quantityProducts: quaP,
-                            bandera: 0,
-                        };*/
-                        request = [];
-                        $.ajax({
-                            url: "/concluirCompra",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            type: 'POST',
-                            contentType: "application/json; charset=iso-8859-1",
-                            data:JSON.stringify(request),
-                            dataType: 'html',
-                            success: function(data) {
-                                console.log("exito");
-                                setTimeout(location.reload(), 10000);
-                            },
-                            error: function(e) {
-                                console.log("ERROR", e);
-                                setTimeout(alert("Exito en la venta"),3000);
-                                location.reload();
-                            },
-                        });
+                                url: "/concluirCompra",
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                type: 'POST',
+                                contentType: "application/json; charset=iso-8859-1",
+                                data:JSON.stringify(request),
+                                dataType: 'html',
+                                success: function(data) {
+                                    console.log("exito");
+                                    setTimeout(location.reload(), 10000);
+                                },
+                                error: function(e) {
+                                    console.log("ERROR", e);
+                                    setTimeout(alert("Exito en la venta"),3000);
+                                    location.reload();
+                                },
+                            });
+                        }
+                    }else{
+                        if($('#typePaymnet').find(':selected').val() != ""){
+                            $('#carritoCompraModal').modal('hide');
+                            request = [];
+                            $.ajax({
+                                url: "/concluirCompra",
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                type: 'POST',
+                                contentType: "application/json; charset=iso-8859-1",
+                                data:JSON.stringify(request),
+                                dataType: 'html',
+                                success: function(data) {
+                                    console.log("exito");
+                                    setTimeout(location.reload(), 10000);
+                                },
+                                error: function(e) {
+                                    console.log("ERROR", e);
+                                    setTimeout(alert("Exito en la venta"),3000);
+                                    location.reload();
+                                },
+                            });
+                        }
                     }
                 });
 
                 $('#btnModaltransferir').on('click', function(){
                     if($('#typeTranferencia').find(':selected').val() != ""){
+                        console.log($('#typeTranferencia').find(':selected').val());
                         $('#carritoModal').modal('hide');
                         request = [];
                         $.ajax({
