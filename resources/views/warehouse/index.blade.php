@@ -2,6 +2,8 @@
 
 @section('content')
 
+
+</script>
     @if (Auth::user()->rol_id == 1)
         <div class="container">
             <div class="card">
@@ -579,7 +581,7 @@
         <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="addInventario" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form action="{{ route('concluir') }}" method="POST">
+                    <form action="{{ route('concluirExcel') }}" id="formConcluir" method="POST">
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title">Carrito</h5>
@@ -689,12 +691,13 @@
                                         <input type="number" name="transferencia" class="form-control" step="any"
                                              readonly value="1">
                                     </div>
+                                    <input type="hidden" name="user" value="{{Auth::user()->id}}" >
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" id="btnModaltransferir" class="btn btn-primary">Transferir</button>
+                            <button type="submit" id="btnModaltransferir" onclick="transferirProductos(event)" class="btn btn-primary">Transferir</button>
                         </div>
                     </form>
                 </div>
@@ -1091,32 +1094,7 @@
                     }
                 });
 
-                $('#btnModaltransferir').on('click', function(){
-                    if($('#typeTranferencia').find(':selected').val() != ""){
-                        $('#carritoModal').modal('hide');
-                        request = [];
-                        $.ajax({
-                            url: "/concluir",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            type: 'POST',
-                            contentType: "application/json; charset=iso-8859-1",
-                            data:JSON.stringify(request),
-                            dataType: 'html',
-                            success: function(data) {
-                                console.log("exito");
-                                setTimeout(location.reload(), 10000);
-                            },
-                            error: function(e) {
-                                console.log("ERROR", e);
-                                setTimeout(alert("Transferencia exitosa!"), 3000);
-                                location.reload();
-                            },
-                        });
-
-                    }
-                });
+              
 
                 $('.eliminar').on('click', function() {
                     var id = $(this).data('id');
@@ -1224,6 +1202,41 @@
 
 
             });
+            const transferirProductos = (event) =>
+            {
+                event.preventDefault();
+                document.getElementById("formConcluir").submit();
+                window.open('/concluir');
+                
+                 
+                    // if($('#typeTranferencia').find(':selected').val() != ""){
+                    //     $('#carritoModal').modal('hide');
+                    //     let request = $('#formConcluir').serialize();
+                        
+                    //     console.log(request);
+                    //     $.ajax({
+                    //         url: "/concluir",
+                    //         headers: {
+                    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    //         },
+                    //         type: 'POST',
+                    //         data: request,
+                    //         success: function(data) {
+                    //             console.log(data);
+                    //            document.getElementById("formConcluir").submit();
+                    //            location.reload();
+                    //         },
+                    //         error: function(e) {
+                    //             console.log("ERROR", e);
+                    //             setTimeout(alert("Transferencia exitosa!"), 3000);
+                    //             location.reload();
+                    //         },
+                    //     });
+
+                   // }
+              
+
+            }
         </script>
 
     @endif

@@ -146,51 +146,61 @@ class CartController extends Controller
 
     }
 
-    public function concluir(Request $request)
+    public function concluir()
     {
-        return Excel::download(new WarehouseExport($request), 'transferenciaAlmacen.xlsx');
-        /*if($request->transferencia){
-            return 0;
-        }else{
-            return 123;
-        }*/
-        /*$user = Auth::user();
-        $almacen = Warehouse::where('user_id','=',$user->id)->get();
-        $carrito = Cart::where('user_id','=',$user->id)->where('status','=',true)->get();
-        try {
-            DB::beginTransaction();
-            $traspaso = new Shipment();
-            $traspaso->warehouse_id = $almacen[0]->id;
-            $traspaso->office_id = $request->office_id;
-            $traspaso->total = $request->total;
-            $traspaso->type = $request->type;
-            $traspaso->subtotal = $request->subtotal;
-            $traspaso->discount = $request->discount;
-            $traspaso->user_id = $user->id;
-            $traspaso->save();
+       
+         return redirect()->route('almacen.index');;
+      // return response()->json(['success' => true, 'data' => $request]);  
+        // if($request->user){
+        //     //return response()->json(['success' => true, 'data' => $request->transferir]);     
+        //     $user = $request->user;
+        // }else{
+        //    //return response()->json(['success' => true, 'data' => 'nada']);
+        //       $user = Auth::user()->id;
+        // }
+      
+        
+        // $almacen = Warehouse::where('user_id','=',$request->user)->get();
+        // $carrito = Cart::where('user_id','=',$request->user)->where('status','=',true)->get();
+        // try {
+        //     DB::beginTransaction();
+        //     $traspaso = new Shipment();
+        //     $traspaso->warehouse_id = $almacen[0]->id;
+        //     $traspaso->office_id = $request->office_id;
+        //     $traspaso->total = $request->total;
+        //     $traspaso->type = $request->type;
+        //     $traspaso->subtotal = $request->subtotal;
+        //     $traspaso->discount = $request->discount;
+        //     $traspaso->user_id = $request->user;
+        //     $traspaso->save();
 
-            foreach ($carrito as $cart) {
-                $product = new InventoryShipment();
-                $product->inventory_id = $cart->inventory_id;
-                $product->shipment_id = $traspaso->id;
-                $product->quantity = $cart->quantity;
-                $product->total = $cart->total;
-                $product->discount = $cart->discount;
-                $product->save();
+        //     foreach ($carrito as $cart) {
+        //         $product = new InventoryShipment();
+        //         $product->inventory_id = $cart->inventory_id;
+        //         $product->shipment_id = $traspaso->id;
+        //         $product->quantity = $cart->quantity;
+        //         $product->total = $cart->total;
+        //         $product->discount = $cart->discount;
+        //         $product->save();
 
-                DB::table('carts')->where('id','=',$cart->id)->update([
-                    'status' => false
-                ]);
-            }
-            DB::commit();
-            return redirect()->route('almacen.index');
+        //         DB::table('carts')->where('id','=',$cart->id)->update([
+        //             'status' => false
+        //         ]);
+        //     }
+        //     DB::commit();
+        //     return response()->json(['success' => true]);
+        //     return redirect()->route('almacen.index');
 
-        } catch (\Error $th) {
-            DB::rollBack();
-            return $th;
-        }*/
+        // } catch (\Error $th) {
+        //     DB::rollBack();
+        //     return $th;
+        // }
     }
-
+    public function concluirExcel(Request $request){
+        
+        return Excel::download(new WarehouseExport($request), 'transferenciaAlmacen.xlsx');
+    }
+    
     public function concluirCompra(Request $request)
     {
         return Excel::download(new WarehouseExport($request), 'ventaAlmacen.xlsx');

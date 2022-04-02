@@ -287,7 +287,7 @@ class WarehouseController extends Controller
     {
         $user = Auth::user();
         $ventas = Shipment::where('user_id', '=', $user->id)->get();
-        $sales = Shipment::where('user_id', '=', $user->id)->paginate(10);
+        $sales = Shipment::where('user_id', '=', $user->id)->orderBy('id','DESC')->paginate(10);
         return view('warehouse.ventas', [
             'ventas' => $ventas,
             'sales' => $sales

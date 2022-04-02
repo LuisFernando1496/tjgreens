@@ -133,7 +133,8 @@ Route::group(['middleware'=>'auth'], function(){
 
     Route::post('/addInventario/{id}',[CartController::class,'store'])->name('add');
     Route::get('/getCarrito',[CartController::class,'index']);
-    Route::post('/concluir',[CartController::class,'concluir'])->name('concluir');
+    Route::get('/concluir',[CartController::class,'concluir'])->name('concluir');
+    Route::post('/finish-Excel',[CartController::class,'concluirExcel'])->name('concluirExcel');
     Route::patch('/venta-pagada/{id}',[CartController::class,'pagado'])->name('venta.pagada');
 
 
