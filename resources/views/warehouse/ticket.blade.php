@@ -56,7 +56,8 @@ img {
         Calle {{$venta->oficina->address->street}},Numero {{$venta->oficina->address->ext_number}} <br>
         Colonia {{$venta->oficina->address->suburb}} <br>
         @else
-        Sin dirección<br>
+        Sin dirección <br>
+        Vendido a cliente privado<br>
         @endif
         Atendido por {{Auth::user()->name}} {{Auth::user()->last_name}} <br>
         Fecha: {{$venta->created_at->format('d-m-y h:m:s')}} <br>

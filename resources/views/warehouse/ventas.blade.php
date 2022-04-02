@@ -75,6 +75,9 @@
                                         @endif
                                     </td>
                                     <td>
+                                        @if($venta->oficina == null)
+                                            <a href="{{route('generate.factura',$venta->id)}}" target="blank" class="btn btn-outline-success" type="button"><i class="bi bi-receipt-cutoff"></i></a>
+                                        @endif
                                         @if ($venta->status != "En proceso")
                                             <a href="{{route('generate.factura',$venta->id)}}" target="blank" class="btn btn-outline-success" type="button"><i class="bi bi-receipt-cutoff"></i></a>
                                         @endif
