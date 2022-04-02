@@ -62,10 +62,14 @@
                                     </td>
                                     <td>
                                         @if ($venta->status == "En proceso")
+                                            @if($venta->oficina != null)
                                             <form action="{{route('venta.pagada',$venta->id)}}" method="POST">
                                                 @csrf @method('PATCH')
                                                 <button class="btn btn-outline-success" type="submit"><i class="bi bi-cash"></i></button>
                                             </form>
+                                            @else
+                                            <a href="{{route('generate.ticket',$venta->id)}}" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>
+                                            @endif
                                         @else
                                             <a href="{{route('generate.ticket',$venta->id)}}" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>
                                         @endif
