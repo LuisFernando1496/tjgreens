@@ -46,7 +46,11 @@
                             @forelse ($sales as $venta)
                                 <tr>
                                     <td>{{$venta->id}}</td>
+                                    @if ($venta->oficina != null)
                                     <td>{{$venta->oficina->name}}</td>
+                                    @else
+                                    <td>Cliente privado</td>
+                                    @endif
                                     <td>{{$venta->type}}</td>
                                     <td>${{number_format($venta->subtotal,2,'.',',')}}</td>
                                     <td>{{$venta->discount}}%</td>

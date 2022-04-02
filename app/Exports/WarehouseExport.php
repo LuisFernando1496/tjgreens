@@ -218,6 +218,7 @@ class WarehouseExport implements FromView //implements FromCollection
                     return $th;
                 }
             }else{
+                return 0;
                 $user = Auth::user();
                 $almacen = Warehouse::where('user_id','=',$user->id)->get();
                 $carrito = CartShopping::where('user_id','=',$user->id)->where('status',true)->get();
