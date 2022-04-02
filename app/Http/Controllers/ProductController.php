@@ -48,6 +48,16 @@ class ProductController extends Controller
 
     }
 
+    public function eliminarProductosSucursal(){
+        try {
+            DB::table('products')->where('branch_office_id', 7)->delete();
+            return 1;
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return 0;
+        }
+    }
+
     public function guardar(Request $request)
     {
         //return back()->withErrors(["Guardar" => "Guardar2:", $request->name]);
