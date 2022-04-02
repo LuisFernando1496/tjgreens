@@ -197,7 +197,7 @@ class CartController extends Controller
         // }
     }
     public function concluirExcel(Request $request){
-        
+       // return $request->all();
         return Excel::download(new WarehouseExport($request), 'transferenciaAlmacen.xlsx');
     }
     
@@ -221,13 +221,19 @@ class CartController extends Controller
 
                 /*$item = Product::where('name','=',$inventario->name)->where('category_id','=',$inventario->category_id)
                 ->where('brand_id','=',$inventario->brand_id)->where('branch_office_id','=',$user->branch_office_id)->get();*/
-                $item = Product::where('bar_code',$inventario->bar_code)->where('branch_office_id','=',$venta->office_id)->get();
-                if (sizeof($item) > 0) {
+                $item = Product::where('bar_code',$inventario->bar_code)->where('branch_office_id','=',$venta->office_id)->first();
+               
+                if (!empty($item)) { 
+                   
                     //return $item;
-                    DB::table('products')->where('id','=',$item[0]->id)->update([
-                        'stock' => $item[0]->stock + $producto->quantity
+                    // DB::table('products')->where('id','=',$item[0]->id)->update([
+                    //     'stock' => $item[0]->stock + $producto->quantity
+                    // ]);
+                    $item->update([
+                        'stock' => $item->stock + $producto->quantity
                     ]);
                 } else {
+                   
                     $new = new Product();
                     $new->name = $inventario->name;
                     $new->bar_code = $inventario->bar_code;

@@ -692,7 +692,7 @@
                                         <input type="number" name="transferencia" class="form-control" step="any"
                                              readonly value="1">
                                     </div>
-                                    <input type="hidden" name="user" value="{{Auth::user()->id}}" >
+                                    
                                 </div>
                             </div>
                         </div>

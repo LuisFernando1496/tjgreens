@@ -60,7 +60,7 @@ class WarehouseController extends Controller
              //  return $inventario;
                 return view('warehouse.index', [
                     'almacenes' => $almacen,
-                    'inventarios' => $inventario,
+                   'inventarios' => $inventario,
                     'categorias' => $categorias,
                     'marcas' => $marcas,
                     'carrito' => $carrito,
