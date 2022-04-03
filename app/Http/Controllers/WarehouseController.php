@@ -44,11 +44,12 @@ class WarehouseController extends Controller
                 ]);
             } else {
                 
-                $almacen = Warehouse::where('user_id', '=', $user->id)->paginate(10);
-                if (sizeof($almacen) < 1) {
-                    $inventario = [];
+                $almacen = Warehouse::where('user_id', '=', $user->id)->get();
+             // return $almacen;
+                if (empty($almacen) ) {
+                    $inventarios = [];
                 } else {
-                    $inventario = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->paginate(5);
+                    $inventarios = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->paginate(5);
                     $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->paginate(5);
                 }
                 $categorias = Category::all();
@@ -60,7 +61,7 @@ class WarehouseController extends Controller
              //  return $inventario;
                 return view('warehouse.index', [
                     'almacenes' => $almacen,
-                   'inventarios' => $inventario,
+                    'inventarios' => $inventarios,
                     'categorias' => $categorias,
                     'marcas' => $marcas,
                     'carrito' => $carrito,

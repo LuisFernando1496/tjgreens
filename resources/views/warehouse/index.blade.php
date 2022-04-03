@@ -1238,10 +1238,7 @@
             {
                 event.preventDefault();
                 document.getElementById("formConcluir").submit();
-                window.open('/concluir');
-                
-                 
-                
+                window.open('/concluir');   
 
             }
         </script>
