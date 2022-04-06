@@ -244,14 +244,16 @@
                                             <td>${{ $inventario->cost }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                                    data-bs-target="#addInventario{{ $inventario->id }}"><i
+                                                    data-bs-target="#addInventario" onclick="llenarinv({{$inventario}})"><i
                                                         class="bi bi-bag-plus-fill"></i></button>
+                                                        
                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                                                     data-bs-target="#addCompra{{ $inventario->id }}"><i
                                                         class="bi bi-bag-plus"></i></button>
                                             </td>
                                             <td>
-                                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>
+                                                {{--<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>--}}
+                                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit({{$inventario}})"><i class="bi bi-pencil"></i></button>
                                                 <a href="{{route('codigoAlmacen', $inventario)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>
                                             </td>
                                             <td>
@@ -292,7 +294,146 @@
                 </div>
             </div>
         </div>
-        @forelse ($invetories as $inventario)
+
+        <div class="modal fade" id="modaledit" tabindex="-1"
+            aria-labelledby="modaledit" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="formmodedit" method="POST">
+                        @csrf @method('PATCH')
+                        <div class="modal-header">
+                            <h5 class="modal-title">Editar producto</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Código de barra</label>
+                                    <input type="text" class="form-control" name="bar_code" value="" id="modeditbar_code" required>
+                                </div>
+                                <div class="col">
+                                    <label for="">Nombre</label>
+                                    <input type="text" class="form-control" name="name" value="" id="modeditname" required>
+                                </div>
+                                <div class="col">
+                                    <label for="">Categoria</label>
+                                    <select name="category_id" id="modeditcategory_id" class="form-control" required>
+                                        @forelse ($categorias as $categoria)
+                                            @if ($categoria->id == $inventario->category_id)
+                                                <option selected value="{{ $categoria->id }}">{{ $categoria->name }}</option>
+                                            @else
+                                                <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
+                                            @endif
+                                        @empty
+                                            <option value="">Sin categorias</option>
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Marca</label>
+                                    <select name="brand_id" id="modeditbrand_id" class="form-control" required>
+                                        @forelse ($marcas as $marca)
+                                            @if ($marca->id == $inventario->brand_id)
+                                                <option selected value="{{ $marca->id }}">{{ $marca->name }}</option>
+                                            @else
+                                                <option value="{{ $marca->id }}">{{ $marca->name }}</option>
+                                            @endif
+                                        @empty
+
+                                        @endforelse
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="">Stock</label>
+                                    <input type="number" class="form-control" name="stock" value="" id="modeditstock">
+                                </div>
+                                <div class="col">
+                                    <label for="">Precio</label>
+                                    <input type="numer" class="form-control" step="any" name="price" value="" id="modeditprice">
+                                </div>
+                                <div class="col">
+                                    <label for="">Costo</label>
+                                    <input type="number" class="form-control" step="any" name="cost" value="" id="modeditcost">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="addInventario" tabindex="-1"
+            aria-labelledby="addInventario" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form id="formaddinv" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title">Añadir al carrito</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Producto</label>
+                                    <input type="text" required readonly
+                                        value="" class="form-control" id="addmodinvproducto">
+                                </div>
+                                <div class="col">
+                                    <label for="">Precio</label>
+                                    <input type="number" class="form-control" step="any"
+                                        required readonly value=""
+                                        id="addmodinvprice">
+                                </div>
+                                <div class="col">
+                                    <label for="">Cantidad</label>
+                                    <input name="quantity" type="number"
+                                        class="form-control cantidad" required
+                                        id="addmodinvquantity" min="1"
+                                        value="1">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Sub Total</label>
+                                    <input type="number" class="form-control" step="any"
+                                        id="addmodinvsubtotal" readonly
+                                        name="subtotal">
+                                </div>
+                                <div class="col">
+                                    <label for="">Descuento en %</label>
+                                    <input name="discount" type="number"
+                                        class="form-control descuento" step="any"
+                                        id="addmodinvdescuento" value="0" min="0">
+                                </div>
+                                <div class="col">
+                                    <label for="">Total</label>
+                                    <input name="total" type="number" step="any"
+                                        class="form-control" id="addmodinvtotal" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        {{--@forelse ($invetories as $inventario)
             <div class="modal fade" id="modaledit{{ $inventario->id }}" tabindex="-1"
                 aria-labelledby="modaledit{{ $inventario->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -374,7 +515,7 @@
                 aria-labelledby="addInventario{{ $inventario->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <form action="{{ route('add', $inventario->id) }}" method="POST">
+                        <form id="formaddinv" method="POST">
                             @csrf
                             <div class="modal-header">
                                 <h5 class="modal-title">Añadir al carrito</h5>
@@ -506,7 +647,7 @@
             </div>
         @empty
 
-        @endforelse
+        @endforelse--}}
 
         <div class="modal fade" id="inventarioModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -896,6 +1037,41 @@
         </div>
 
         <script>
+            function llenaredit(product){
+                //action="{{ route('inventario.update', $inventario->id) }}" 
+                console.log(product);
+                //document.getElementById("formmodedit").action = "/product/"+item.id;
+                document.getElementById('modeditbar_code').value = product.bar_code;
+                document.getElementById('modeditname').value = product.name;
+                document.getElementById('modeditcategory_id').value = product.category_id;
+                document.getElementById('modeditbrand_id').value = product.brand_id;
+                document.getElementById('modeditstock').value = product.stock;
+                document.getElementById('modeditprice').value = product.price;
+                document.getElementById('modeditcost').value = product.cost;
+            }
+            function llenarinv(product){
+                console.log(product.id);
+                //action="{{ route('add', $inventario->id) }}" 
+                document.getElementById("formaddinv").action = "/addInventario/"+product.id;
+                document.getElementById('addmodinvproducto').value = product.name;
+                document.getElementById('addmodinvprice').value = product.price;
+                document.getElementById('addmodinvsubtotal').value = product.price * 1;
+                document.getElementById('addmodinvtotal').value = product.price * 1;
+                /*document.getElementById('modaddinvproducto').value = product.bar_code;
+                document.getElementById('modaddinvproducto').value = product.bar_code;
+                document.getElementById('modaddinvproducto').value = product.bar_code;*/
+            }
+            function llenaredit(product){
+                console.log(product);
+                //document.getElementById("myFormEdit").action = "/product/"+item.id;
+                document.getElementById('modeditbar_code').value = product.bar_code;
+                document.getElementById('modeditname').value = product.name;
+                document.getElementById('modeditcategory_id').value = product.category_id;
+                document.getElementById('modeditbrand_id').value = product.brand_id;
+                document.getElementById('modeditstock').value = product.stock;
+                document.getElementById('modeditprice').value = product.price;
+                document.getElementById('modeditcost').value = product.cost;
+            }
             $(document).ready(function() {
                 $('.cantidad').on('change', function() {
                     var id = $(this).data('id');
@@ -1126,7 +1302,7 @@
                     }
                 });
 
-              
+                
 
                 $('.eliminar').on('click', function() {
                     var id = $(this).data('id');
@@ -1157,6 +1333,7 @@
                             $('#inventarios2').empty();
                             data.forEach(element => {
                                 var id = element['id'];
+                                console.log(id);
                                 var url = '{{route("inventario.delete",'+id+')}}';
                                 $('#inventarios2').append('<tr>'+
                                     '<td>'+element['id']+'</td>'+
@@ -1168,7 +1345,6 @@
                                     '<td>'+element['price']+'</td>'+
                                     '<td>'+element['cost']+'</td>'+
                                     '<td>'+
-                                       
                                         '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
                                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                     '</td>'+
