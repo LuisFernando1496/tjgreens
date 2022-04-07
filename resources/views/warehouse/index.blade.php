@@ -1125,13 +1125,7 @@
                 document.getElementById('modeditcost').value = product.cost;
             }
             function llenarinv(product){
-<<<<<<< HEAD
                 if(typeof(product) == "number"){
-=======
-                 
-                
-                if(product.length == undefined){
->>>>>>> 69418e5765e269edf5f1c09ec6c88aa120089830
                     //console.log("Entra: ",result.);
                     let item = result.find(element => element.id == product);   
 
@@ -1156,13 +1150,13 @@
                     //console.log("item: ",item.);
                     document.getElementById("formaddcom").action = "/addCompra/"+item.id;
                     document.getElementById('addmodcomproduct').value = item.name;
-                    document.getElementById('addmodcomcosto').value = item.costo;
+                    document.getElementById('addmodcomcosto').value = item.cost;
                     document.getElementById('addmodcomsubtotal').value = item.price * 1;
                     document.getElementById('addmodcomtotal').value = item.price * 1;
                 }else{
                     document.getElementById("formaddcom").action = "/addCompra/"+product.id;
                     document.getElementById('addmodcomproduct').value = product.name;
-                    document.getElementById('addmodcomcosto').value = product.costo;
+                    document.getElementById('addmodcomcosto').value = product.cost;
                     document.getElementById('addmodcomsubtotal').value = product.price * 1;
                     document.getElementById('addmodcomtotal').value = product.price * 1;
                 }
@@ -1440,9 +1434,13 @@
                                     '<td>'+element['price']+'</td>'+
                                     '<td>'+element['cost']+'</td>'+
                                     '<td>'+
-                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                       ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
-                                                '<i class="bi bi-bag-plus-fill"></i></button>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>':
+                                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>'
+                                            }`
+                                        +
                                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
                                             'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
                                             '<i class="bi bi-bag-plus"></i></button>'+
@@ -1536,7 +1534,12 @@
                                 '<td>'+element['price']+'</td>'+
                                 '<td>'+element['cost']+'</td>'+
                                 '<td>'+
-                                    '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                    ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                            'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>':
+                                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>'
+                                            }`+
                                     '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                 '</td>'+
                                 '<td>'+
@@ -1558,25 +1561,31 @@
             });
             $('#addmodinvquantity').on('change',function(event){
                 let cantidad = $('#addmodinvquantity').val();
-                console.log(cantidad);
                 let precio = $('#addmodinvprice').val();
-                console.log(precio);
                 let total = cantidad * precio;
-                console.log(total);
                 $('#addmodinvtotal').val(total);
                
             });
             $('#addmodinvquantity').on('keyup',function(event){
                 let cantidad = $('#addmodinvquantity').val();
-                console.log(cantidad);
                 let precio = $('#addmodinvprice').val();
-                console.log(precio);
                 let total = cantidad * precio;
-                console.log(total);
                 $('#addmodinvtotal').val(total);
                
             });
            
+            $('.cantidadCompra').on('change',function(event){
+                let cantidad = $(this).val();
+               let costo = $('#addmodcomcosto').val();
+                let total = cantidad * costo;
+                $('#addmodcomtotal').val(total);
+            });
+            $('.cantidadCompra').on('keyup',function(event){
+                let cantidad = $(this).val();
+               let costo = $('#addmodcomcosto').val();
+                let total = cantidad * costo;
+                $('#addmodcomtotal').val(total);
+            });
             
             const transferirProductos = (event) =>
             {
