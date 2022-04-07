@@ -408,7 +408,7 @@
                 .then(text => {
                     document.getElementById("result2").innerHTML = "";
                     console.log(typeof(text));
-                    result=JSON.parse(text);
+                    result = JSON.parse(text);
                     //console.log(result.data[0]);
                     //r = JSON.parse(result.data[0]);
                     //console.log(r);

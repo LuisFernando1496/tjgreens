@@ -248,7 +248,7 @@
                                                         class="bi bi-bag-plus-fill"></i></button>
                                                         
                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                                    data-bs-target="#addCompra{{ $inventario->id }}"><i
+                                                    data-bs-target="#addCompra" onclick="llenarCompra({{$inventario}})"><i
                                                         class="bi bi-bag-plus"></i></button>
                                             </td>
                                             <td>
@@ -420,6 +420,73 @@
                                     <label for="">Total</label>
                                     <input name="total" type="number" step="any"
                                         class="form-control" id="addmodinvtotal" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal fade" id="addCompra" tabindex="-1"
+            aria-labelledby="addInventario" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form action="{{ route('addCompra', $inventario->id) }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title">Añadir al carrito</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Producto</label>
+                                    <input type="text" required readonly
+                                        value=""
+                                        class="form-control">
+                                </div>
+                                <div class="col">
+                                    <label for="">Costo</label>
+                                    <input type="number" class="form-control" step="any"
+                                        required readonly value="{{ $inventario->cost }}"
+                                        id="cost{{ $inventario->id }}">
+                                </div>
+                                <div class="col">
+                                    <label for="">Cantidad</label>
+                                    <input name="quantity" type="number"
+                                        class="form-control cantidadCompra" required
+                                        data-id="{{ $inventario->id }}" min="1" value="1">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Sub Total</label>
+                                    <input type="number" class="form-control" step="any"
+                                        id="subtotalCompra{{ $inventario->id }}"
+                                        value="{{ $inventario->cost }}" readonly
+                                        name="subtotal">
+                                </div>
+                                <div class="col">
+                                    <label for="">Descuento en %</label>
+                                    <input name="discount" type="number"
+                                        data-id="{{ $inventario->id }}"
+                                        class="form-control descuentoCompra" step="any"
+                                        id="descuentoCompra{{ $inventario->id }}" value="0"
+                                        min="0">
+                                </div>
+                                <div class="col">
+                                    <label for="">Total</label>
+                                    <input name="total" type="number" step="any"
+                                        class="form-control"
+                                        id="totalCompra{{ $inventario->id }}"
+                                        value="{{ $inventario->cost }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -1037,9 +1104,9 @@
         </div>
 
         <script>
+            let result = [];
             function llenaredit(product){
                 //action="{{ route('inventario.update', $inventario->id) }}" 
-                console.log(product);
                 //document.getElementById("formmodedit").action = "/product/"+item.id;
                 document.getElementById('modeditbar_code').value = product.bar_code;
                 document.getElementById('modeditname').value = product.name;
@@ -1050,19 +1117,30 @@
                 document.getElementById('modeditcost').value = product.cost;
             }
             function llenarinv(product){
-                console.log(product.id);
+                if(product.length == undefined){
+                    //console.log("Entra: ",result.);
+                    let item = result.find(element => element.id == product);    
+                    //console.log("item: ",item.);
+                    document.getElementById("formaddinv").action = "/addInventario/"+item.id;
+                    document.getElementById('addmodinvproducto').value = item.name;
+                    document.getElementById('addmodinvprice').value = item.price;
+                    document.getElementById('addmodinvsubtotal').value = item.price * 1;
+                    document.getElementById('addmodinvtotal').value = item.price * 1;
+                }else{
+                    document.getElementById("formaddinv").action = "/addInventario/"+product.id;
+                    document.getElementById('addmodinvproducto').value = product.name;
+                    document.getElementById('addmodinvprice').value = product.price;
+                    document.getElementById('addmodinvsubtotal').value = product.price * 1;
+                    document.getElementById('addmodinvtotal').value = product.price * 1;
+                }
+                
                 //action="{{ route('add', $inventario->id) }}" 
-                document.getElementById("formaddinv").action = "/addInventario/"+product.id;
-                document.getElementById('addmodinvproducto').value = product.name;
-                document.getElementById('addmodinvprice').value = product.price;
-                document.getElementById('addmodinvsubtotal').value = product.price * 1;
-                document.getElementById('addmodinvtotal').value = product.price * 1;
+                
                 /*document.getElementById('modaddinvproducto').value = product.bar_code;
                 document.getElementById('modaddinvproducto').value = product.bar_code;
                 document.getElementById('modaddinvproducto').value = product.bar_code;*/
             }
-            function llenaredit(product){
-                console.log(product);
+            function llenarCompra(product){
                 //document.getElementById("myFormEdit").action = "/product/"+item.id;
                 document.getElementById('modeditbar_code').value = product.bar_code;
                 document.getElementById('modeditname').value = product.name;
@@ -1331,9 +1409,9 @@
                         $.get('/buscarInventario/'+palabra,function (data){
                             //console.log(data);
                             $('#inventarios2').empty();
+                            result = data;
                             data.forEach(element => {
                                 var id = element['id'];
-                                console.log(id);
                                 var url = '{{route("inventario.delete",'+id+')}}';
                                 $('#inventarios2').append('<tr>'+
                                     '<td>'+element['id']+'</td>'+
@@ -1345,8 +1423,11 @@
                                     '<td>'+element['price']+'</td>'+
                                     '<td>'+element['cost']+'</td>'+
                                     '<td>'+
-                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
-                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                            'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>'+
+                                        //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                        //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                     '</td>'+
                                     '<td>'+
                                         '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
