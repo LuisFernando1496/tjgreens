@@ -171,11 +171,24 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
-                            <input type="text" class="form-control" id="codigo" placeholder="Buscar en sucursales">
+                            {{--<input type="text" class="form-control" id="codigo" placeholder="Buscdsasdar en sucursales">--}}
+                            <select name="" id="buscarPorSucursal" class="form-control" required>
+                                <option value="">--Seleccionar--</option>
+                                @forelse ($oficinas as $oficina)
+                                    @if ($oficina->id == Auth::user()->branch_office_id)
+                                        <option selected value="{{ $oficina->id }}">{{ $oficina->name }}
+                                        </option>
+                                    @else
+                                        <option value="{{ $oficina->id }}">{{ $oficina->name }}</option>
+                                    @endif
+                                @empty
+
+                                @endforelse
+                            </select>
                         </div>
                         <div class="col">
-                            <button id="search" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                data-bs-target="#busquedaP"><i class="bi bi-search"></i></button>
+                            {{--<button id="search" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#busquedaP"><i class="bi bi-search"></i></button>--}}
                         </div>
                         <div class="col-2">
                             <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
@@ -437,7 +450,7 @@
             aria-labelledby="addInventario" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form action="{{ route('addCompra', $inventario->id) }}" method="POST">
+                    <form id="formaddcom" method="POST">
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title">Añadir al carrito</h5>
@@ -449,44 +462,39 @@
                                 <div class="col">
                                     <label for="">Producto</label>
                                     <input type="text" required readonly
-                                        value=""
-                                        class="form-control">
+                                        value="" id="addmodcomproduct" class="form-control">
                                 </div>
                                 <div class="col">
                                     <label for="">Costo</label>
                                     <input type="number" class="form-control" step="any"
-                                        required readonly value="{{ $inventario->cost }}"
-                                        id="cost{{ $inventario->id }}">
+                                        required readonly value="" id="addmodcomcosto">
                                 </div>
                                 <div class="col">
                                     <label for="">Cantidad</label>
                                     <input name="quantity" type="number"
                                         class="form-control cantidadCompra" required
-                                        data-id="{{ $inventario->id }}" min="1" value="1">
+                                        id="addmodcomcantidad" min="1" value="1">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <label for="">Sub Total</label>
                                     <input type="number" class="form-control" step="any"
-                                        id="subtotalCompra{{ $inventario->id }}"
-                                        value="{{ $inventario->cost }}" readonly
-                                        name="subtotal">
+                                        id="addmodcomsubtotal"
+                                        value="" readonly name="subtotal">
                                 </div>
                                 <div class="col">
                                     <label for="">Descuento en %</label>
                                     <input name="discount" type="number"
-                                        data-id="{{ $inventario->id }}"
                                         class="form-control descuentoCompra" step="any"
-                                        id="descuentoCompra{{ $inventario->id }}" value="0"
+                                        id="addmodcomdescuento" value="0"
                                         min="0">
                                 </div>
                                 <div class="col">
                                     <label for="">Total</label>
                                     <input name="total" type="number" step="any"
                                         class="form-control"
-                                        id="totalCompra{{ $inventario->id }}"
-                                        value="{{ $inventario->cost }}" readonly>
+                                        id="addmodcomtotal" value="" readonly>
                                 </div>
                             </div>
                         </div>
@@ -1117,9 +1125,13 @@
                 document.getElementById('modeditcost').value = product.cost;
             }
             function llenarinv(product){
+<<<<<<< HEAD
+                if(typeof(product) == "number"){
+=======
                  
                 
                 if(product.length == undefined){
+>>>>>>> 69418e5765e269edf5f1c09ec6c88aa120089830
                     //console.log("Entra: ",result.);
                     let item = result.find(element => element.id == product);   
 
@@ -1136,22 +1148,24 @@
                     document.getElementById('addmodinvsubtotal').value = product.price * 1;
                     document.getElementById('addmodinvtotal').value = product.price * 1;
                 }
-                
-                //action="{{ route('add', $inventario->id) }}" 
-                
-                /*document.getElementById('modaddinvproducto').value = product.bar_code;
-                document.getElementById('modaddinvproducto').value = product.bar_code;
-                document.getElementById('modaddinvproducto').value = product.bar_code;*/
             }
             function llenarCompra(product){
-                //document.getElementById("myFormEdit").action = "/product/"+item.id;
-                document.getElementById('modeditbar_code').value = product.bar_code;
-                document.getElementById('modeditname').value = product.name;
-                document.getElementById('modeditcategory_id').value = product.category_id;
-                document.getElementById('modeditbrand_id').value = product.brand_id;
-                document.getElementById('modeditstock').value = product.stock;
-                document.getElementById('modeditprice').value = product.price;
-                document.getElementById('modeditcost').value = product.cost;
+                //console.log("init ",typeof(1));
+                if(typeof(product) == "number"){
+                    let item = result.find(element => element.id == product);    
+                    //console.log("item: ",item.);
+                    document.getElementById("formaddcom").action = "/addCompra/"+item.id;
+                    document.getElementById('addmodcomproduct').value = item.name;
+                    document.getElementById('addmodcomcosto').value = item.costo;
+                    document.getElementById('addmodcomsubtotal').value = item.price * 1;
+                    document.getElementById('addmodcomtotal').value = item.price * 1;
+                }else{
+                    document.getElementById("formaddcom").action = "/addCompra/"+product.id;
+                    document.getElementById('addmodcomproduct').value = product.name;
+                    document.getElementById('addmodcomcosto').value = product.costo;
+                    document.getElementById('addmodcomsubtotal').value = product.price * 1;
+                    document.getElementById('addmodcomtotal').value = product.price * 1;
+                }
             }
             $(document).ready(function() {
                 $('.cantidad').on('change', function() {
@@ -1429,6 +1443,9 @@
                                         '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
                                                 '<i class="bi bi-bag-plus-fill"></i></button>'+
+                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
+                                            'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
+                                            '<i class="bi bi-bag-plus"></i></button>'+
                                         //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
                                         //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                     '</td>'+
@@ -1451,6 +1468,52 @@
                         document.getElementById("inventarios2").innerHTML = "";
                     }
                 });
+
+                /*$('#buscarPorSucursal').change(function(){
+                    let idsucursal = $('#buscarPorSucursal').val();
+                    console.log("sucursal: ",idsucursal);
+                    $("#tabla1").prop('hidden', true);
+                    $("#tabla2").prop('hidden', false);
+                    $.get('/buscarInventarioSucursal/'+idsucursal, function (data){
+                        //console.log(data);
+                        $('#inventarios2').empty();
+                        result = data;
+                        data.forEach(element => {
+                            var id = element['id'];
+                            var url = '{{route("inventario.delete",'+id+')}}';
+                            $('#inventarios2').append('<tr>'+
+                                '<td>'+element['id']+'</td>'+
+                                '<td>'+element['bar_code']+'</td>'+
+                                '<td>'+element['name']+'</td>'+
+                                '<td>'+element['categoria']['name']+'</td>'+
+                                '<td>'+element['marca']['name']+'</td>'+
+                                '<td>'+element['stock']+'</td>'+
+                                '<td>'+element['price']+'</td>'+
+                                '<td>'+element['cost']+'</td>'+
+                                '<td>'+
+                                    '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                        'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                            '<i class="bi bi-bag-plus-fill"></i></button>'+
+                                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
+                                        'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
+                                        '<i class="bi bi-bag-plus"></i></button>'+
+                                    //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                    //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<form action="/inventario/'+id+'" method="POST">'+
+                                        '@csrf @method("DELETE")'+
+                                        '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                    '</form>'+
+                                '</td>'+
+                            '</tr>');
+                        });
+                    });
+                });*/
 
                 $('#buscarInve').on('click',function(){
                     $("#tabla1").prop('hidden', true);

@@ -178,4 +178,12 @@ class InventoryController extends Controller
         ->get();
         return response()->json($inventario);
     }
+
+    /*public function busquedaSucursal($id)
+    {
+        $inventario = Inventory::where('branch_office_id','LIKE',"%$id%")
+        ->with(['marca','categoria','almacen'])
+        ->get();
+        return response()->json($inventario);
+    }*/
 }
