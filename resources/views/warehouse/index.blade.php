@@ -256,9 +256,17 @@
                                             <td>${{ $inventario->price }}</td>
                                             <td>${{ $inventario->cost }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                                                @if($inventario->stock >0)
+                                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
                                                     data-bs-target="#addInventario" onclick="llenarinv({{$inventario}})"><i
                                                         class="bi bi-bag-plus-fill"></i></button>
+                                                
+                                                @else
+                                                <button type="button" class="btn btn-outline-secondary" disabled ><i
+                                                        class="bi bi-bag-plus-fill"></i></button>
+                                                
+                                                @endif
+                                               
                                                         
                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                                                     data-bs-target="#addCompra" onclick="llenarCompra({{$inventario}})"><i
