@@ -1619,13 +1619,13 @@
                 let total = subtotal - (subtotal * descuento);
                 $('#addmodcomtotal').val(total);
             });
-            // $('#addmodcomdescuento').on('keyup',function(event){
+            $('#addmodcomdescuento').on('keyup',function(event){
 
-            //     let descuento = $(this).val()/100;
-            //     let subtotal = $('#addmodcomsubtotall').val();
-            //     let total = subtotal - (subtotal * descuento);
-            //     $('#addmodcomtotal').val(total);
-            // });
+                let descuento = $(this).val()/100;
+                let subtotal = $('#addmodcomsubtotall').val();
+                let total = subtotal - (subtotal * descuento);
+                $('#addmodcomtotal').val(total);
+            });
 
             const transferirProductos = (event) =>
             {
