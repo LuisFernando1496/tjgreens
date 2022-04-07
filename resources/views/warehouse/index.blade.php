@@ -501,7 +501,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
                                 data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" onclick="sumarCantidad()">Agregar</button>
+                            <button type="submit" class="btn btn-primary" >Agregar</button>
                         </div>
                     </form>
                 </div>
@@ -1434,9 +1434,13 @@
                                     '<td>'+element['price']+'</td>'+
                                     '<td>'+element['cost']+'</td>'+
                                     '<td>'+
-                                        '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                       ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
-                                                '<i class="bi bi-bag-plus-fill"></i></button>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>':
+                                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>'
+                                            }`
+                                        +
                                         '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
                                             'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
                                             '<i class="bi bi-bag-plus"></i></button>'+
@@ -1530,7 +1534,12 @@
                                 '<td>'+element['price']+'</td>'+
                                 '<td>'+element['cost']+'</td>'+
                                 '<td>'+
-                                    '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                    ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                            'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>':
+                                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>'
+                                            }`+
                                     '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                 '</td>'+
                                 '<td>'+
@@ -1552,28 +1561,31 @@
             });
             $('#addmodinvquantity').on('change',function(event){
                 let cantidad = $('#addmodinvquantity').val();
-                console.log(cantidad);
                 let precio = $('#addmodinvprice').val();
-                console.log(precio);
                 let total = cantidad * precio;
-                console.log(total);
                 $('#addmodinvtotal').val(total);
                
             });
             $('#addmodinvquantity').on('keyup',function(event){
                 let cantidad = $('#addmodinvquantity').val();
-                console.log(cantidad);
                 let precio = $('#addmodinvprice').val();
-                console.log(precio);
                 let total = cantidad * precio;
-                console.log(total);
                 $('#addmodinvtotal').val(total);
                
             });
-           const sumarCantidad = () =>
-            {
-               
-            }
+           
+            $('.cantidadCompra').on('change',function(event){
+                let cantidad = $(this).val();
+               let costo = $('#addmodcomcosto').val();
+                let total = cantidad * costo;
+                $('#addmodcomtotal').val(total);
+            });
+            $('.cantidadCompra').on('keyup',function(event){
+                let cantidad = $(this).val();
+               let costo = $('#addmodcomcosto').val();
+                let total = cantidad * costo;
+                $('#addmodcomtotal').val(total);
+            });
             
             const transferirProductos = (event) =>
             {
