@@ -50,7 +50,7 @@ img {
 
 </style>
 <div class="ticket">
-    <img src="{{asset('/logo_inusual.png')}}" alt="Logotipo">
+    <img src="{{ asset('/logo_inusual.jpeg') }}" class="img-fluid rounded-start" alt="...">
     <p class="centrado">
         @if($venta->oficina != null)
         Calle {{$venta->oficina->address->street}},Numero {{$venta->oficina->address->ext_number}} <br>
