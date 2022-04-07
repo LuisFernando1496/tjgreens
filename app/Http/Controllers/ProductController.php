@@ -49,9 +49,11 @@ class ProductController extends Controller
     }
 
     public function eliminarProductosSucursal(){
+            // $product = Product::where('branch_office_id', 6)->get();
+            // return $product;
         try {
             DB::table('products')->where('branch_office_id', 5)->delete();
-            return 1;
+            return 'eliminados';
         } catch (\Throwable $th) {
             DB::rollback();
             return 0;

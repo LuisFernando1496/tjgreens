@@ -501,7 +501,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
                                 data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Agregar</button>
+                            <button type="submit" class="btn btn-primary" onclick="sumarCantidad()">Agregar</button>
                         </div>
                     </form>
                 </div>
@@ -1125,9 +1125,16 @@
                 document.getElementById('modeditcost').value = product.cost;
             }
             function llenarinv(product){
+<<<<<<< HEAD
                 if(typeof(product) == "number"){
+=======
+                 
+                
+                if(product.length == undefined){
+>>>>>>> 69418e5765e269edf5f1c09ec6c88aa120089830
                     //console.log("Entra: ",result.);
-                    let item = result.find(element => element.id == product);    
+                    let item = result.find(element => element.id == product);   
+
                     //console.log("item: ",item.);
                     document.getElementById("formaddinv").action = "/addInventario/"+item.id;
                     document.getElementById('addmodinvproducto').value = item.name;
@@ -1549,6 +1556,31 @@
 
 
             });
+            $('#addmodinvquantity').on('change',function(event){
+                let cantidad = $('#addmodinvquantity').val();
+                console.log(cantidad);
+                let precio = $('#addmodinvprice').val();
+                console.log(precio);
+                let total = cantidad * precio;
+                console.log(total);
+                $('#addmodinvtotal').val(total);
+               
+            });
+            $('#addmodinvquantity').on('keyup',function(event){
+                let cantidad = $('#addmodinvquantity').val();
+                console.log(cantidad);
+                let precio = $('#addmodinvprice').val();
+                console.log(precio);
+                let total = cantidad * precio;
+                console.log(total);
+                $('#addmodinvtotal').val(total);
+               
+            });
+           const sumarCantidad = () =>
+            {
+               
+            }
+            
             const transferirProductos = (event) =>
             {
                 event.preventDefault();
