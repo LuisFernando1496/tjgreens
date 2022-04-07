@@ -1151,17 +1151,17 @@
                     document.getElementById("formaddcom").action = "/addCompra/"+item.id;
                     document.getElementById('addmodcomproduct').value = item.name;
                     document.getElementById('addmodcomcosto').value = item.cost;
-                    document.getElementById('addmodcomsubtotal').value = item.price * 1;
-                    document.getElementById('addmodcomtotal').value = item.price * 1;
+                    document.getElementById('addmodcomsubtotal').value = item.cost * 1;
+                    document.getElementById('addmodcomtotal').value = item.cost *1 ;
                 }else{
                     document.getElementById("formaddcom").action = "/addCompra/"+product.id;
                     document.getElementById('addmodcomproduct').value = product.name;
                     document.getElementById('addmodcomcosto').value = product.cost;
-                    document.getElementById('addmodcomsubtotal').value = product.price * 1;
-                    document.getElementById('addmodcomtotal').value = product.price * 1;
+                    document.getElementById('addmodcomsubtotal').value = product.cost * 1;
+                    document.getElementById('addmodcomtotal').value = product.cost * 1;
                 }
             }
-            $(document).ready(function() {
+            $(document).ready(function() {});
                 $('.cantidad').on('change', function() {
                     var id = $(this).data('id');
                     var precio = $('#price' + id).val();
@@ -1558,11 +1558,12 @@
                 });
 
 
-            });
+            
             $('#addmodinvquantity').on('change',function(event){
                 let cantidad = $('#addmodinvquantity').val();
                 let precio = $('#addmodinvprice').val();
                 let total = cantidad * precio;
+                $('#addmodinvsubtotal').val(total);
                 $('#addmodinvtotal').val(total);
                
             });
@@ -1570,23 +1571,54 @@
                 let cantidad = $('#addmodinvquantity').val();
                 let precio = $('#addmodinvprice').val();
                 let total = cantidad * precio;
+                $('#addmodinvsubtotal').val(total);
                 $('#addmodinvtotal').val(total);
-               
             });
            
             $('.cantidadCompra').on('change',function(event){
+               
                 let cantidad = $(this).val();
                let costo = $('#addmodcomcosto').val();
                 let total = cantidad * costo;
+                $('#addmodcomsubtotal').val(total);
                 $('#addmodcomtotal').val(total);
             });
             $('.cantidadCompra').on('keyup',function(event){
+               
                 let cantidad = $(this).val();
-               let costo = $('#addmodcomcosto').val();
+                let costo = $('#addmodcomcosto').val();
                 let total = cantidad * costo;
+                $('#addmodcomsubtotal').val(total);
                 $('#addmodcomtotal').val(total);
             });
             
+            $('#addmodinvdescuento').on('change',function(event){
+                let descuento = $(this).val()/100;
+                let subtotal = $('#addmodinvsubtotal').val();
+                let total = subtotal - (subtotal * descuento);
+                $('#addmodinvtotal').val(total);
+            });
+            $('#addmodinvdescuento').on('keyup',function(event){
+                let descuento = $(this).val()/100;
+                let subtotal = $('#addmodinvsubtotal').val();
+                let total = subtotal - (subtotal * descuento);
+                $('#addmodinvtotal').val(total);
+            });
+
+            $('#addmodcomdescuento').on('change',function(event){
+                let descuento = $(this).val()/100;
+                let subtotal = $('#addmodcomsubtotal').val();
+                let total = subtotal - (subtotal * descuento);
+                $('#addmodcomtotal').val(total);
+            });
+            // $('#addmodcomdescuento').on('keyup',function(event){
+
+            //     let descuento = $(this).val()/100;
+            //     let subtotal = $('#addmodcomsubtotall').val();
+            //     let total = subtotal - (subtotal * descuento);
+            //     $('#addmodcomtotal').val(total);
+            // });
+
             const transferirProductos = (event) =>
             {
                 event.preventDefault();
