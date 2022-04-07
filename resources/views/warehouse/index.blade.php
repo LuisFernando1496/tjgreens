@@ -1467,13 +1467,13 @@
                     }
                 });
 
-                /*$('#buscarPorSucursal').change(function(){
+                $('#buscarPorSucursal').change(function(){
                     let idsucursal = $('#buscarPorSucursal').val();
                     console.log("sucursal: ",idsucursal);
                     $("#tabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
                     $.get('/buscarInventarioSucursal/'+idsucursal, function (data){
-                        //console.log(data);
+                        console.log("Data: ",data);
                         $('#inventarios2').empty();
                         result = data;
                         data.forEach(element => {
@@ -1481,10 +1481,10 @@
                             var url = '{{route("inventario.delete",'+id+')}}';
                             $('#inventarios2').append('<tr>'+
                                 '<td>'+element['id']+'</td>'+
-                                '<td>'+element['bar_code']+'</td>'+
+                                '<td>'+element['code']+'</td>'+
                                 '<td>'+element['name']+'</td>'+
-                                '<td>'+element['categoria']['name']+'</td>'+
-                                '<td>'+element['marca']['name']+'</td>'+
+                                '<td>'+element['categoriname']+'</td>'+
+                                '<td>'+element['brandname']+'</td>'+
                                 '<td>'+element['stock']+'</td>'+
                                 '<td>'+element['price']+'</td>'+
                                 '<td>'+element['cost']+'</td>'+
@@ -1511,7 +1511,7 @@
                             '</tr>');
                         });
                     });
-                });*/
+                });
 
                 $('#buscarInve').on('click',function(){
                     $("#tabla1").prop('hidden', true);
