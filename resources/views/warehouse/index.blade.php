@@ -493,7 +493,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary"
                                 data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" onclick="sumarCantidad()">Agregar</button>
+                            <button type="submit" class="btn btn-primary" >Agregar</button>
                         </div>
                     </form>
                 </div>
@@ -1513,10 +1513,7 @@
                 $('#addmodinvtotal').val(total);
                
             });
-           const sumarCantidad = () =>
-            {
-               
-            }
+           
             
             const transferirProductos = (event) =>
             {
