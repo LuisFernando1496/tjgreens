@@ -1123,14 +1123,27 @@
             let result = [];
             function llenaredit(product){
                 //action="{{ route('inventario.update', $inventario->id) }}" 
-                //document.getElementById("formmodedit").action = "/product/"+item.id;
-                document.getElementById('modeditbar_code').value = product.bar_code;
-                document.getElementById('modeditname').value = product.name;
-                document.getElementById('modeditcategory_id').value = product.category_id;
-                document.getElementById('modeditbrand_id').value = product.brand_id;
-                document.getElementById('modeditstock').value = product.stock;
-                document.getElementById('modeditprice').value = product.price;
-                document.getElementById('modeditcost').value = product.cost;
+                
+                if(typeof(product) == "number"){
+                    let item = result.find(element => element.id == product);  
+                    document.getElementById("formmodedit").action = "/inventario/"+item.id;
+                    document.getElementById('modeditbar_code').value = item.bar_code;
+                    document.getElementById('modeditname').value = item.name;
+                    document.getElementById('modeditcategory_id').value = item.category_id;
+                    document.getElementById('modeditbrand_id').value = item.brand_id;
+                    document.getElementById('modeditstock').value = item.stock;
+                    document.getElementById('modeditprice').value = item.price;
+                    document.getElementById('modeditcost').value = item.cost;
+                }else{
+                    document.getElementById("formmodedit").action = "/inventario/"+product.id;
+                    document.getElementById('modeditbar_code').value = product.bar_code;
+                    document.getElementById('modeditname').value = product.name;
+                    document.getElementById('modeditcategory_id').value = product.category_id;
+                    document.getElementById('modeditbrand_id').value = product.brand_id;
+                    document.getElementById('modeditstock').value = product.stock;
+                    document.getElementById('modeditprice').value = product.price;
+                    document.getElementById('modeditcost').value = product.cost;
+                }
             }
             function llenarinv(product){
                 if(typeof(product) == "number"){
@@ -1140,12 +1153,16 @@
                     //console.log("item: ",item.);
                     document.getElementById("formaddinv").action = "/addInventario/"+item.id;
                     document.getElementById('addmodinvproducto').value = item.name;
+                    document.getElementById('addmodinvquantity').value = 1;
+                    document.getElementById('addmodinvdescuento').value = 0;
                     document.getElementById('addmodinvprice').value = item.price;
                     document.getElementById('addmodinvsubtotal').value = item.price * 1;
                     document.getElementById('addmodinvtotal').value = item.price * 1;
                 }else{
                     document.getElementById("formaddinv").action = "/addInventario/"+product.id;
                     document.getElementById('addmodinvproducto').value = product.name;
+                    document.getElementById('addmodinvquantity').value = 1;
+                    document.getElementById('addmodinvdescuento').value = 0;
                     document.getElementById('addmodinvprice').value = product.price;
                     document.getElementById('addmodinvsubtotal').value = product.price * 1;
                     document.getElementById('addmodinvtotal').value = product.price * 1;
@@ -1158,11 +1175,15 @@
                     //console.log("item: ",item.);
                     document.getElementById("formaddcom").action = "/addCompra/"+item.id;
                     document.getElementById('addmodcomproduct').value = item.name;
+                    document.getElementById('addmodcomcantidad').value = 1;
+                    document.getElementById('addmodcomdescuento').value = 0;
                     document.getElementById('addmodcomcosto').value = item.cost;
                     document.getElementById('addmodcomsubtotal').value = item.cost * 1;
                     document.getElementById('addmodcomtotal').value = item.cost *1 ;
                 }else{
                     document.getElementById("formaddcom").action = "/addCompra/"+product.id;
+                    document.getElementById('addmodcomcantidad').value = 1;
+                    document.getElementById('addmodcomdescuento').value = 0;
                     document.getElementById('addmodcomproduct').value = product.name;
                     document.getElementById('addmodcomcosto').value = product.cost;
                     document.getElementById('addmodcomsubtotal').value = product.cost * 1;
@@ -1456,7 +1477,8 @@
                                         //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                     '</td>'+
                                     '<td>'+
-                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
+                                        //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
                                         '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
                                     '</td>'+
                                     '<td>'+
