@@ -1525,8 +1525,6 @@
                                     '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
                                         'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
                                         '<i class="bi bi-bag-plus"></i></button>'+
-                                    //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
-                                    //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
                                 '</td>'+
                                 '<td>'+
                                     '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
@@ -1547,8 +1545,48 @@
                     $("#tabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
                     var palabra = $('#inputBusqueda').val();
-
                     $.get('/buscarInventario/'+palabra,function (data){
+                        //console.log(data);
+                        $('#inventarios2').empty();
+                        result = data;
+                        data.forEach(element => {
+                            var id = element['id'];
+                            var url = '{{route("inventario.delete",'+id+')}}';
+                            $('#inventarios2').append('<tr>'+
+                                '<td>'+element['id']+'</td>'+
+                                '<td>'+element['bar_code']+'</td>'+
+                                '<td>'+element['name']+'</td>'+
+                                '<td>'+element['categoria']['name']+'</td>'+
+                                '<td>'+element['marca']['name']+'</td>'+
+                                '<td>'+element['stock']+'</td>'+
+                                '<td>'+element['price']+'</td>'+
+                                '<td>'+element['cost']+'</td>'+
+                                '<td>'+
+                                    ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                        'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                            '<i class="bi bi-bag-plus-fill"></i></button>':
+                                            '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                            '<i class="bi bi-bag-plus-fill"></i></button>'
+                                        }`
+                                    +
+                                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
+                                        'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
+                                        '<i class="bi bi-bag-plus"></i></button>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
+                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                '</td>'+
+                                '<td>'+
+                                    '<form action="/inventario/'+id+'" method="POST">'+
+                                        '@csrf @method("DELETE")'+
+                                        '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                    '</form>'+
+                                '</td>'+
+                            '</tr>');
+                        });
+                    });
+                    /*$.get('/buscarInventario/'+palabra,function (data){
                         //console.log(data);
                         $('#inventarios2').empty();
                         data.forEach(element => {
@@ -1584,7 +1622,7 @@
                                 '</td>'+
                             '</tr>');
                         });
-                    });
+                    });*/
                 });
 
 
