@@ -152,6 +152,7 @@ Route::group(['middleware'=>'auth'], function(){
     Route::delete('/eliminar/{id}',[CartController::class,'destroy'])->name('eliminar.carrito');
     Route::delete('/delete-cart/{id}',[CartController::class,'eliminar'])->name('eliminar.shopping');
     Route::get('/buscarInventario/{palabra}',[InventoryController::class,'busqueda']);
+    Route::get('/buscarInventarioSucursal/{id}',[InventoryController::class,'busquedaSucursal']);
     Route::delete('/eliminar-venta/{id}',[ShoppingController::class,'destroy'])->name('eliminar.traspaso');
 });
 

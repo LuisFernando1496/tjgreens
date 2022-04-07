@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Inventory;
 use App\InventoryShipment;
 use App\Shipment;
+use App\Product;
 use App\Warehouse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -179,11 +180,24 @@ class InventoryController extends Controller
         return response()->json($inventario);
     }
 
-    /*public function busquedaSucursal($id)
+    public function busquedaSucursal($id)
     {
-        $inventario = Inventory::where('branch_office_id','LIKE',"%$id%")
-        ->with(['marca','categoria','almacen'])
+        $inventario = Product::join('brands', 'products.brand_id', 'brands.id')
+        ->join('categories', 'products.category_id', 'categories.id')
+        ->where('products.branch_office_id', '=', $id)
+        ->where('products.status', "=", true)
+        ->where('products.stock', ">", 0)
+        ->select(
+            "products.id as id",
+            "products.bar_code as code",
+            "products.name as name",
+            "categories.name as categoriname",
+            "brands.name as brandname",
+            "products.stock as stock",
+            "products.price_1 as price",
+            "products.cost as cost",
+        )
         ->get();
         return response()->json($inventario);
-    }*/
+    }
 }
