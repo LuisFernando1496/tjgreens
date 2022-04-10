@@ -180,6 +180,46 @@ class InventoryController extends Controller
         return response()->json($inventario);
     }
 
+    public function busquedaAlmacen($palabra){
+        /*$sales = Shipment::where('user_id', '=', $user->id)->orderBy('id','DESC')->paginate(10);*/
+        $inventario = Shipment::join('branch_offices','shipments.office_id','branch_offices.id')
+        ->join("users", "shipments.user_id", "users.id")
+        ->where('branch_offices.name','LIKE',"%{$palabra}%")
+        ->orWhere("shipments.status", "LIKE", "%{$palabra}%")
+        ->orWhere("shipments.type", "LIKE", "%{$palabra}%")
+        ->orWhere("shipments.id", "LIKE", "%{$palabra}%")
+        ->select(
+            "shipments.id as id",
+            "branch_offices.name as office",
+            "shipments.type as type",
+            "shipments.subtotal as subtotal",
+            "shipments.discount as descuento",
+            "shipments.total as total",
+            "shipments.status as estado",
+            "users.name as user",
+            "users.last_name as last_name",
+            "shipments.created_at as created_at",
+        )
+        ->orderBy('shipments.id','DESC')
+        ->get();
+        return response()->json($inventario);
+    }
+
+    public function busquedaModalVentas($id){
+        $venta = InventoryShipment::join("inventories", "inventory_shipments.inventory_id", "inventories.id")
+        ->where("inventory_shipments.shipment_id", "=", $id)
+        ->select(
+            "inventories.id as id",
+            "inventories.name as name",
+            "inventories.price as price",
+            "inventory_shipments.quantity as quantity",
+            "inventory_shipments.discount as discount",
+            "inventory_shipments.total as total",
+        )
+        ->get();
+        return response()->json($venta);
+    }
+
     public function busquedaSucursal($id)
     {
         $inventario = Product::join('brands', 'products.brand_id', 'brands.id')
