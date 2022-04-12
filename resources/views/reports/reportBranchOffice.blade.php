@@ -73,7 +73,6 @@
                     <th style="font-size: 10px" class="backgroundColor">INVERSION</th>  
                     @endif
                     <th style="font-size: 10px" class="backgroundColor">TOTAL</th>
-                    <th style="font-size: 10px" class="backgroundColor">TIPO</th>
                     <th style="font-size: 10px" class="backgroundColor">VENDEDOR</th>
                     <th style="font-size: 10px" class="backgroundColor">FECHA</th>
                     <th style="font-size: 10px" class="backgroundColor">HORA</th>
