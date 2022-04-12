@@ -17,10 +17,11 @@
         </style>
     </head> 
     @php
-        $totalVentasGeneral =0;
+        $totalVentasGeneral = 0;
         $totalTarjeta = 0;
         $totalEfectivo = 0;
         $totalCredito = 0;
+        $totalMixto = 0;
     @endphp
    
     
@@ -72,13 +73,14 @@
                     <th style="font-size: 10px" class="backgroundColor">INVERSION</th>  
                     @endif
                     <th style="font-size: 10px" class="backgroundColor">TOTAL</th>
+                    <th style="font-size: 10px" class="backgroundColor">TIPO</th>
                     <th style="font-size: 10px" class="backgroundColor">VENDEDOR</th>
                     <th style="font-size: 10px" class="backgroundColor">FECHA</th>
                     <th style="font-size: 10px" class="backgroundColor">HORA</th>
                 </tr>
                
                 @foreach ($products as $p)
-               
+          
                 @if ($b->id == $p->branch_office_id )
                  @php
                      $totalVentasGeneral += $p->total;
@@ -90,6 +92,9 @@
                     }
                     if($p->tipoPago == 2){
                         $totalCredito +=  $p->total;
+                    }
+                    if($p->tipoPago == 3){
+                        $totalMixto +=  $p->total;
                     }
                 @endphp
                 
@@ -228,6 +233,10 @@
                 <tr>
                     <th colspan="3">DINERO EFECTIVO</th>
                     <td colspan="3">${{number_format($totalEfectivo,2) }}</td>
+                </tr>
+                <tr>
+                    <th colspan="3">PAGO MIXTO</th>
+                    <td colspan="3">${{number_format($totalMixto,2) }}</td>
                 </tr>
                 
                 <tr>

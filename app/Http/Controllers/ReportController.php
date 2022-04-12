@@ -555,6 +555,7 @@ class ReportController extends Controller
             ->where("sales.status",  "=", true)
             ->whereBetween('sales.created_at',[$from, $to])
             ->get();
+         
             
          $ap =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
             ->join("users","users.id","=","sales.user_id")
@@ -683,6 +684,7 @@ class ReportController extends Controller
             ->where("sales.branch_office_id","=",$tempId)
             ->whereBetween('sales.created_at',[$from, $to])
             ->get();
+           
             $ap =ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
             ->join("users","users.id","=","sales.user_id")
             ->join("products","products.id","=","product_in_sales.product_id")
