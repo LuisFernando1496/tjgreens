@@ -78,7 +78,9 @@
                 </tr>
                
                 @foreach ($products as $p)
-                @php
+               
+                @if ($b->id == $p->branch_office_id )
+                 @php
                      $totalVentasGeneral += $p->total;
                      if($p->tipoPago == 0){
                         $totalEfectivo += $p->total;
@@ -90,8 +92,6 @@
                         $totalCredito +=  $p->total;
                     }
                 @endphp
-                @if ($b->id == $p->branch_office_id )
-                
                 
                 <tr>
                  

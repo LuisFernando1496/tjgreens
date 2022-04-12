@@ -420,7 +420,7 @@
                                     <label for="">Cantidad</label>
                                     <input name="quantity" type="number"
                                         class="form-control cantidad" required
-                                        id="addmodinvquantity" min="1"
+                                        id="addmodinvquantity" min="1" 
                                         value="1">
                                 </div>
                             </div>
@@ -1154,6 +1154,7 @@
                     document.getElementById("formaddinv").action = "/addInventario/"+item.id;
                     document.getElementById('addmodinvproducto').value = item.name;
                     document.getElementById('addmodinvquantity').value = 1;
+                    document.getElementById('addmodinvquantity').max = product.stock;
                     document.getElementById('addmodinvdescuento').value = 0;
                     document.getElementById('addmodinvprice').value = item.price;
                     document.getElementById('addmodinvsubtotal').value = item.price * 1;
@@ -1162,6 +1163,7 @@
                     document.getElementById("formaddinv").action = "/addInventario/"+product.id;
                     document.getElementById('addmodinvproducto').value = product.name;
                     document.getElementById('addmodinvquantity').value = 1;
+                    document.getElementById('addmodinvquantity').max = product.stock;
                     document.getElementById('addmodinvdescuento').value = 0;
                     document.getElementById('addmodinvprice').value = product.price;
                     document.getElementById('addmodinvsubtotal').value = product.price * 1;
