@@ -73,7 +73,9 @@ class BranchOfficeExport implements FromView
             "users.name as seller",
             "users.last_name as seller_lastName",
             "product_in_sales.created_at as date",
-            "sales.branch_office_id"
+            "sales.branch_office_id",
+            "sales.card_ingress as pagoTarjeta",
+            "sales.payment_type as tipoPago"
             )
             ->where("sales.branch_office_id","=",$tempId)
             ->where("sales.status",  "=", true)
