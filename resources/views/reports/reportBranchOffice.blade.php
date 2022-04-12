@@ -227,7 +227,7 @@
                 </tr>
                 <tr>
                     <th colspan="3">DINERO EFECTIVO</th>
-                    <td colspan="3">${{number_format($totalEfectivo) }}</td>
+                    <td colspan="3">${{number_format($totalEfectivo,2) }}</td>
                 </tr>
                 
                 <tr>
