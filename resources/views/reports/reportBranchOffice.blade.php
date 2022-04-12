@@ -86,7 +86,7 @@
                         $totalEfectivo += $p->total;
                     }
                     if($p->tipoPago == 1){
-                    $totalTarjeta += ($p->pagoTarjeta + $p->total);
+                    $totalTarjeta += ( $p->total);
                     }
                     if($p->tipoPago == 2){
                         $totalCredito +=  $p->total;
