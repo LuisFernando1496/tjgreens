@@ -330,7 +330,7 @@ class WarehouseController extends Controller
     public function ticket($id)
     {
         $venta = Shipment::findOrFail($id);
-
+        
         return view('warehouse.ticket', [
             'venta' => $venta
         ]);
