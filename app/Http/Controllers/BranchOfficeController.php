@@ -18,8 +18,11 @@ class BranchOfficeController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1) {
             return view('branchOffice.index', ['office' => BranchOffice::where('status', '=', true)->get()]);
+        } 
+        if ( Auth::user()->rol_id == 3) {
+            return view('branchOffice.index', ['office' => BranchOffice::where('status', '=', true)->where('id',Auth::user()->branch_office_id)->get()]);
         } else {
             return back()->withErrors(["error" => "No se pudo realizar la operación."]);
         }
@@ -32,6 +35,9 @@ class BranchOfficeController extends Controller
      */
     public function create()
     {
+        if(Auth::user()->rol_id != 1){
+            return redirect('branchOffice.index')->withErrors(["error" => "Ah ocurrido un error al actualizar los datos"]);
+        }
         return view('branchOffice.create', ["branchOffice" => new BranchOffice, "Address" => new Address]);
     }
 
@@ -47,9 +53,7 @@ class BranchOfficeController extends Controller
         DB::beginTransaction();
 
         if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
-            if (count($offices) == 10) {
-                return back()->withErrors(["error" => "Ya existen 10 sucursales registradas"]);
-            } elseif (count($offices) < 10) {
+           
                 try {
                     $request['address_id'] = Address::create($request->all())->id;
                     BranchOffice::create($request->all());
@@ -59,10 +63,9 @@ class BranchOfficeController extends Controller
                     DB::rollback();
                     return $th->getMessage();
                 }
-            } else {
-                //Nunca entra y esta OK
-            }
-        } else {
+          
+        } 
+        else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
     }

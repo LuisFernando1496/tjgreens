@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 ) {
             $products = Product::where('status', true)
             ->orderBy('name', 'ASC')
             //->orderBy('id','DESC')
@@ -41,7 +41,25 @@ class ProductController extends Controller
                 'offices' => $offices,
                 'providers' => $providers
             ]);
-        } else {
+        } if(Auth::user()->rol_id == 3){
+            $products = Product::where('status', true)
+            ->where('branch_office_id', Auth::user()->branch_office_id)
+            ->orderBy('id','DESC')
+            ->paginate(10);//->get();
+            //$products = Product::where('status', true)->get();
+            $offices = BranchOffice::where('status', true)
+            ->where('id', Auth::user()->branch_office_id)
+            ->get();
+            $providers = Provider::all();
+            return view('products.index', [
+                'products' => $products,
+                'brands' => Brand::where('status', true)->get(),
+                'categories' => Category::where('status', true)->get(),
+                'offices' => $offices,
+                'providers' => $providers
+            ]);
+        } 
+        else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
 
@@ -71,7 +89,6 @@ class ProductController extends Controller
                 if (count($exist) != 0) {
                     return back()->withErrors(["error" => 'Ya hay un producto con ese codigo de barras en la sucursal']);
                 }
-                //$cost = $request->cost * 20.68;
                 $product = Product::create(
                     [
                         'name' => $request->name,
@@ -103,9 +120,7 @@ class ProductController extends Controller
                 //return back()->with(["success" => "Éxito al realizar la operación."]);
             } catch (\Throwable $th) {
                 DB::rollback();
-                //return $th->getMessage();
                 return response()->json(["error" => $th->getMessage()]);
-                //return back()->withErrors(["error" => $th->getMessage()]);
             }
         } else {
             return response()->json(["error" => "No tienes permisos"]);
@@ -114,51 +129,99 @@ class ProductController extends Controller
 
     public function buscar(Request $request)
     {
-        $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
-        ->join('categories', 'products.category_id', 'categories.id')
-        ->join('branch_offices','products.branch_office_id','branch_offices.id')
-        ->where("products.bar_code", "LIKE", "%{$request->search}%")
-        ->where("products.status", true)
-        ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
-        ->where("branch_offices.status", "=", true)
-        ->where("products.status", true)
-        ->orWhere('products.name', "LIKE", "%{$request->search}%")
-        ->where("products.status", true)
-        ->orWhere("brands.name", "LIKE", "%{$request->search}%")
-        ->where("products.status", true)
-        ->where("brands.status", "=", true)
-        ->orWhere("categories.name", "LIKE", "%{$request->search}%")
-        ->where("categories.status", "=", true)
-        ->where("products.status", true)
-        ->select(
-            "products.id as id",
-            "products.expiration as expiration",
-            "products.provider_id as provider_id",
-            "products.brand_id as brand_id",
-            "products.category_id as category_id",
-            "products.branch_office_id as branch_office_id",
-            "products.lot as lot",
-            "products.ieps as ieps",
-            "products.product_key as product_key",
-            "products.unit_product_key as unit_product_key",
-            "products.name as name",
-            "products.status as borrado",
-            "products.stock as stock",
-            "products.bar_code as bar_code",
-            "products.cost as cost",
-            "products.price_1 as price_1",
-            "products.price_2 as price_2",
-            "products.price_3 as price_3",
-            "products.iva as iva",
-            "brands.name as brands_name",
-            "categories.name as categories_name",
-            "branch_offices.name as branch_office_name",
-        )
-        //->get();
-        ->paginate(20);
-        //return $buscar;
+        if(Auth::user()->rol_id == 1){
+            $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
+            ->join('categories', 'products.category_id', 'categories.id')
+            ->join('branch_offices','products.branch_office_id','branch_offices.id')
+            ->where("products.bar_code", "LIKE", "%{$request->search}%")
+            ->where("products.status", true)
+            ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
+            ->where("branch_offices.status", "=", true)
+            ->where("products.status", true)
+            ->orWhere('products.name', "LIKE", "%{$request->search}%")
+            ->where("products.status", true)
+            ->orWhere("brands.name", "LIKE", "%{$request->search}%")
+            ->where("products.status", true)
+            ->where("brands.status", "=", true)
+            ->orWhere("categories.name", "LIKE", "%{$request->search}%")
+            ->where("categories.status", "=", true)
+            ->where("products.status", true)
+            ->select(
+                "products.id as id",
+                "products.expiration as expiration",
+                "products.provider_id as provider_id",
+                "products.brand_id as brand_id",
+                "products.category_id as category_id",
+                "products.branch_office_id as branch_office_id",
+                "products.lot as lot",
+                "products.ieps as ieps",
+                "products.product_key as product_key",
+                "products.unit_product_key as unit_product_key",
+                "products.name as name",
+                "products.status as borrado",
+                "products.stock as stock",
+                "products.bar_code as bar_code",
+                "products.cost as cost",
+                "products.price_1 as price_1",
+                "products.price_2 as price_2",
+                "products.price_3 as price_3",
+                "products.iva as iva",
+                "brands.name as brands_name",
+                "categories.name as categories_name",
+                "branch_offices.name as branch_office_name",
+            )->paginate(20);
+        }if(Auth::user()->rol_id == 3)
+        {
+            $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
+            ->join('categories', 'products.category_id', 'categories.id')
+            ->join('branch_offices','products.branch_office_id','branch_offices.id')
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->where("products.bar_code", "LIKE", "%{$request->search}%")
+            ->where("products.status", true)
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->orWhere('branch_offices.name', "LIKE", "%{$request->search}%")
+            ->where("branch_offices.status", "=", true)
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->where("products.status", true)
+            ->orWhere('products.name', "LIKE", "%{$request->search}%")
+            ->where("products.status", true)
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->orWhere("brands.name", "LIKE", "%{$request->search}%")
+            ->where("products.status", true)
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->where("brands.status", "=", true)
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->orWhere("categories.name", "LIKE", "%{$request->search}%")
+            ->where("categories.status", "=", true)
+            ->where("products.status", true)
+            ->where("products.branch_office_id", Auth::user()->branch_office_id)
+            ->select(
+                "products.id as id",
+                "products.expiration as expiration",
+                "products.provider_id as provider_id",
+                "products.brand_id as brand_id",
+                "products.category_id as category_id",
+                "products.branch_office_id as branch_office_id",
+                "products.lot as lot",
+                "products.ieps as ieps",
+                "products.product_key as product_key",
+                "products.unit_product_key as unit_product_key",
+                "products.name as name",
+                "products.status as borrado",
+                "products.stock as stock",
+                "products.bar_code as bar_code",
+                "products.cost as cost",
+                "products.price_1 as price_1",
+                "products.price_2 as price_2",
+                "products.price_3 as price_3",
+                "products.iva as iva",
+                "brands.name as brands_name",
+                "categories.name as categories_name",
+                "branch_offices.name as branch_office_name",
+            )
+            ->paginate(20);
+        }
         return response()->json($buscar);
-        //return view('products.index', $buscar);
     }
 
     function fetch_data(Request $request)

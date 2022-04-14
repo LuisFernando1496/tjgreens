@@ -27,9 +27,25 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->rol_id == 1 || $user->rol_id == 3) {
-            return view('user.index', ['users' => User::with('address')->where('status', 1)->where('id', '!=', Auth::user()->id)->get(), 'offices' => BranchOffice::where('status', true)->get(), 'rols' => Rol::all()]);
-        } else {
+        if ($user->rol_id == 1) {
+             $users = User::with('address')->where('status', 1)->where('id', '!=',$user->id)->get(); 
+             $offices = BranchOffice::where('status', true)->get();
+             $rols =  Rol::all();
+            return view('user.index', ['users' => $users, 'offices' => $offices, 'rols' =>$rols]);
+        }
+        if($user->rol_id == 3)
+        {
+            $users = User::with('address')->where('id', '!=',$user->id)
+            ->where('branch_office_id', $user->branch_office_id)
+            ->where('rol_id', '!=', 1)
+            ->where('status', true)
+            ->get(); 
+            $offices = BranchOffice::where('status', true)->get();
+            $rols =  Rol::all();
+         //   return $offices;
+           return view('user.index', ['users' => $users, 'offices' => $offices, 'rols' =>$rols]);
+        } 
+        else {
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
     }

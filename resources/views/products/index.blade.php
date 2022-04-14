@@ -274,8 +274,11 @@
           </button>
         </div>
       @endforeach
+
     @endif
+
     <div id="alerterror"></div>
+    
     <div style="text-align:right">
         <button onclick="limpiar()" type="button" class="btn  btn-outline-primary my-2" data-toggle="modal" data-target="#productModal"><small>CREAR</small></button>
     </div>
@@ -309,7 +312,6 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Costo</th>
                 <th scope="col">Precio 1</th>
-                <th scope="col">IVA</th>
 
 
                 <th scope="col"></th>
@@ -331,10 +333,6 @@
                 <th scope="col">Stock</th>
                 <th scope="col">Costo</th>
                 <th scope="col">Precio 1</th>
-                <th scope="col">IVA</th>
-
-
-
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -356,13 +354,7 @@
                     <td>${{$item->cost}}</td>
                     <td>${{$item->price_1}}</td>
 
-                    @if($item->iva == null)
-                        <td>-</td>
-                    @else
-                        <td>{{$item->iva}}</td>
-                    @endif
-
-
+                   
 
                     <td>
                         <button onclick="llenar({{$item}})" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">
@@ -413,7 +405,7 @@
                     //r = JSON.parse(result.data[0]);
                     //console.log(r);
                     result.data.forEach(function(element,index){
-                        console.log(element);
+                       
 
                         document.getElementById("result2").innerHTML += //'<tr>'+
 
@@ -428,7 +420,7 @@
                                 '<td>'+element.price_1+'</td>'+
                                 //'<td>'+element.price_2+'</td>'+
                                 //'<td>'+element.price_3+'</td>'+
-                                '<td>'+element.iva+'</td>'+
+                               
                                 '<td>'+
                                     '<button onclick="llenar2('+element.id+')" type="button" class="btn btn-outline-secondary btn-sm my-2" data-type="edit" data-toggle="modal" data-target="#productModalEdit">'+
                                         '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
@@ -592,7 +584,7 @@
 
     function llenar2(idP){
         let item = result.data.find(element => element.id == idP);
-        console.log("a: "+item.category_id);
+     
         document.getElementById("myFormEdit").action = "/product/"+item.id;
         document.getElementById('name_edit').value = item.name
         document.getElementById('stock_edit').value = item.stock
@@ -606,15 +598,15 @@
         document.getElementById('category_id_edit').value = item.category_id
         document.getElementById('brand_id_edit').value = item.brand_id
         //document.getElementById('expiration_edit').value = item.expiration
-        document.getElementById('iva_edit').value = item.iva
-        document.getElementById('product_key_edit').value = item.product_key
-        document.getElementById('unit_product_key_edit').value = item.unit_product_key
-        document.getElementById('lot_edit').value = item.lot
-        document.getElementById('ieps_edit').value = item.ieps
+     //   document.getElementById('iva_edit').value = item.iva
+        // document.getElementById('product_key_edit').value = item.product_key
+        // document.getElementById('unit_product_key_edit').value = item.unit_product_key
+        // document.getElementById('lot_edit').value = item.lot
+        // document.getElementById('ieps_edit').value = item.ieps
     }
 
     function llenar(item){
-        console.log("llenar: "+item.category_id);
+     
         document.getElementById("myFormEdit").action = "/product/"+item.id;
         document.getElementById('name_edit').value = item.name
         document.getElementById('stock_edit').value = item.stock
@@ -624,16 +616,17 @@
         //document.getElementById('price_3_edit').value = item.price_3
         document.getElementById('bar_code_edit').value = item.bar_code
         document.getElementById('branch_office_id_edit').value = item.branch_office.id
+        console.log(item.branch_office.id);
         document.getElementById('provider_id_edit').value = item.provider_id
         document.getElementById('category_id_edit').value = item.category_id
         document.getElementById('brand_id_edit').value = item.brand_id
         //console.log(item.provider_id);
         //document.getElementById('expiration_edit').value = item.expiration
-        document.getElementById('iva_edit').value = item.iva
-        document.getElementById('product_key_edit').value = item.product_key
-        document.getElementById('unit_product_key_edit').value = item.unit_product_key
-        document.getElementById('lot_edit').value = item.lot
-        document.getElementById('ieps_edit').value = item.ieps
+        //document.getElementById('iva_edit').value = item.iva
+       // document.getElementById('product_key_edit').value = item.product_key
+      //  document.getElementById('unit_product_key_edit').value = item.unit_product_key
+       // document.getElementById('lot_edit').value = item.lot
+        //document.getElementById('ieps_edit').value = item.ieps
 
     }
 

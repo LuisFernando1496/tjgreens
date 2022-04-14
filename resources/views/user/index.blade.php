@@ -334,15 +334,25 @@
                         </svg>
                         <small>EDITAR</small>
                     </button>
-                    <button data-type="delete" data-target="#deleteModal" data-id="{{$item->id}}" class="btn btn-outline-danger btn-sm my-2" data-toggle="modal" data-target="#deleteModal">
+                    <button data-type="delete" data-target="#deleteModal" data-id="{{$item->id}}" class=" d-inline btn btn-outline-danger btn-sm my-2" data-toggle="modal" data-target="#deleteModal">
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z" />
                         </svg>
                         <small>ELIMINAR</small>
                     </button>
                     
-                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                        @if ($item->rol_id == 1)
+                    @if ( Auth::user()->rol_id == 3)
+                        @if ($item->rol_id != 3 &&  $item->rol_id != 1)
+                        <button type="button" class="btn btn-sm btn-outline-warning" data-type="update" data-toggle="modal" data-target="#passwordModal" data-id="{{$item->id}}">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-asterisk" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z" />
+                            </svg>
+                            <small>PASSWORD</small>
+                        </button>
+                        @endif
+                    @endif
+                    @if ( Auth::user()->rol_id == 1 )
+                        @if ($item->rol_id != 1)
                         <button type="button" class="btn btn-sm btn-outline-warning" data-type="update" data-toggle="modal" data-target="#passwordModal" data-id="{{$item->id}}">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-asterisk" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z" />
@@ -362,38 +372,38 @@
 <script>
     $(document).ready(function() {
 
-        $.get('/users-ajax',function(data){
-            console.log(data);
-            let response = data['users'];
-            let rol = data['rol'];
-            let rolname = data['rolname'];
-            response.forEach(element => {
-                if (rol != 2) {
-                    $('#mydata').append("<tr>"+
-                    "<td scope='row'>"+element['email']+"</td>"+
-                    "<td>"+element['name']+"</td>"+
-                    "<td>"+element['last_name']+"</td>"+
-                    "<td>"+element['rfc']+"</td>"+
-                    "<td>"+element['curp']+"</td>"+
-                    "<td>"+element['phone']+"</td>"+
-                    "<td>"+element['branch_office']['name']+"</td>"+
-                    "<td>"+element['rol']['name']+"</td>"+
-                    "<td></td>"+
-                    "</tr>");
-                } else {
-                    $('#mydata').append("<tr>"+
-                    "<td scope='row'>"+element['email']+"</td>"+
-                    "<td>"+element['name']+"</td>"+
-                    "<td>"+element['last_name']+"</td>"+
-                    "<td>"+element['rfc']+"</td>"+
-                    "<td>"+element['curp']+"</td>"+
-                    "<td>"+element['phone']+"</td>"+
-                    "<td>"+element['rol']['name']+"</td>"+
-                    "<td></td>"+
-                    "</tr>");
-                }
-            });
-        });
+        // $.get('/users-ajax',function(data){
+        //     console.log(data);
+        //     let response = data['users'];
+        //     let rol = data['rol'];
+        //     let rolname = data['rolname'];
+        //     response.forEach(element => {
+        //         if (rol != 2) {
+        //             $('#mydata').append("<tr>"+
+        //             "<td scope='row'>"+element['email']+"</td>"+
+        //             "<td>"+element['name']+"</td>"+
+        //             "<td>"+element['last_name']+"</td>"+
+        //             "<td>"+element['rfc']+"</td>"+
+        //             "<td>"+element['curp']+"</td>"+
+        //             "<td>"+element['phone']+"</td>"+
+        //             "<td>"+element['branch_office']['name']+"</td>"+
+        //             "<td>"+element['rol']['name']+"</td>"+
+        //             "<td></td>"+
+        //             "</tr>");
+        //         } else {
+        //             $('#mydata').append("<tr>"+
+        //             "<td scope='row'>"+element['email']+"</td>"+
+        //             "<td>"+element['name']+"</td>"+
+        //             "<td>"+element['last_name']+"</td>"+
+        //             "<td>"+element['rfc']+"</td>"+
+        //             "<td>"+element['curp']+"</td>"+
+        //             "<td>"+element['phone']+"</td>"+
+        //             "<td>"+element['rol']['name']+"</td>"+
+        //             "<td></td>"+
+        //             "</tr>");
+        //         }
+        //     });
+        // });
 
         $('button').click(function() {
             if ($(this).data('type') == 'delete') {

@@ -123,7 +123,11 @@
         </div>
     </div>
 
+    @if(Auth::user()->rol_id == 1)
+    
     <button onclick="limpiar()" type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#productModal">Crear</button>
+    @endif
+  
     
     <table class="display table table-striped table-bordered" id="example" style="font-size:0.85em; width:100%">
         <thead class="black white-text">

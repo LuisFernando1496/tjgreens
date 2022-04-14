@@ -18,8 +18,11 @@ class BoxController extends Controller
     public function index()
     {
 
-        if(Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3){
+        if(Auth::user()->rol_id == 1 ){
             return view('boxes.index',["boxes" => Box::where('status', '=',true)->get(),"branch_office" => BranchOffice::where('status','=',true)->get()]);
+        }
+        if(Auth::user()->rol_id == 3 ){
+            return view('boxes.index',["boxes" => Box::where('status', '=',true)->where('branch_office_id',Auth::user()->branch_office_id)->get(),"branch_office" => BranchOffice::where('status','=',true)->get()]);
         }else{
             return view('boxes.index',["boxes" => Box::where('branch_office_id', '=',Auth::user()->branch_office_id)->where('status', '=',true)->get(),"branch_office" =>[Auth::user()->branchOffice]]);
         }
