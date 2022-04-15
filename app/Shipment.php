@@ -14,7 +14,8 @@ class Shipment extends Model
         'total',
         'type',
         'status',
-        'user_id'
+        'user_id',
+        'by',
     ];
 
     public function almacen()

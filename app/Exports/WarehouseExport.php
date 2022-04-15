@@ -49,7 +49,8 @@ class WarehouseExport implements FromView //implements FromCollection
                     DB::beginTransaction();
                     $traspaso = new Shipment();
                     $traspaso->warehouse_id = $almacen[0]->id;
-                    $traspaso->office_id = $this->dataGlobal->office_id;
+                    $traspaso->office_id = null;
+                    $traspaso->by = $this->dataGlobal->nombreCp;
                     $traspaso->total = $this->dataGlobal->total;
                     $traspaso->type = $this->dataGlobal->type;
                     $traspaso->subtotal = $this->dataGlobal->subtotal;

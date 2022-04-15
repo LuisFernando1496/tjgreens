@@ -610,7 +610,13 @@ class SaleController extends Controller
     }
     public function showCanceledSale()
     {
+        if(Auth::user()->rol_id == 1){
+         
         $sale = Sale::with('productsInSale')->where('status', false)->get();
+        }
+        if(Auth::user()->rol_id == 3){
+            $sale = Sale::with('productsInSale')->where('status', false)->where('branch_office_id',Auth::user()->branch_office_id)->get();
+        }
 
 
         return view('sales.refound', ['sale' => $sale]);

@@ -803,7 +803,7 @@
         </div>
 
         <div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="addInventario" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <form action="{{ route('concluirExcel') }}" id="formConcluir" method="POST">
                         @csrf
@@ -859,7 +859,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="">Sucursal</label>
-                                        <select name="office_id" id="" class="form-control" required>
+                                        <select name="office_id" id="office_id" class="form-control" required>
                                             <option value="">--Seleccionar--</option>
                                             @forelse ($oficinas as $oficina)
                                                 @if ($oficina->id == Auth::user()->branch_office_id)
@@ -874,6 +874,10 @@
                                             <option value="0">Cliente privado</option>
                                         </select>
                                     </div>
+                                    <div class="col" id="showNombreCp" style="display: none">
+                                        <label for="nombreCp">Nombre</label>
+                                        <input type="text" name="nombreCp" class="form-control" placeholder="Ingresa nombre" required>
+                                    </div>
                                     <div class="col">
                                         <label for="">Tipo Pago</label>
                                         <select name="type" id="typeTranferencia" class="form-control" required>
@@ -883,6 +887,7 @@
                                             <option value="Transferencia">Transferencia</option>
                                         </select>
                                     </div>
+                                   
                                     <div class="col">
                                         <label for="">Sub Total</label>
                                         <input type="number" name="subtotal" class="form-control" step="any"
@@ -1696,6 +1701,14 @@
                 window.open('/concluir');   
 
             }
+            $("#office_id").on('change',function(){
+                let option = $(this).val();
+                if(option == 0){
+                    document.getElementById("showNombreCp").style.display = "inline-block";
+                }else{
+                    document.getElementById("showNombreCp").style.display = "none";
+                }
+            });
         </script>
 
     @endif

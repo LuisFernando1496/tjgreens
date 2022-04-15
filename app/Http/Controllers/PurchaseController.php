@@ -19,10 +19,14 @@ class PurchaseController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 ) {
             $products = Product::where('status', true)->where('branch_office_id',Auth::user()->branch_office_id)->get();
             return view('purchase/index', ['products' => $products]);
         } else {
+        if (Auth::user()->rol_id == 3 ) {
+            $products = Product::where('status', true)->where('branch_office_id',Auth::user()->branch_office_id)->get();
+            return view('purchase/index', ['products' => $products]);
+        } 
             return back()->withErrors(["error" => "No tienes permisos"]);
         }
     }

@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Factura de Venta {{ $venta->id }}</h5>
                         @if($venta->oficina == null)
-                            Cliente privado
+                            Cliente privado: <strong>{{ $venta->by }}</strong>
                         @else
                             Vendido a {{$venta->oficina->name}}
                         @endif

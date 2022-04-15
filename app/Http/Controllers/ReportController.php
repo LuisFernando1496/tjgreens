@@ -30,10 +30,10 @@ class ReportController extends Controller
 
         $user = Auth::user();
 
-        if ($user->rol_id == 1 || $user->rol_id == 3) {
+        if ($user->rol_id == 1 ) {
             $offices = BranchOffice::where('status',true)->get();
             return view('reports.index', ['offices'=>$offices]);
-        }elseif ($user->rol_id == 2) {
+        } elseif ($user->rol_id == 3) {
             $offices = BranchOffice::where('id',$user->branchOffice->id)->get();
             return view('reports.index', ['offices'=>$offices]);
         }else{

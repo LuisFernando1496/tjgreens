@@ -18,10 +18,11 @@
                 <h4>Sucursal destino {{$sucursal[0]->name}} </h4>
                 @endif
                 @if($title == "Traspaso" && $compra->office_id == 0)
-                <h4>Cliente privado</h4>
+                <h4>Cliente privado: {{$compra->by}}</h4>
+                
                 @endif
                 @if($title == "Venta" && $compra->office_id == 0)
-                <h4>Venta a Cliente Privado</h4>
+                <h4>Venta a Cliente Privado: {{$compra->by}}</h4>
                 @endif
             </div>
             <div class="card-body">

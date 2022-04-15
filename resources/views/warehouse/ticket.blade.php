@@ -58,6 +58,7 @@ img {
         @else
         Sin dirección <br>
         Vendido a cliente privado<br>
+        Nombre: {{$venta->by}}
         @endif
         Atendido por {{Auth::user()->name}} {{Auth::user()->last_name}} <br>
         Fecha: {{$venta->created_at->format('d-m-y h:m:s')}} <br>
