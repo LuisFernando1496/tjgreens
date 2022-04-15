@@ -24,6 +24,8 @@
         $totalMixto = 0;
         $totaldia = 0;
         $totalmes = 0;
+        $totalcosto = 0;
+        $totalprecio = 0;
     @endphp
    
     
@@ -87,10 +89,14 @@
                             @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
                                 @if($totaldia != 0)
                                 <tr>
-                                    <td colspan="12">Venta total del día ${{$totaldia}}</td>
+                                    <td colspan="3">Venta total del día ${{$totaldia}}</td>
+                                    <td colspan="4">Venta Costos por día ${{$totalcosto}}</td>
+                                    <td colspan="4">Venta total precio al publico ${{$totalprecio}}</td>
                                 </tr>
                                     @php
                                         $totaldia = 0;
+                                        $totalcosto = 0;
+                                        $totalprecio = 0;
                                     @endphp
                                 @endif
                             @endif
@@ -99,7 +105,9 @@
                         @if($iterador == sizeof($products)-1)
                             @if($totaldia != 0)
                                 <tr>
-                                    <td colspan="12">Venta final del día ${{$totaldia}}</td>
+                                    <td colspan="3">Venta final del día ${{$totaldia}}</td>
+                                    <td colspan="4">Venta Costos por día ${{$totalcosto}}</td>
+                                    <td colspan="4">Venta total precio al publico ${{$totalprecio}}</td>
                                 </tr>
                             @endif
                             
@@ -112,6 +120,8 @@
                             
                             @php
                                 $totaldia = 0;
+                                $totalcosto = 0;
+                                $totalprecio = 0;
                             @endphp
                         @endif
 
@@ -136,6 +146,8 @@
                         @php
                             $totaldia += $p->total;
                             $totalmes += $p->total;
+                            $totalcosto += $p->cost;
+                            $totalprecio += $p->sale_price;
                             $totalVentasGeneral += $p->total;
                             if($p->tipoPago == 0){
                                 $totalEfectivo += $p->total;
@@ -180,16 +192,22 @@
                         @if($iterador < sizeof($products)-1)
                             @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
                             <tr>
-                                <td colspan="12">Venta total del día ${{$totaldia}}</td>
+                                <td colspan="4">Venta total del día ${{$totaldia}}</td>
+                                <td colspan="4">Costos por día ${{$totalcosto}}</td>
+                                <td colspan="4">Total precio al publico ${{$totalprecio}}</td>
                             </tr>
                                 @php
                                     $totaldia = 0;
+                                    $totalcosto = 0;
+                                    $totalprecio = 0;
                                 @endphp    
                             @endif
                         @endif
                         @if($iterador == sizeof($products)-1)
                             <tr>
-                                <td colspan="12">Venta final del día ${{$totaldia}}</td>
+                                <td colspan="3">Venta final del día ${{$totaldia}}</td>
+                                <td colspan="4">Costos final por día ${{$totalcosto}}</td>
+                                <td colspan="4">precio al publico final ${{$totalprecio}}</td>
                             </tr>
                             <tr>
                                 <td colspan="12">Venta total del mes ${{$totalmes}}</td>
