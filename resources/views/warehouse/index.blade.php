@@ -289,7 +289,9 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                            {{$inventarios->links()}}
+                            <div id="divtabla1">
+                                {{$inventarios->links()}}
+                            </div>
 
                             <table class="table table-hover" id="tabla2" hidden>
                                 <thead>
@@ -1446,6 +1448,7 @@
                 document.getElementById("inputBusqueda").addEventListener("keyup", function(){
                     if (document.getElementById("inputBusqueda").value.length >= 1){
                         $("#tabla1").prop('hidden', true);
+                        $("#divtabla1").prop('hidden', true);
                         $("#tabla2").prop('hidden', false);
                         var palabra = $('#inputBusqueda').val();
                         $.get('/buscarInventario/'+palabra,function (data){
@@ -1494,6 +1497,7 @@
                         });
                     }else{
                         $("#tabla1").prop('hidden', false);
+                        $("#divtabla1").prop('hidden', false);
                         $("#tabla2").prop('hidden', true);
                         document.getElementById("inventarios2").innerHTML = "";
                     }
@@ -1503,6 +1507,7 @@
                     let idsucursal = $('#buscarPorSucursal').val();
                     console.log("sucursal: ",idsucursal);
                     $("#tabla1").prop('hidden', true);
+                    $("#divtabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
                     $.get('/buscarInventarioSucursal/'+idsucursal, function (data){
                         console.log("Data: ",data);
@@ -1544,7 +1549,63 @@
                 });
 
                 $('#buscarInve').on('click',function(){
-                    $("#tabla1").prop('hidden', true);
+                    if (document.getElementById("inputBusqueda").value.length >= 1){
+                        $("#tabla1").prop('hidden', true);
+                        $("#divtabla1").prop('hidden', true);
+                        $("#tabla2").prop('hidden', false);
+                        var palabra = $('#inputBusqueda').val();
+                        $.get('/buscarInventario/'+palabra,function (data){
+                            //console.log(data);
+                            $('#inventarios2').empty();
+                            result = data;
+                            data.forEach(element => {
+                                var id = element['id'];
+                                var url = '{{route("inventario.delete",'+id+')}}';
+                                $('#inventarios2').append('<tr>'+
+                                    '<td>'+element['id']+'</td>'+
+                                    '<td>'+element['bar_code']+'</td>'+
+                                    '<td>'+element['name']+'</td>'+
+                                    '<td>'+element['categoria']['name']+'</td>'+
+                                    '<td>'+element['marca']['name']+'</td>'+
+                                    '<td>'+element['stock']+'</td>'+
+                                    '<td>'+element['price']+'</td>'+
+                                    '<td>'+element['cost']+'</td>'+
+                                    '<td>'+
+                                       ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                            'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>':
+                                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                                '<i class="bi bi-bag-plus-fill"></i></button>'
+                                            }`
+                                        +
+                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
+                                            'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
+                                            '<i class="bi bi-bag-plus"></i></button>'+
+                                        //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                        //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
+                                        //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                        '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<form action="/inventario/'+id+'" method="POST">'+
+                                            '@csrf @method("DELETE")'+
+                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                        '</form>'+
+                                    '</td>'+
+                                '</tr>');
+                            });
+                        });
+                    }else{
+                        $("#tabla1").prop('hidden', false);
+                        $("#divtabla1").prop('hidden', false);
+                        $("#tabla2").prop('hidden', true);
+                        document.getElementById("inventarios2").innerHTML = "";
+                    }
+                    /*$("#tabla1").prop('hidden', true);
+                    $("#divtabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
                     var palabra = $('#inputBusqueda').val();
                     $.get('/buscarInventario/'+palabra,function (data){
@@ -1587,7 +1648,7 @@
                                 '</td>'+
                             '</tr>');
                         });
-                    });
+                    });*/
                     /*$.get('/buscarInventario/'+palabra,function (data){
                         //console.log(data);
                         $('#inventarios2').empty();

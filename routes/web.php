@@ -35,7 +35,7 @@ Route::get('/registro', 'UserController@create');
 Route::post('/registro', 'UserController@store'); 
 Route::get('/home', 'HomeController@index')->name('home');
 //Route::get('/cambiarPass', 'UserController@cambiarPass');
-Route::get('/eliminarProductosSucursal', 'ProductController@eliminarProductosSucursal');
+//Route::get('/eliminarProductosSucursal', 'ProductController@eliminarProductosSucursal');
 //Route::resource('user', 'UserController'); 
 Route::group(['middleware'=>'auth'], function(){  
     //Rutas AJAX

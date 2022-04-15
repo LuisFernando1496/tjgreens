@@ -19,6 +19,8 @@
     <body>
         @php
             $totalVendido = 0;
+            $totaldia = 0;
+            $totalmes = 0;
         @endphp
         <div style="text-align:center; margin-left: auto; margin-right: auto;">
 {{--             
@@ -85,37 +87,117 @@
                     <th style="font-size: 10px" class="backgroundColor">FECHA</th>
                     <th style="font-size: 10px" class="backgroundColor">HORA</th>
                 </tr>
-                @foreach ($products as $p)
-                @if ($b->id == $p->branch_office_id )
-                <tr>
-                    @php
-                        $totalVendido +=$p->quantity
-                    @endphp
-                    <td>{{$p->product_name}}</td>
-                    <td>{{$p->category}}</td>
-                    @if ($p->brand == null)
-                    <td>N/A</td>
-                    @else
-                    <td>{{$p->brand }}</td>
+                @foreach ($products as $iterador => $p)
+                    @if ($b->id != $p->branch_office_id )
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
+                                @if($totaldia != 0)
+                                <tr>
+                                    <td colspan="12">Venta total del día ${{$totaldia}}</td>
+                                </tr>
+                                    @php
+                                        $totaldia = 0;
+                                    @endphp
+                                @endif
+                            @endif
+                        @endif
+                        
+                        @if($iterador == sizeof($products)-1)
+                            @if($totaldia != 0)
+                                <tr>
+                                    <td colspan="12">Venta final del día ${{$totaldia}}</td>
+                                </tr>
+                            @endif
+                            
+                            <tr>
+                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                            </tr>
+                            @php
+                                $totalmes = 0;
+                            @endphp
+                            
+                            @php
+                                $totaldia = 0;
+                            @endphp
+                        @endif
+
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('m',strtotime($products[$iterador]->date)) != date('m',strtotime($products[$iterador+1]->date)))
+                                @if($totalmes != 0)
+                                <tr>
+                                    <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                                </tr>
+                                
+                                    @php
+                                        $totalmes = 0;
+                                    @endphp    
+                                @endif
+                            @endif
+                        @endif
+
                     @endif
 
-                    <td>{{$p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 )
-                    <td>${{$p->cost}}</td>
-                    @endif
-                    <td>${{$p->sale_price}}</td>
-                    <td>${{$p->amount_discount * $p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 )
-                    <td>${{$p->cost * $p->quantity}}</td>
-                    @endif
-                    <td>${{$p->total}}</td> 
-                    <td>{{$p->seller.' '.$p->seller_lastName}}</td> 
-                    <td>{{date('Y-m-d',strtotime($p->date))}}</td> 
-                    <td>{{date('H:m:s',strtotime($p->date))}}</td> 
 
+                    @if ($b->id == $p->branch_office_id )
+                    <tr>
+                        @php
+                            $totalVendido +=$p->quantity;
+                            $totaldia += $p->total;
+                            $totalmes += $p->total;
+                        @endphp
+                        <td>{{$p->product_name}}</td>
+                        <td>{{$p->category}}</td>
+                        @if ($p->brand == null)
+                        <td>N/A</td>
+                        @else
+                        <td>{{$p->brand }}</td>
+                        @endif
 
-                </tr>
-                @endif
+                        <td>{{$p->quantity}}</td>
+                        @if (Auth::user()->rol_id == 1 )
+                        <td>${{$p->cost}}</td>
+                        @endif
+                        <td>${{$p->sale_price}}</td>
+                        <td>${{$p->amount_discount * $p->quantity}}</td>
+                        @if (Auth::user()->rol_id == 1 )
+                        <td>${{$p->cost * $p->quantity}}</td>
+                        @endif
+                        <td>${{$p->total}}</td> 
+                        <td>{{$p->seller.' '.$p->seller_lastName}}</td> 
+                        <td>{{date('Y-m-d',strtotime($p->date))}}</td> 
+                        <td>{{date('H:i:s',strtotime($p->date))}}</td> 
+                    </tr>
+                    
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
+                            <tr>
+                                <td colspan="12">Venta total del día ${{$totaldia}}</td>
+                            </tr>
+                                @php
+                                    $totaldia = 0;
+                                @endphp    
+                            @endif
+                        @endif
+                        @if($iterador == sizeof($products)-1)
+                            <tr>
+                                <td colspan="12">Venta final del día ${{$totaldia}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                            </tr>
+                        @endif
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('m',strtotime($products[$iterador]->date)) != date('m',strtotime($products[$iterador+1]->date)))
+                            <tr>
+                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                            </tr>
+                                @php
+                                    $totalmes = 0;
+                                @endphp    
+                            @endif
+                        @endif
+
+                    @endif
                 @endforeach
             </table>
 

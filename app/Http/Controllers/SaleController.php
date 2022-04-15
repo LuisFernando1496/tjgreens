@@ -89,7 +89,8 @@ class SaleController extends Controller
             "sales.user_id as user_id",
         )
         //->orderBy('id','DESC')
-        ->paginate(20);
+        //->get();
+        ->paginate(80);
         //return back()->withErrors(["error" => "No tienes permisos", $buscar]);
         return response()->json($buscar);
     }
