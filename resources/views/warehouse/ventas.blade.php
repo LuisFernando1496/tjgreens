@@ -126,7 +126,9 @@
                             @endforelse
                         </tbody>
                     </table>
-                    {{$sales->links()}}
+                    <div id="divtabla1">
+                        {{$sales->links()}}
+                    </div>
 
                     {{--@forelse ($ventas as $venta)--}}
                         <div class="modal fade" id="ventModal" tabindex="-1" aria-labelledby="addInventario" aria-hidden="true">
@@ -284,6 +286,7 @@
             document.getElementById("inputBusquedaVentas").addEventListener("keyup", function(){
                 if (document.getElementById("inputBusquedaVentas").value.length >= 1){
                     $("#tabla1").prop('hidden', true);
+                    $("#divtabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
                     var palabra = $('#inputBusquedaVentas').val();
                     $.get('/buscarVentasAlmacen/'+palabra, function (data){
@@ -384,6 +387,116 @@
                     });
                 }else{
                     $("#tabla1").prop('hidden', false);
+                    $("#divtabla1").prop('hidden', false);
+                    $("#tabla2").prop('hidden', true);
+                    document.getElementById("inventarios2").innerHTML = "";
+                }
+            });
+            $('#buscarVentas').on('click',function(){
+                if (document.getElementById("inputBusquedaVentas").value.length >= 1){
+                    $("#tabla1").prop('hidden', true);
+                    $("#divtabla1").prop('hidden', true);
+                    $("#tabla2").prop('hidden', false);
+                    var palabra = $('#inputBusquedaVentas').val();
+                    $.get('/buscarVentasAlmacen/'+palabra, function (data){
+                        $('#tablaVentasAlmacen2').empty();
+                        //result = data;
+                        data.forEach(element => {
+                            var id = element['id'];
+                            //var url = '{{route("inventario.delete",'+id+')}}';
+                            if(element['estado'] == 'En proceso'){
+                                if(element['office'] == 0){
+                                    console.log("Privado");
+                                    $('#tablaVentasAlmacen2').append('<tr>'+
+                                    '<td>'+element['id']+'</td>'+
+                                    '<td>'+element['office']+'</td>'+
+                                    '<td>'+element['type']+'</td>'+
+                                    '<td>'+element['subtotal']+'</td>'+
+                                    '<td>'+element['descuento']+'</td>'+
+                                    '<td>'+element['total']+'</td>'+
+                                    '<td>'+element['estado']+'</td>'+
+                                    '<td style="font-size: 10px">'+  +'</td>'+
+                                    '<td>'+
+                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal" onclick="llenarModalVentas('+element['id']+')"><i class="bi bi-eye-fill"></i></button>'+
+                                        //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal"><i class="bi bi-eye-fill"></i></button>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<form action="/venta-pagada/'+element['id']+'" method="POST">'+
+                                            '@csrf @method(`PATCH`)'+
+                                            '<button class="btn btn-outline-success" type="submit"><i class="bi bi-cash"></i></button>'+
+                                        '</form>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<a href="/factura-venta/'+element['id']+'" target="blank" class="btn btn-outline-success" type="button"><i class="bi bi-receipt-cutoff"></i></a>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<form action="/eliminar-venta/'+element['id']+'" method="POST">'+
+                                            '@csrf @method("DELETE")'+
+                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                        '</form>'+
+                                    '</td>'+
+                                '</tr>');
+                                }else{
+                                    $('#tablaVentasAlmacen2').append('<tr>'+
+                                        '<td>'+element['id']+'</td>'+
+                                        '<td>'+element['office']+'</td>'+
+                                        '<td>'+element['type']+'</td>'+
+                                        '<td>'+element['subtotal']+'</td>'+
+                                        '<td>'+element['descuento']+'</td>'+
+                                        '<td>'+element['total']+'</td>'+
+                                        '<td>'+element['estado']+'</td>'+
+                                        '<td style="font-size: 10px">'+  +'</td>'+
+                                        '<td>'+
+                                            '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal" onclick="llenarModalVentas('+element['id']+')"><i class="bi bi-eye-fill"></i></button>'+
+                                            //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal"><i class="bi bi-eye-fill"></i></button>'+
+                                        '</td>'+
+                                        '<td>'+
+                                            '<a href="/ticket-venta/'+element['id']+'" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>'+
+                                        '</td>'+
+                                        '<td>'+
+                                            '<a href="/factura-venta/'+element['id']+'" target="blank" class="btn btn-outline-success" type="button"><i class="bi bi-receipt-cutoff"></i></a>'+
+                                        '</td>'+
+                                        '<td>'+
+                                            '<form action="/eliminar-venta/'+element['id']+'" method="POST">'+
+                                                '@csrf @method("DELETE")'+
+                                                '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                            '</form>'+
+                                        '</td>'+
+                                    '</tr>');
+                                }
+                            }else{
+                                $('#tablaVentasAlmacen2').append('<tr>'+
+                                    '<td>'+element['id']+'</td>'+
+                                    '<td>'+element['office']+'</td>'+
+                                    '<td>'+element['type']+'</td>'+
+                                    '<td>'+element['subtotal']+'</td>'+
+                                    '<td>'+element['descuento']+'</td>'+
+                                    '<td>'+element['total']+'</td>'+
+                                    '<td>'+element['estado']+'</td>'+
+                                    '<td style="font-size: 10px">'+element['user']+' '+element['last_name']+' - '+element['created_at']+'</td>'+
+                                    '<td>'+
+                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal" onclick="llenarModalVentas('+element['id']+')"><i class="bi bi-eye-fill"></i></button>'+
+                                        //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#ventModal"><i class="bi bi-eye-fill"></i></button>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<a href="/ticket-venta/'+element['id']+'" target="blank" class="btn btn-outline-secondary" type="button"><i class="bi bi-receipt"></i></a>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<a href="/factura-venta/'+element['id']+'" target="blank" class="btn btn-outline-success" type="button"><i class="bi bi-receipt-cutoff"></i></a>'+
+                                    '</td>'+
+                                    '<td>'+
+                                        '<form action="/eliminar-venta/'+element['id']+'" method="POST">'+
+                                            '@csrf @method("DELETE")'+
+                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                        '</form>'+
+                                    '</td>'+
+                                '</tr>');
+                            }
+                        });
+                    });
+                }else{
+                    $("#tabla1").prop('hidden', false);
+                    $("#divtabla1").prop('hidden', false);
                     $("#tabla2").prop('hidden', true);
                     document.getElementById("inventarios2").innerHTML = "";
                 }

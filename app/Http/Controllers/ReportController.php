@@ -187,6 +187,7 @@ class ReportController extends Controller
             )
             ->where("sales.status",  "=", true)
             ->whereBetween('sales.created_at',[$from, $to])
+            ->orderBy("sales.created_at")
             ->get();
 
 
@@ -217,6 +218,7 @@ class ReportController extends Controller
 
 
             $b = DB::table('branch_offices')
+            ->where("status",  "=", true)
             ->distinct()
             ->get();
             

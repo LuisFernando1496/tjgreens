@@ -79,6 +79,7 @@
         <tbody id="result2">
         </tbody>
     </table>
+    
     <table class="display table table-striped table-bordered" id="tabla1" style="width:100%">
         <thead class="black white-text">
             <tr>
@@ -265,8 +266,12 @@
         </tbody>
     </table>
     @endif
+    <div id="divtabla1">
+        {{ $sales->links() }}
+    </div>
+    
 </div>
-{{ $sales->links() }}
+
 @endsection
 @push('scripts')
 <script>
@@ -281,6 +286,7 @@
         document.getElementById("search").addEventListener("keyup", function(){
             if (document.getElementById("search").value.length >= 1){
                 $("#tabla1").prop('hidden', true);
+                $("#divtabla1").prop('hidden', true);
                 $("#tabla2").prop('hidden', false);
                 fetch(`sales/busqueda?search=${document.getElementById("search").value.toUpperCase()}`,{
                     method: 'get',
@@ -334,6 +340,7 @@
                 //.catch(error => console.log(error));
             }else{
                 $("#tabla1").prop('hidden', false);
+                $("#divtabla1").prop('hidden', false);
                 $("#tabla2").prop('hidden', true);
                 document.getElementById("result2").innerHTML = ""
             }

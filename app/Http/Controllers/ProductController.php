@@ -169,7 +169,7 @@ class ProductController extends Controller
                 "brands.name as brands_name",
                 "categories.name as categories_name",
                 "branch_offices.name as branch_office_name",
-            )->paginate(20);
+            )->paginate(50);
         }if(Auth::user()->rol_id == 3)
         {
             $buscar = Product::join('brands', 'products.brand_id', 'brands.id')
@@ -219,7 +219,7 @@ class ProductController extends Controller
                 "categories.name as categories_name",
                 "branch_offices.name as branch_office_name",
             )
-            ->paginate(20);
+            ->paginate(50);
         }
         return response()->json($buscar);
     }

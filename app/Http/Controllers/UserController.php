@@ -50,7 +50,7 @@ class UserController extends Controller
         }
     }
 
-    /*public function cambiarPass(){
+    public function cambiarPass(){
         $user = User::first();
         //return $user;
         DB::beginTransaction();
@@ -63,7 +63,7 @@ class UserController extends Controller
             DB::rollback();
             return 0;
         }
-    }*/
+    }
 
     public function ajaxget()
     {
