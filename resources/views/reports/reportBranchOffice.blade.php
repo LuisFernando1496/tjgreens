@@ -22,6 +22,8 @@
         $totalEfectivo = 0;
         $totalCredito = 0;
         $totalMixto = 0;
+        $totaldia = 0;
+        $totalmes = 0;
     @endphp
    
     
@@ -78,53 +80,132 @@
                     <th style="font-size: 10px" class="backgroundColor">HORA</th>
                 </tr>
                
-                @foreach ($products as $p)
+                {{--@foreach ($products as $p)--}}
+                @foreach ($products as $iterador => $p)
+                    @if ($b->id != $p->branch_office_id )
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
+                                @if($totaldia != 0)
+                                <tr>
+                                    <td colspan="12">Venta total del día ${{$totaldia}}</td>
+                                </tr>
+                                    @php
+                                        $totaldia = 0;
+                                    @endphp
+                                @endif
+                            @endif
+                        @endif
+                        
+                        @if($iterador == sizeof($products)-1)
+                            @if($totaldia != 0)
+                                <tr>
+                                    <td colspan="12">Venta final del día ${{$totaldia}}</td>
+                                </tr>
+                            @endif
+                            
+                            <tr>
+                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                            </tr>
+                            @php
+                                $totalmes = 0;
+                            @endphp
+                            
+                            @php
+                                $totaldia = 0;
+                            @endphp
+                        @endif
+
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('m',strtotime($products[$iterador]->date)) != date('m',strtotime($products[$iterador+1]->date)))
+                                @if($totalmes != 0)
+                                <tr>
+                                    <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                                </tr>
+                                
+                                    @php
+                                        $totalmes = 0;
+                                    @endphp    
+                                @endif
+                            @endif
+                        @endif
+
+                    @endif
+
           
-                @if ($b->id == $p->branch_office_id )
-                 @php
-                     $totalVentasGeneral += $p->total;
-                     if($p->tipoPago == 0){
-                        $totalEfectivo += $p->total;
-                    }
-                    if($p->tipoPago == 1){
-                    $totalTarjeta += ( $p->total);
-                    }
-                    if($p->tipoPago == 2){
-                        $totalCredito +=  $p->total;
-                    }
-                    if($p->tipoPago == 3){
-                        $totalMixto +=  $p->total;
-                    }
-                @endphp
-                
-                <tr>
-                 
-                   
-                    <td>{{$p->product_name}}</td>
-                    <td>{{$p->category}}</td>
-                    @if ($p->brand == null)
-                    <td>N/A</td>
-                    @else
-                    <td>{{$p->brand }}</td>
-                    @endif
+                    @if ($b->id == $p->branch_office_id )
+                        @php
+                            $totaldia += $p->total;
+                            $totalmes += $p->total;
+                            $totalVentasGeneral += $p->total;
+                            if($p->tipoPago == 0){
+                                $totalEfectivo += $p->total;
+                            }
+                            if($p->tipoPago == 1){
+                            $totalTarjeta += ( $p->total);
+                            }
+                            if($p->tipoPago == 2){
+                                $totalCredito +=  $p->total;
+                            }
+                            if($p->tipoPago == 3){
+                                $totalMixto +=  $p->total;
+                            }
+                        @endphp
+                    
+                    <tr>
+                        <td>{{$p->product_name}}</td>
+                        <td>{{$p->category}}</td>
+                        @if ($p->brand == null)
+                        <td>N/A</td>
+                        @else
+                        <td>{{$p->brand }}</td>
+                        @endif
 
-                    <td>{{$p->quantity}}</td>
-                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                    <td>${{number_format($p->cost, 2)}}</td>
-                    @endif
-                    <td>${{number_format($p->sale_price, 2)}}</td>
-                    <td>${{number_format($p->amount_discount * $p->quantity, 2)}}</td>
-                    @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                    <td>${{number_format($p->cost * $p->quantity, 2)}}</td>
-                    @endif
-                    <td>${{number_format($p->total, 2)}}</td> 
-                    <td>{{$p->seller.' '.$p->seller_lastName}}</td> 
-                    <td>{{date('Y-m-d',strtotime($p->date))}}</td> 
-                    <td>{{date('H:m:s',strtotime($p->date))}}</td> 
+                        <td>{{$p->quantity}}</td>
+                        @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                        <td>${{number_format($p->cost, 2)}}</td>
+                        @endif
+                        <td>${{number_format($p->sale_price, 2)}}</td>
+                        <td>${{number_format($p->amount_discount * $p->quantity, 2)}}</td>
+                        @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
+                        <td>${{number_format($p->cost * $p->quantity, 2)}}</td>
+                        @endif
+                        <td>${{number_format($p->total, 2)}}</td> 
+                        <td>{{$p->seller.' '.$p->seller_lastName}}</td> 
+                        <td>{{date('Y-m-d',strtotime($p->date))}}</td> 
+                        <td>{{date('H:m:s',strtotime($p->date))}}</td> 
 
 
-                </tr>
-                @endif
+                    </tr>
+
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
+                            <tr>
+                                <td colspan="12">Venta total del día ${{$totaldia}}</td>
+                            </tr>
+                                @php
+                                    $totaldia = 0;
+                                @endphp    
+                            @endif
+                        @endif
+                        @if($iterador == sizeof($products)-1)
+                            <tr>
+                                <td colspan="12">Venta final del día ${{$totaldia}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                            </tr>
+                        @endif
+                        @if($iterador < sizeof($products)-1)
+                            @if(date('m',strtotime($products[$iterador]->date)) != date('m',strtotime($products[$iterador+1]->date)))
+                            <tr>
+                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                            </tr>
+                                @php
+                                    $totalmes = 0;
+                                @endphp    
+                            @endif
+                        @endif
+                    @endif
                 @endforeach
             </table>
             @endforeach
