@@ -20,7 +20,7 @@
                 <table class="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>#</th>
                             <th>Código de barras</th>
                             <th>Nombre</th>
                             <th>Categoria</th>
