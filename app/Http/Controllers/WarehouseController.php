@@ -15,10 +15,13 @@ use App\Shipment;
 use App\Shopping;
 use App\User;
 use App\Warehouse;
+use App\Exports\inventarioAlmacen;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WarehouseController extends Controller
 {
@@ -229,12 +232,21 @@ class WarehouseController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    public function inventarioDownload()
+    {
+        $productos = Inventory::with(['marca', 'categoria', 'almacen'])->get();
+     
+        return view('warehouse.inventarioAlmacen', compact('productos'));
+        return $productos;
+    }
+    public function inventarioDownloadExcel()
+    {
+        $fecha = Carbon::now();
+       
+       return Excel::download(new inventarioAlmacen, "Reporte-inventario-$fecha.xlsx");
+   
+    }
+
     public function show($id)
     {
         //

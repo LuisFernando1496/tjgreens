@@ -166,6 +166,39 @@
             </div>
         </div>
     @else
+
+    <div class="modal fade" id="optionDownload" tabindex="-1" aria-labelledby="optionDownloadLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <form action="{{ route('almacen.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="optionDownloadLabel">Descargar Inventario</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="color: red">Selecciona un formato de archivo</p>
+                        <div class="row">
+                            <div class="col text-center">
+                                <button class="btn btn-outline-success" type="submit" onclick="optionDownload(event, option='Excel')">
+                                    <i class="bi bi-file-earmark-excel-fill"></i>Excel</button>
+                                <button class="btn btn-outline-danger" type="submit" onclick="optionDownload(event, option='PDF')">
+                                    <i class="bi bi-file-earmark-pdf-fill"></i>PDF</button>
+
+                            </div>
+                        </div>
+                      
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
         <div class="container">
             <div class="card">
                 <div class="card-header">
@@ -186,10 +219,10 @@
                                 @endforelse
                             </select>
                         </div>
-                        <div class="col">
-                            {{--<button id="search" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                data-bs-target="#busquedaP"><i class="bi bi-search"></i></button>--}}
-                        </div>
+                       {{-- <div class="col-2">
+                            <button id="search" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#busquedaP"><i class="bi bi-search"></i></button>
+                        </div>--}}
                         <div class="col-2">
                             <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
                                 data-bs-target="#inventarioModal">Agregar</button>
@@ -213,6 +246,11 @@
                         <div class="col-2">
                             <a href="{{ route('getOrder') }}" target="blank" type="button"
                                 class="btn btn-outline-warning"><i class="bi bi-receipt-cutoff">Orden</i></a>
+                        </div>
+                        <div class="col-2">
+                            <button href="#"  type="button" data-bs-toggle="modal"
+                            data-bs-target="#optionDownload"
+                                class="btn btn-outline-info"><i class="bi bi-arrow-down-square-fill"> Inventario</i></button>
                         </div>
                     </div>
                 </div>
@@ -1770,6 +1808,23 @@
                     document.getElementById("showNombreCp").style.display = "none";
                 }
             });
+            const optionDownload = (event,option) =>
+            {
+                event.preventDefault();
+
+               
+               if(option =='Excel'){
+                   window.open('/almacen/inventario/Excel')
+               }
+               if(option == 'PDF')
+               {
+                    window.open('/almacen/inventario');
+               }
+                   
+                // document.getElementById("formConcluir").submit();
+                // window.open('/concluir');   
+
+            }
         </script>
 
     @endif
