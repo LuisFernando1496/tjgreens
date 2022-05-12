@@ -243,7 +243,7 @@ class CashClosingController extends Controller
         $closeTime = new DateTime('NOW',new DateTimeZone('America/Mexico_City'));  
         
         $gastoCaja = Expense::select(DB::raw('sum(price * quantity) as total'))->where('cash_closing_id',$cashClosing->id)->first()->total;        
-        $ventaCaja = Sale::where('cash_closing_id',$cashClosing->id)->where('payment_type',1)->where('status',true)->sum('cart_total');
+        $ventaCaja = Sale::where('cash_closing_id',$cashClosing->id)->where('status',true)->sum('cart_total');
         $endCash = $ventaCaja + $cashClosing->initial_cash - $gastoCaja;
         
         $request["end_cash"] = $endCash;
