@@ -9,7 +9,14 @@ class CashClosing extends Model
 {
     protected $guarded = [];
 
-
+    protected $fillable = [
+        'status',
+        'initial_cash',
+        'end_cash',
+        'branch_office_id',
+        'box_id',
+        'user_id',
+    ];
     public function add($data){
         return $this->create($data);
     }

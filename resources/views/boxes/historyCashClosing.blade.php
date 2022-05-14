@@ -7,7 +7,22 @@
 @if(Auth::user()->rol_id != 1)
 <h3>Historial de cortes</h3>
 <br>
+
 @endif
+<div class="col-md-8">
+    <div class="input-group">
+        <input type="text" id="search" style="text-transform: uppercase" class="form-control" name="search" autocomplate="search" placeholder="Buscar en el historial (nombre, fecha: YYYY-M-D): ejemplo 2022-05-14"/>
+        <div class="input-group-append">
+            <button id="searchButton" class="btn btn-outline-secondary">
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+<br>
     <table class="table">
         <thead>
             <tr>
@@ -18,7 +33,7 @@
                 <th>Reimprimir corte</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="tableResult">
             @forelse($cashClosings as $history)
             <tr>
                
@@ -38,7 +53,44 @@
             @endforelse
         </tbody>
     </table>
+    <div class="pagination" id="pag">
     {{ $cashClosings->links() }}
 </div>
+</div>
+<script>
+    let search = '';
+    let option = '';
+    let url = '';
+    let idpag = document.getElementById('pag');
+    $("#search").on("keyup", function () {
+        search = $(this).val();
+        url = `search/cashclosing?search=${search}`;
+        idpag ? idpag.remove() : '';
+        idpag = false;
+       
+       peticiones(url);
+       
+    });
+    $(document).on("click", '.pagination a', function (e) {
+    
+    if(!idpag){
+        e.preventDefault();
+        page = $(this).attr("href");
+        url = page;
+        peticiones(url);
+    }
+   
+ });
+    const peticiones = (url) =>
+    {
+        fetch(url, { method: 'GET', headers: { 'X-CSRF-Token': $('meta[name="_token"]').attr('content') } })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('tableResult').innerHTML = html;
+           
+        });
+    }
+   
 
+</script>
 @endsection

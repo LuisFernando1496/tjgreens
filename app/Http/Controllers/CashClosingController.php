@@ -51,11 +51,41 @@ class CashClosingController extends Controller
         return view( 'boxes.historyCashClosing', compact('cashClosings'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+   
+    public function searchCashClosing(Request $request)
+    {
+        $user = Auth::user();
+        $search = $request->search;
+        if ( $user->rol_id == 1 ) {
+            $cashClosings = CashClosing::join('users','users.id','cash_closings.user_id')
+                                        ->join('branch_offices', 'branch_offices.id', 'cash_closings.branch_office_id')
+                                        ->where('users.name', 'like', '%'.$search.'%')
+                                        ->orwhere('branch_offices.name', 'like', '%'.$search.'%')
+                                        ->orwhere('cash_closings.created_at', 'like', '%'.$search.'%')
+                                        ->orderBy('cash_closings.id','DESC')
+                                        ->select('users.name as userName', 'branch_offices.name as officeName', 'cash_closings.*')
+                                        ->paginate(10);
+        } if( $user->rol_id == 3 ) {
+           
+            $cashClosings = CashClosing::join('users','users.id','cash_closings.user_id')
+                                        ->join('branch_offices', 'branch_offices.id', 'cash_closings.branch_office_id')
+                                        ->where('cash_closings.branch_office_id', $user->branch_office_id)
+                                        ->where('users.name', 'like', '%'.$search.'%')
+                                        ->orwhere('cash_closings.created_at', 'like', '%'.$search.'%')
+                                        ->orderBy('cash_closings.id','DESC')
+                                        ->where('cash_closings.branch_office_id', $user->branch_office_id)
+                                        ->select('users.name as userName', 'branch_offices.name as officeName', 'cash_closings.*')
+                                        ->paginate(10);
+                        
+        }
+        else {
+          return ('no tienes permisos para ver este sitio');
+        }
+      
+        return view( 'boxes.resultSearch', compact('cashClosings','search'));
+       
+    }
+
     public function create(CashClosing $cashClosing)
     {
         return view('cashClosing.create',["cashClosing" => new CashClosing]);
