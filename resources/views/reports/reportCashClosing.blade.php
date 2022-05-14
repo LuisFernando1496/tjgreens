@@ -30,6 +30,7 @@
 
             </table> --}}
             <h4 >REPORTE DE CORTE DE CAJA</h4>
+            <h4>Caja atendida por:  <strong>{{$worker->name}}</strong></h4>
             @foreach ($branchOffice as $b)
             <table style="width: 100%; margin-top:20px;">
                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)

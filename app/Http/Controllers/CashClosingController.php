@@ -13,21 +13,22 @@ use App\Expense;
 use DateTime;
 use DateTimeZone;
 use DB;
-
-
-use App\User;
-
-use App\Product;
-use PDF;
-use App\Exports\GeneralExport;
-use App\Exports\BranchOfficeExport;
-use App\Exports\UserExport;
-use App\Exports\CutBoxExport;
-use App\Exports\InventExport;
-use App\Exports\InventByBranchOfficeIdExport;
-use Excel;
 use App\ProductInSale;
 use Barryvdh\DomPDF\PDF as DomPDFPDF;
+use PDF;
+// use App\User;
+
+// use App\Product;
+// 
+// use App\Exports\GeneralExport;
+// use App\Exports\BranchOfficeExport;
+// use App\Exports\UserExport;
+// use App\Exports\CutBoxExport;
+// use App\Exports\InventExport;
+// use App\Exports\InventByBranchOfficeIdExport;
+// use Excel;
+// use App\ProductInSale;
+// 
 
 class CashClosingController extends Controller
 {
@@ -38,7 +39,14 @@ class CashClosingController extends Controller
      */
     public function index()
     {
-        return CashClosing::all();
+        $user = Auth::user();
+        if ( $user->rol_id == 1 ) {
+            $cashClosings = CashClosing::orderBy('id','DESC')->paginate(10);
+        } else {
+            $cashClosings = CashClosing::where('branch_office_id', $user->branch_office_id)->orderBy('id','DESC')->paginate(10);
+        }
+       
+        return view( 'boxes.historyCashClosing', compact('cashClosings'));
     }
 
     /**
@@ -59,7 +67,7 @@ class CashClosingController extends Controller
      */
     public function store(Request $request)
     {
-        DB::beginTransaction();
+         DB::beginTransaction();
         try {
             //return back()->withErrors(['error'=>CashClosing::where('user_id','=',Auth::user()->id)->where('status','=',false)->count()]);
             //return back()->withErrors(['error'=>Box::find($request->box_id)->number, Box::find($request->box_id)->status, Box::find($request->box_id)->id]);

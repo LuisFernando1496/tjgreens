@@ -9,6 +9,7 @@ class CashClosing extends Model
 {
     protected $guarded = [];
 
+
     public function add($data){
         return $this->create($data);
     }
@@ -27,4 +28,10 @@ class CashClosing extends Model
     public function changeStatus($data){
         return $this->fill(["status"=>$data])->save();
     }
+
+    public function branchOffice(){
+        return $this->belongsTo(BranchOffice::class);
+    }
+
+    
 }
