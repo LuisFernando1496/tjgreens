@@ -65,7 +65,7 @@ class CashClosingController extends Controller
                                         ->orderBy('cash_closings.id','DESC')
                                         ->select('users.name as userName', 'branch_offices.name as officeName', 'cash_closings.*')
                                         ->paginate(10);
-        } if( $user->rol_id == 3 ) {
+        } elseif( $user->rol_id == 3 ) {
            
             $cashClosings = CashClosing::join('users','users.id','cash_closings.user_id')
                                         ->join('branch_offices', 'branch_offices.id', 'cash_closings.branch_office_id')
