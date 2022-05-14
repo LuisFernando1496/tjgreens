@@ -14,12 +14,11 @@ use DateTime;
 use DateTimeZone;
 use DB;
 use App\ProductInSale;
-use Barryvdh\DomPDF\PDF as DomPDFPDF;
 use PDF;
 // use App\User;
 
 // use App\Product;
-// 
+
 // use App\Exports\GeneralExport;
 // use App\Exports\BranchOfficeExport;
 // use App\Exports\UserExport;
@@ -27,8 +26,8 @@ use PDF;
 // use App\Exports\InventExport;
 // use App\Exports\InventByBranchOfficeIdExport;
 // use Excel;
-// use App\ProductInSale;
-// 
+
+
 
 class CashClosingController extends Controller
 {
@@ -42,8 +41,11 @@ class CashClosingController extends Controller
         $user = Auth::user();
         if ( $user->rol_id == 1 ) {
             $cashClosings = CashClosing::orderBy('id','DESC')->paginate(10);
-        } else {
+        } elseif( $user->rol_id == 3 ) {
             $cashClosings = CashClosing::where('branch_office_id', $user->branch_office_id)->orderBy('id','DESC')->paginate(10);
+        }
+        else {
+          return ('no tienes permisos para ver este sitio');
         }
        
         return view( 'boxes.historyCashClosing', compact('cashClosings'));
