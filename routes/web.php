@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShoppingController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\BranchPriceController;
 use App\Warehouse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -59,6 +60,7 @@ Route::group(['middleware'=>'auth'], function(){
         return view('user/profile',['user'=>auth()->user()]);
     });
     Route::resource('BranchOffice','BranchOfficeController');
+    Route::get('/office/buscar/{id}', 'BranchOfficeController@search');
     // Route::resource('expense', 'ExpenseController');
     Route::resource('reportes', 'ReportController');
     Route::get('employeeByOffice/{id}','ReportController@employeeByOffice');
@@ -161,6 +163,8 @@ Route::group(['middleware'=>'auth'], function(){
     Route::get('/buscarVentasModal/{id}',[InventoryController::class,'busquedaModalVentas']);
     Route::get('/buscarInventarioSucursal/{id}',[InventoryController::class,'busquedaSucursal']);
     Route::delete('/eliminar-venta/{id}',[ShoppingController::class,'destroy'])->name('eliminar.traspaso');
+
+    Route::get('/almacen/inventario/costo/{id}',[BranchPriceController::class,'show']);
 });
 
 Route::get('/productos',[ProductController::class,'allProductos']);

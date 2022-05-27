@@ -28,11 +28,11 @@ class BranchOfficeController extends Controller
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function search($id)
+    {
+        $office = BranchOffice::find($id);
+        return response()->json($office);
+    }
     public function create()
     {
         if(Auth::user()->rol_id != 1){

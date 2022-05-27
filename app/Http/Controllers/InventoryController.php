@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\BranchPrice;
 use App\Inventory;
 use App\InventoryShipment;
 use App\Shipment;
 use App\Product;
 use App\Warehouse;
+use App\BranchOffice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -43,7 +45,9 @@ class InventoryController extends Controller
     {
         $user = Auth::user();
         $almacen = Warehouse::where('user_id','=',$user->id)->get();
-
+        $branche = BranchOffice::where('status',true)->get();
+        $nombreRequest = '';
+     // return $request->all();
         try {
             DB::beginTransaction();
             $inventario = new Inventory();
@@ -56,6 +60,15 @@ class InventoryController extends Controller
             $inventario->brand_id = $request->brand_id;
             $inventario->warehouse_id = $almacen[0]->id;
             $inventario->save();
+            foreach($branche as $branch){
+                $precio = new BranchPrice();
+                $precio->office_id = $branch->id;
+                $precio->inventory_id = $inventario->id;
+                $precio->branch_cost = $request['branch_cost'.$branch->id];
+                $precio->save();
+               
+            }
+        
             DB::commit();
             return redirect()->route('almacen.index');
         } catch (\Error $th) {
@@ -95,6 +108,7 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $branche = BranchOffice::where('status',true)->get();
         try {
             DB::beginTransaction();
             DB::table('inventories')->where('id','=',$id)->update([
@@ -106,6 +120,19 @@ class InventoryController extends Controller
                 'category_id' => $request->category_id,
                 'brand_id' => $request->brand_id,
             ]);
+            foreach($branche as $branch){
+                $editCost = BranchPrice::where('office_id','=',$branch->id)->where('inventory_id','=',$id)->first();
+                if($editCost){
+                    $editCost->branch_cost = $request['branch_cost'.$branch->id];
+                    $editCost->save();
+                }else{
+                    $precio = new BranchPrice();
+                    $precio->office_id = $branch->id;
+                    $precio->inventory_id = $id;
+                    $precio->branch_cost = $request['branch_cost'.$branch->id];
+                    $precio->save();
+                }
+            }
             DB::commit();
             return redirect()->route('almacen.index');
         } catch (\Error $th) {

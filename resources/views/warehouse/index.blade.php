@@ -198,6 +198,47 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="costSelect" tabindex="-1" aria-labelledby="costSelectLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <form action="{{ route('almacen.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="costSelectLabel">Selecion de costos</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p style="color: red">Costos encontrados para este producto</p>
+                        <div class="row">
+                            <div class="col text-center" >
+                                <table class="table">
+                                    <thead>
+                                       <tr>
+                                            <th>Producto</th>
+                                            <th>Sucursal</th>
+                                             <th>Costo</th>
+                                             <th>Agregar</th>
+                                       </tr>
+                                      
+                                    </thead>
+                                    <tbody id="resultCost">
+                                      
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                      
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
         <div class="container">
             <div class="card">
@@ -291,8 +332,13 @@
                                             <td>{{ $inventario->categoria->name }}</td>
                                             <td>{{ $inventario->marca->name }}</td>
                                             <td>{{ $inventario->stock }}</td>
-                                            <td>${{ $inventario->price }}</td>
-                                            <td>${{ $inventario->cost }}</td>
+                                            <td>${{ $inventario->price }}</td>Separador
+                                            <td id="cost{{$inventario->id}}"><span id="spanCost{{$inventario->id}}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
+                                                data-bs-target="#costSelect" onclick="branchCost(id={{$inventario->id}})"  style="cursor: pointer">
+                                                ${{ $inventario->cost }}
+                                            </span>
+                                                
+                                            </td>
                                             <td>
                                                 @if($inventario->stock >0)
                                                     <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
@@ -307,7 +353,7 @@
                                                
                                                         
                                                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                                    data-bs-target="#addCompra" onclick="llenarCompra({{$inventario}})"><i
+                                                    data-bs-target="#addCompra" onclick="llenarCompra({{$inventario}},{{$inventario->id}})"><i
                                                         class="bi bi-bag-plus"></i></button>
                                             </td>
                                             <td>
@@ -392,6 +438,16 @@
                                     </select>
                                 </div>
                             </div>
+                             <div class="col">
+                                    <label for="">Costo</label>
+                                    <input type="number" class="form-control" step="any" name="cost" value="" id="modeditcost">
+                                </div>
+                                @foreach ($oficinas as $oficina)
+                                <div class="col">
+                                    <label for="">Costo {{$oficina->name}}</label>
+                                    <input type="number" step="any" class="form-control" id="branch_cost{{$oficina->id}}"  name="branch_cost{{$oficina->id}}" placeholder="$">
+                                </div>
+                                @endforeach
                             <div class="row">
                                 <div class="col">
                                     <label for="">Marca</label>
@@ -415,10 +471,7 @@
                                     <label for="">Precio</label>
                                     <input type="numer" class="form-control" step="any" name="price" value="" id="modeditprice">
                                 </div>
-                                <div class="col">
-                                    <label for="">Costo</label>
-                                    <input type="number" class="form-control" step="any" name="cost" value="" id="modeditcost">
-                                </div>
+                               
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -774,7 +827,7 @@
 
         <div class="modal fade" id="inventarioModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <form action="{{ route('inventario.store') }}" method="POST">
                         @csrf
@@ -797,13 +850,24 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="">Stock</label>
-                                    <input type="number" class="form-control" required name="stock">
+                                    <input type="number" class="form-control" required name="stock" >
                                 </div>
-                                <div class="col">
-                                    <label for="">Costo</label>
-                                    <input type="number" step="any" class="form-control" required name="cost">
-                                </div>
+                               
+                                
+                              
                             </div>
+                            <div class="col">
+                                    
+                                <label for="">Costo Por Defecto</label>
+                                <input type="number" step="any" class="form-control" required name="cost" placeholder="$">
+                            </div>
+                                @foreach ($oficinas as $oficina)
+                                <div class="col">
+                                    
+                                    <label for="">Costo {{$oficina->name}}</label>
+                                    <input type="number" step="any" class="form-control"  name="branch_cost{{$oficina->id}}" placeholder="$">
+                                </div>
+                                @endforeach
                             <div class="row">
                                 <div class="col">
                                     <label for="">Precio</label>
@@ -1166,10 +1230,20 @@
 
         <script>
             let result = [];
-            function llenaredit(product){
+            var nom = '';
+          async  function llenaredit(product){
                 //action="{{ route('inventario.update', $inventario->id) }}" 
-                
+               
+              
                 if(typeof(product) == "number"){
+                    
+                  await $.get('/almacen/inventario/costo/'+product,function(data){
+                         data.map(function(cost){
+                             console.log(cost.id);
+                             document.getElementById(`branch_cost${cost.id}`).value = data.branch_cost;
+                         });
+                     
+                });
                     let item = result.find(element => element.id == product);  
                     document.getElementById("formmodedit").action = "/inventario/"+item.id;
                     document.getElementById('modeditbar_code').value = item.bar_code;
@@ -1180,6 +1254,12 @@
                     document.getElementById('modeditprice').value = item.price;
                     document.getElementById('modeditcost').value = item.cost;
                 }else{
+                    await $.get('/almacen/inventario/costo/'+product.id,function(data){
+                         data.map(function(cost){
+                             document.getElementById(`branch_cost${cost.id}`).value = cost.branch_cost;
+                         });
+                     
+                });
                     document.getElementById("formmodedit").action = "/inventario/"+product.id;
                     document.getElementById('modeditbar_code').value = product.bar_code;
                     document.getElementById('modeditname').value = product.name;
@@ -1215,26 +1295,33 @@
                     document.getElementById('addmodinvtotal').value = product.price * 1;
                 }
             }
-            function llenarCompra(product){
+            function llenarCompra(product,id){
                 //console.log("init ",typeof(1));
+             
                 if(typeof(product) == "number"){
                     let item = result.find(element => element.id == product);    
+                    let costoSpan = document.getElementById(`spanCost${item.id}`).innerHTML.trim();
+                    const costo = parseFloat(costoSpan.substring(1)).toFixed(2);
+                   // console.log("costoSpan: ",costoSpan);
                     //console.log("item: ",item.);
                     document.getElementById("formaddcom").action = "/addCompra/"+item.id;
                     document.getElementById('addmodcomproduct').value = item.name;
                     document.getElementById('addmodcomcantidad').value = 1;
                     document.getElementById('addmodcomdescuento').value = 0;
-                    document.getElementById('addmodcomcosto').value = item.cost;
-                    document.getElementById('addmodcomsubtotal').value = item.cost * 1;
-                    document.getElementById('addmodcomtotal').value = item.cost *1 ;
+                    document.getElementById('addmodcomcosto').value = costo;
+                    document.getElementById('addmodcomsubtotal').value = costo * 1;
+                    document.getElementById('addmodcomtotal').value = costo *1 ;
                 }else{
+                   let costoSpan = document.getElementById(`spanCost${id}`).innerHTML.trim();
+                    const costo = parseFloat(costoSpan.substring(1)).toFixed(2);
+                    console.log("costo: ",costo);
                     document.getElementById("formaddcom").action = "/addCompra/"+product.id;
                     document.getElementById('addmodcomcantidad').value = 1;
                     document.getElementById('addmodcomdescuento').value = 0;
                     document.getElementById('addmodcomproduct').value = product.name;
-                    document.getElementById('addmodcomcosto').value = product.cost;
-                    document.getElementById('addmodcomsubtotal').value = product.cost * 1;
-                    document.getElementById('addmodcomtotal').value = product.cost * 1;
+                    document.getElementById('addmodcomcosto').value = costo;
+                    document.getElementById('addmodcomsubtotal').value = costo * 1;
+                    document.getElementById('addmodcomtotal').value = costo *1 ;
                 }
             }
             $(document).ready(function() {});
@@ -1825,6 +1912,47 @@
                 // window.open('/concluir');   
 
             }
+            const branchCost = (id)=>
+            {
+                $('#resultCost').empty();
+              $.get('/almacen/inventario/costo/'+id,function(data){
+                    nom ={...data};
+                   
+                  data.map( function(cost){
+                      let cantidad =parseFloat(cost.branch_cost);
+                      let id = cost.inventory.id;
+                       let idnom =  cost.office.id;
+                       $('#resultCost').append('<tr>'
+                        +'<td>'+cost.inventory.name +'</td>'
+                        +'<td>'+cost.office.name +'</td>'
+                        +'<td>$'+cantidad +'</td>'
+                        +'<td> <button class="btn btn-outline-success" onclick="insertNewCost('+id+','+cantidad+','+idnom+')" type="button">agregar</button>'+'</td>'
+                        +'</tr>')
+                
+                   }  );                   
+                });
+               
+            }
+            const insertNewCost = async(id,cost,idnom) =>
+            {
+                var nombreOffice='';
+             
+              await $.get('/office/buscar/'+idnom,function(data){
+               
+                nombreOffice = data.name;
+               });
+                let costo = cost.toFixed(2);
+               let elemntCost= $(`#cost${id}`);
+               elemntCost.empty();
+               elemntCost.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
+                                                data-bs-target="#costSelect" onclick="branchCost(id=${id})"  style="cursor: pointer">
+                                               $${costo}
+                                            </span>`);
+             
+               $('#costSelect').modal('hide'); 
+                alert('Se ha agregado el costo correctamente');
+            }
+            
         </script>
 
     @endif
