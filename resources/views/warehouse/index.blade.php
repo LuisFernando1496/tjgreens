@@ -1240,7 +1240,7 @@
                   await $.get('/almacen/inventario/costo/'+product,function(data){
                          data.map(function(cost){
                              console.log(cost.id);
-                             document.getElementById(`branch_cost${cost.id}`).value = data.branch_cost;
+                             document.getElementById(`branch_cost${cost.id}`).value = cost.branch_cost;
                          });
                      
                 });
@@ -1596,7 +1596,13 @@
                                     '<td>'+element['marca']['name']+'</td>'+
                                     '<td>'+element['stock']+'</td>'+
                                     '<td>'+element['price']+'</td>'+
-                                    '<td>'+element['cost']+'</td>'+
+                                    '<td id ="costDymanic'+id+'">'+
+                                        '<span id="spanCost'+id+'" class="badge badge-success float-center"type="button" data-bs-toggle="modal"'
+                                                +'data-bs-target="#costSelect" onclick="branchCost(id='+id+')"  style="cursor: pointer">'
+                                               +'$'+element['cost']+''
+                                            +'</span>'
+                                    +'</td>'+
+                                
                                     '<td>'+
                                        ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
@@ -1654,7 +1660,12 @@
                                 '<td>'+element['brandname']+'</td>'+
                                 '<td>'+element['stock']+'</td>'+
                                 '<td>'+element['price']+'</td>'+
-                                '<td>'+element['cost']+'</td>'+
+                                '<td id ="costDymanic'+id+'">'+
+                                        '<span id="spanCost'+id+'" class="badge badge-success float-center"type="button" data-bs-toggle="modal"'
+                                                +'data-bs-target="#costSelect" onclick="branchCost(id='+id+')"  style="cursor: pointer">'
+                                               +'$'+element['cost']+''
+                                            +'</span>'
+                                    +'</td>'+
                                 '<td>'+
                                     '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                         'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
@@ -1699,7 +1710,12 @@
                                     '<td>'+element['marca']['name']+'</td>'+
                                     '<td>'+element['stock']+'</td>'+
                                     '<td>'+element['price']+'</td>'+
-                                    '<td>'+element['cost']+'</td>'+
+                                    '<td id ="costDymanic'+id+'">'+
+                                        '<span id="spanCost'+id+'" class="badge badge-success float-center"type="button" data-bs-toggle="modal"'
+                                                +'data-bs-target="#costSelect" onclick="branchCost(id='+id+')"  style="cursor: pointer">'
+                                               +'$'+element['cost']+''
+                                            +'</span>'
+                                    +'</td>'+
                                     '<td>'+
                                        ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
@@ -1943,8 +1959,14 @@
                });
                 let costo = cost.toFixed(2);
                let elemntCost= $(`#cost${id}`);
+               let elemntCostDymanic = $(`#costDymanic${id}`);
                elemntCost.empty();
                elemntCost.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
+                                                data-bs-target="#costSelect" onclick="branchCost(id=${id})"  style="cursor: pointer">
+                                               $${costo}
+                                            </span>`);
+               elemntCostDymanic.empty();
+               elemntCostDymanic.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
                                                 data-bs-target="#costSelect" onclick="branchCost(id=${id})"  style="cursor: pointer">
                                                $${costo}
                                             </span>`);
