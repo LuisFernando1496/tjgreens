@@ -332,7 +332,7 @@
                                             <td>{{ $inventario->categoria->name }}</td>
                                             <td>{{ $inventario->marca->name }}</td>
                                             <td>{{ $inventario->stock }}</td>
-                                            <td>${{ $inventario->price }}</td>Separador
+                                            <td>${{ $inventario->price }}</td>
                                             <td id="cost{{$inventario->id}}"><span id="spanCost{{$inventario->id}}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
                                                 data-bs-target="#costSelect" onclick="branchCost(id={{$inventario->id}})"  style="cursor: pointer">
                                                 ${{ $inventario->cost }}
