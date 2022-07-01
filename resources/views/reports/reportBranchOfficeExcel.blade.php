@@ -89,14 +89,14 @@
 
                     <td>{{$p->quantity}}</td>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                    <td>${{$p->product->cost}}</td>
+                    <td>{{$p->product->cost}}</td>
                     @endif
-                    <td>${{$p->sale_price}}</td>
-                    <td>${{$p->amount_discount * $p->quantity}}</td>
+                    <td>{{$p->sale_price}}</td>
+                    <td>{{$p->amount_discount * $p->quantity}}</td>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                    <td>${{$p->product->cost * $p->quantity}}</td>
+                    <td>{{$p->product->cost * $p->quantity}}</td>
                     @endif
-                    <td>${{$p->total}}</td> 
+                    <td>{{$p->total}}</td> 
 
 
                 </tr>
@@ -110,28 +110,28 @@
                 @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td>${{$cash->subtotal + $card->subtotal}}</td>
+                    <td>{{$cash->subtotal + $card->subtotal}}</td>
                     <th>INVERSIÓN</th>
-                    <td>${{$cash->costo + $card->costo}}</td>
+                    <td>{{$cash->costo + $card->costo}}</td>
                 </tr>
                 @else
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td colspan="3">${{$cash->subtotal + $card->subtotal}}</td>
+                    <td colspan="3">{{$cash->subtotal + $card->subtotal}}</td>
                 </tr>
                 @endif
                 <tr>
                     <th>DINERO EFECTIVO</th>
-                    <td>${{$cash->total}}</td>
+                    <td>{{$cash->total}}</td>
                     <th>DINERO ELECTRÓNICO</th>
-                    <td>${{$card->total}}</td>
+                    <td>{{$card->total}}</td>
                     
                 </tr>
                 <tr>
                     <th>GANANCIA</th>
-                    <td>${{($cash->subtotal + $card->subtotal) - ($cash->costo + $card->costo) }}</td>
+                    <td>{{($cash->subtotal + $card->subtotal) - ($cash->costo + $card->costo) }}</td>
                     <th>DESCUENTOS</th>
-                    <td>${{$cash->descuento + $card->descuento}}</td>
+                    <td>{{$cash->descuento + $card->descuento}}</td>
                 </tr>
                 <tr>
                     <th>GASTOS</th>

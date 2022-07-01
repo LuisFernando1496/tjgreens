@@ -78,19 +78,19 @@
                     @else
                     <td>{{$p->stock}}</td> 
                     @endif
-                    <td>${{$p->price_1}}</td>
+                    <td>{{$p->price_1}}</td>
                     @if($p->price_2 == 0)
                     <td >N/A</td>
                     @else
-                    <td >${{$p->price_2}}</td>
+                    <td >{{$p->price_2}}</td>
                     @endif
                     @if($p->price_3 == 0)
                     <td >N/A</td>
                     @else
-                    <td >${{$p->price_3}}</td>
+                    <td >{{$p->price_3}}</td>
                     @endif
                     @if (Auth::user()->rol_id == 1)
-                    <td>${{$p->cost}}</td>
+                    <td>{{$p->cost}}</td>
                     @endif
                     
 

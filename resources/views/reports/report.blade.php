@@ -83,36 +83,36 @@
                     <td>Bebidas</td>
                     <td>Coca Cola</td>
                     <td>50</td>
-                    <td>$ 10.00</td>
-                    <td>$ 12.00</td>
-                    <td>$ 0.00</td>
-                    <td>$ 600.00</td>
+                    <td> 10.00</td>
+                    <td> 12.00</td>
+                    <td> 0.00</td>
+                    <td> 600.00</td>
                 </tr>
             </table>
 
             <table style="width: 100%; margin-top:20px;">
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td>$ 600.00</td>
+                    <td> 600.00</td>
                     <th>INVERSIÓN</th>
-                    <td>$ 500.00</td>
+                    <td> 500.00</td>
                 </tr>
                 <tr>
                     <th>GANANCIA</th>
-                    <td>$ 200.00</td>
+                    <td>200.00</td>
                     <th>DESCUENTOS</th>
-                    <td>$ 0.00</td>
+                    <td> 0.00</td>
                 </tr>
                 <tr>
                     <th>GANANCIA REAL</th>
-                    <td colspan="3">$ 600.00</td>
+                    <td colspan="3"> 600.00</td>
                 </tr>
                 <tr></tr>
                 <tr>
                     <th>DINERO EFECTIVO</th>
-                    <td>$ 200.00</td>
+                    <td> 200.00</td>
                     <th>DINERO ELECTRÓNICO</th>
-                    <td>$ 200.00</td>
+                    <td> 200.00</td>
                 </tr>
             </table>
 

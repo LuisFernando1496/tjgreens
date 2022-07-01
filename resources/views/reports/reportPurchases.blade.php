@@ -69,11 +69,11 @@
                     
                     <th scope="row">{{$compra->product->name}}</th>
                   <th scope="row">{{$compra->product->category->name}}</th>
-                    <th scope="row">${{$compra->product->cost}}</th>
-                    <th scope="row">${{number_format(($compra->product->cost /20.68),2)}}</th>
+                    <th scope="row">{{$compra->product->cost}}</th>
+                    <th scope="row">{{number_format(($compra->product->cost /20.68),2)}}</th>
                     <th scope="row">{{$compra->quantity}}</th>
-                    <th scope="row">${{$compra->total}} </th>
-                    <th scope="row">${{number_format(($compra->total/20.68),2)}} </th>
+                    <th scope="row">{{$compra->total}} </th>
+                    <th scope="row">{{number_format(($compra->total/20.68),2)}} </th>
 
                 </tr>
            @php
@@ -89,7 +89,7 @@
           
                 <tr>
                     <th>TOTAL COMPRAS (MXN)</th>
-                    <td colspan="3">${{$totalMxn}}</td>
+                    <td colspan="3">{{$totalMxn}}</td>
                     {{-- <th>INVERSIÓN</th>
                     <td>${{$cash->costo + $card->costo}}</td> --}}
 
@@ -97,7 +97,7 @@
               
                 <tr>
                     <th>TOTAL COMPRAS (USD)</th>
-                    <td colspan="3">${{number_format($totalUsd,2)}}</td>
+                    <td colspan="3">{{number_format($totalUsd,2)}}</td>
                 </tr>
               
 

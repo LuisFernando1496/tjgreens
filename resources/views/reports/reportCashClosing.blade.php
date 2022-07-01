@@ -106,15 +106,15 @@
                     <td>{{$p->quantity}}</td>
                     <td>{{$tipo}}</td>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                    <td>${{$p->product->cost}}</td>
+                    <td>{{$p->product->cost}}</td>
                     
                     @endif
-                    <td>${{$p->sale_price}}</td>
-                    <td>${{($p->sale_price * (($p->PD/100)  ) ) * $p->quantity}}</td>
+                    <td>{{$p->sale_price}}</td>
+                    <td>{{($p->sale_price * (($p->PD/100)  ) ) * $p->quantity}}</td>
                     @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                    <td>${{$p->product->cost * $p->quantity}}</td>
+                    <td>{{$p->product->cost * $p->quantity}}</td>
                     @endif
-                    <td>${{$p->total}}</td> 
+                    <td>{{$p->total}}</td> 
                     
 
                 </tr>
@@ -134,9 +134,9 @@
                 -->
                 <tr>
                     <th>TOTAL VENTAS</th>
-                    <td>${{number_format($cash->subtotal + $card->subtotal,2)}}</td>
+                    <td>{{number_format($cash->subtotal + $card->subtotal,2)}}</td>
                     <th>DINERO EFECTIVO</th>
-                    <td>${{number_format($efectivoVenta,2)}}</td>
+                    <td>{{number_format($efectivoVenta,2)}}</td>
                     <!--
                     <th>INVERSIÓN</th>
                     <td>${{$cash->costo + $card->costo}}</td>
@@ -145,9 +145,9 @@
                 <tr>
                     
                     <th>DINERO ELECTRÓNICO</th>
-                    <td>${{number_format($electronicoVenta,2) }}</td>
+                    <td>{{number_format($electronicoVenta,2) }}</td>
                     <th>DESCUENTOS</th>
-                    <td>${{$cash->descuento + $card->descuento}}</td>
+                    <td>{{$cash->descuento + $card->descuento}}</td>
                     
                 </tr>
                 <!--<tr>

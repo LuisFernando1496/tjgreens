@@ -81,8 +81,8 @@
                    
                        @endif
                       
-                       <td>${{$item->sale_price}}</td>
-                       <td>${{$item->total}}</td>
+                       <td>{{$item->sale_price}}</td>
+                       <td>{{$item->total}}</td>
                        @php
                            $totals += $item->total;
                            $counterProduct++
@@ -92,7 +92,7 @@
                @endforeach
              <tr>
                  <th colspan="6"></th>
-                 <td>Total: ${{$totals}}</td>
+                 <td>Total: {{$totals}}</td>
              </tr>
             </table>
 

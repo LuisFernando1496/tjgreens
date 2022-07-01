@@ -89,9 +89,9 @@
                             @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
                                 @if($totaldia != 0)
                                 <tr>
-                                    <td colspan="3">Venta total del día ${{$totaldia}}</td>
-                                    <td colspan="4">Venta Costos por día ${{$totalcosto}}</td>
-                                    <td colspan="4">Venta total precio al publico ${{$totalprecio}}</td>
+                                    <td colspan="3">Venta total del día {{$totaldia}}</td>
+                                    <td colspan="4">Venta Costos por día {{$totalcosto}}</td>
+                                    <td colspan="4">Venta total precio al publico {{$totalprecio}}</td>
                                 </tr>
                                     @php
                                         $totaldia = 0;
@@ -105,14 +105,14 @@
                         @if($iterador == sizeof($products)-1)
                             @if($totaldia != 0)
                                 <tr>
-                                    <td colspan="3">Venta final del día ${{$totaldia}}</td>
-                                    <td colspan="4">Venta Costos por día ${{$totalcosto}}</td>
-                                    <td colspan="4">Venta total precio al publico ${{$totalprecio}}</td>
+                                    <td colspan="3">Venta final del día {{$totaldia}}</td>
+                                    <td colspan="4">Venta Costos por día {{$totalcosto}}</td>
+                                    <td colspan="4">Venta total precio al publico {{$totalprecio}}</td>
                                 </tr>
                             @endif
                             
                             <tr>
-                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                                <td colspan="12">Venta total del mes {{$totalmes}}</td>
                             </tr>
                             @php
                                 $totalmes = 0;
@@ -129,7 +129,7 @@
                             @if(date('m',strtotime($products[$iterador]->date)) != date('m',strtotime($products[$iterador+1]->date)))
                                 @if($totalmes != 0)
                                 <tr>
-                                    <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                                    <td colspan="12">Venta total del mes {{$totalmes}}</td>
                                 </tr>
                                 
                                     @php
@@ -174,14 +174,14 @@
 
                         <td>{{$p->quantity}}</td>
                         @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                        <td>${{number_format($p->cost, 2)}}</td>
+                        <td>{{number_format($p->cost, 2)}}</td>
                         @endif
-                        <td>${{number_format($p->sale_price, 2)}}</td>
-                        <td>${{number_format($p->amount_discount * $p->quantity, 2)}}</td>
+                        <td>{{number_format($p->sale_price, 2)}}</td>
+                        <td>{{number_format($p->amount_discount * $p->quantity, 2)}}</td>
                         @if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3)
-                        <td>${{number_format($p->cost * $p->quantity, 2)}}</td>
+                        <td>{{number_format($p->cost * $p->quantity, 2)}}</td>
                         @endif
-                        <td>${{number_format($p->total, 2)}}</td> 
+                        <td>{{number_format($p->total, 2)}}</td> 
                         <td>{{$p->seller.' '.$p->seller_lastName}}</td> 
                         <td>{{date('Y-m-d',strtotime($p->date))}}</td> 
                         <td>{{date('H:m:s',strtotime($p->date))}}</td> 
@@ -192,9 +192,9 @@
                         @if($iterador < sizeof($products)-1)
                             @if(date('d',strtotime($products[$iterador]->date)) != date('d',strtotime($products[$iterador+1]->date)))
                             <tr>
-                                <td colspan="4">Venta total del día ${{$totaldia}}</td>
-                                <td colspan="4">Costos por día ${{$totalcosto}}</td>
-                                <td colspan="4">Total precio al publico ${{$totalprecio}}</td>
+                                <td colspan="4">Venta total del día {{$totaldia}}</td>
+                                <td colspan="4">Costos por día {{$totalcosto}}</td>
+                                <td colspan="4">Total precio al publico {{$totalprecio}}</td>
                             </tr>
                                 @php
                                     $totaldia = 0;
@@ -205,18 +205,18 @@
                         @endif
                         @if($iterador == sizeof($products)-1)
                             <tr>
-                                <td colspan="3">Venta final del día ${{$totaldia}}</td>
-                                <td colspan="4">Costos final por día ${{$totalcosto}}</td>
-                                <td colspan="4">precio al publico final ${{$totalprecio}}</td>
+                                <td colspan="3">Venta final del día {{$totaldia}}</td>
+                                <td colspan="4">Costos final por día {{$totalcosto}}</td>
+                                <td colspan="4">precio al publico final {{$totalprecio}}</td>
                             </tr>
                             <tr>
-                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                                <td colspan="12">Venta total del mes {{$totalmes}}</td>
                             </tr>
                         @endif
                         @if($iterador < sizeof($products)-1)
                             @if(date('m',strtotime($products[$iterador]->date)) != date('m',strtotime($products[$iterador+1]->date)))
                             <tr>
-                                <td colspan="12">Venta total del mes ${{$totalmes}}</td>
+                                <td colspan="12">Venta total del mes {{$totalmes}}</td>
                             </tr>
                                 @php
                                     $totalmes = 0;
@@ -286,14 +286,14 @@
 
                     <td>{{$p->quantity}}</td>
                     @if (Auth::user()->rol_id == 1 )
-                    <td>${{$p->cost}}</td>
+                    <td>{{$p->cost}}</td>
                     @endif
-                    <td>${{number_format($p->sale_price, 2)}}</td>
-                    <td>${{number_format($p->amount_discount * $p->quantity, 2)}}</td>
+                    <td>{{number_format($p->sale_price, 2)}}</td>
+                    <td>{{number_format($p->amount_discount * $p->quantity, 2)}}</td>
                     @if (Auth::user()->rol_id == 1 )
-                    <td>${{number_format(($p->cost * $p->quantity), 2)}}</td>
+                    <td>{{number_format(($p->cost * $p->quantity), 2)}}</td>
                     @endif
-                    <td>${{number_format($p->total, 2)}}</td>  
+                    <td>{{number_format($p->total, 2)}}</td>  
                     <td>{{$p->seller.' '.$p->seller_lastName}}</td> 
                     {{-- <td>{{date('Y-m-d',strtotime($p->date))}}</td> 
                     <td>{{date('H:m:s',strtotime($p->date))}}</td>  --}}
@@ -312,7 +312,7 @@
                         <td >{{$totalProduct}}</td>
                     
                     <th colspan="2">TOTAL VENTAS</th>
-                    <td >${{number_format( $totalVentasGeneral - $totalCredito, 2)}}</td>
+                    <td >{{number_format( $totalVentasGeneral - $totalCredito, 2)}}</td>
                     {{-- <th>INVERSIÓN</th>
                     <td>${{$cash->costo + $card->costo}}</td> --}}
 
@@ -321,30 +321,30 @@
                
                 <tr>
                     <th colspan="3">TOTAL VENTAS</th>
-                    <td colspan="3">${{number_format($totalVentasGeneral - $totalCredito, 2)}}</td>
+                    <td colspan="3">{{number_format($totalVentasGeneral - $totalCredito, 2)}}</td>
                 </tr>
                 @endif
                 <tr>
                     <th colspan="3">TOTAL EN CREDITO</th>
-                    <td colspan="3">${{$totalCredito }}</td>
+                    <td colspan="3">{{$totalCredito }}</td>
                 </tr>
                 <tr>
                     <th colspan="3">DINERO EFECTIVO</th>
-                    <td colspan="3">${{number_format($totalEfectivo,2) }}</td>
+                    <td colspan="3">{{number_format($totalEfectivo,2) }}</td>
                 </tr>
                 <tr>
                     <th colspan="3">PAGO MIXTO</th>
-                    <td colspan="3">${{number_format($totalMixto,2) }}</td>
+                    <td colspan="3">{{number_format($totalMixto,2) }}</td>
                 </tr>
                 
                 <tr>
                     <th colspan="3">DINERO ELECTRÓNICO</th>
-                    <td colspan="3">${{number_format($totalTarjeta, 2)}}</td>
+                    <td colspan="3">{{number_format($totalTarjeta, 2)}}</td>
                 </tr>
                 <tr>
                    
                     <th colspan="3">DESCUENTOS</th>
-                    <td colspan="3">${{number_format($cash->descuento + $card->descuento, 2)}}</td>
+                    <td colspan="3">{{number_format($cash->descuento + $card->descuento, 2)}}</td>
                 </tr>
                
             </table>
