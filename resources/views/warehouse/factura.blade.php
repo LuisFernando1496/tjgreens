@@ -80,6 +80,9 @@
                                     {
                                         $price = $branche->branch_cost;
                                     }
+                                    else {
+                                        $price =$inventario->inventario[0]->cost;
+                                    }
                                     
                                  }
                                  
