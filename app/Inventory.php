@@ -36,4 +36,8 @@ class Inventory extends Model
     {
         return $this->hasMany(Cart::class,'id','inventory_id');
     }
+    public function branchPrice()
+    {
+        return $this->hasMany(BranchPrice::class);
+    }
 }

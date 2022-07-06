@@ -71,9 +71,30 @@
                                 <td>{{$inventario->inventario[0]->marca->name}}</td>
                                 <td>{{$inventario->inventario[0]->categoria->name}}</td>
                                 <td>{{$inventario->quantity}}</td>
+                                @if($venta->office_id != null)
+                                 @php
+                                        $price = 0;
+                                 foreach ($inventario->inventario[0]->branchPrice as $branche)
+                                 {
+                                    if( $branche->office_id == $venta->office_id)
+                                    {
+                                        $price = $branche->branch_cost;
+                                    }
+                                    
+                                 }
+                                 
+                                 
+                                @endphp 
+                                
+                                <td> ${{number_format($price,2,'.',',')}}</td>
+                                @else
+                                    @php
+                                    $price = $inventario->inventario[0]->cost;
+                                    @endphp
                                 <td>${{number_format($inventario->inventario[0]->cost,2,'.',',')}}</td>
+                                @endif
                                 @php
-                                    $ct = $inventario->quantity * $inventario->inventario[0]->cost;
+                                    $ct = $inventario->quantity * $price;
                                     $costo_total += $ct;
                                 @endphp
                                 <td>${{number_format($ct,2,'.',',')}}</td>
