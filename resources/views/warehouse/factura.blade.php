@@ -67,29 +67,30 @@
                     <tbody>
                         @forelse ($venta->productos as $inventario)
                             <tr>
+                                
                                 <td>{{$inventario->inventario[0]->name}}</td>
                                 <td>{{$inventario->inventario[0]->marca->name}}</td>
                                 <td>{{$inventario->inventario[0]->categoria->name}}</td>
                                 <td>{{$inventario->quantity}}</td>
-                                @if($venta->office_id != null)
+                                @if($venta->office_id != null )
                                  @php
                                         $price = 0;
-                                 foreach ($inventario->inventario[0]->branchPrice as $branche)
-                                 {
-                                    if( $branche->office_id == $venta->office_id)
+                                        $price2=0;
+                                    foreach ($inventario->inventario[0]->branchPrice as $branche)
                                     {
-                                        $price = $branche->branch_cost;
+                                        if( $branche->office_id == $venta->office_id)
+                                        {
+                                            $price = $branche->branch_cost;
+                                        }  
                                     }
-                                    else {
-                                        $price =$inventario->inventario[0]->cost;
-                                    }
-                                    
-                                 }
-                                 
+                                if($price ==0){
+                                   $price =  $inventario->inventario[0]->cost;
+                                }
+                               
                                  
                                 @endphp 
                                 
-                                <td> ${{number_format($price,2,'.',',')}}</td>
+                                  <td> ${{number_format($price,2,'.',',')}}</td>
                                 @else
                                     @php
                                     $price = $inventario->inventario[0]->cost;
@@ -97,6 +98,7 @@
                                 <td>${{number_format($inventario->inventario[0]->cost,2,'.',',')}}</td>
                                 @endif
                                 @php
+                               
                                     $ct = $inventario->quantity * $price;
                                     $costo_total += $ct;
                                 @endphp

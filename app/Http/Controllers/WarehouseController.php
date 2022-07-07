@@ -350,7 +350,7 @@ class WarehouseController extends Controller
 
     public function factura($id)
     {
-        $venta = Shipment::where('id',$id)->with('productos.inventario.branchPrice')->first();
+        $venta = Shipment::where('id',$id)->with(['productos.inventario.branchPrice'])->first();
         //return $venta;
         return view('warehouse.factura',[
             'venta' => $venta
