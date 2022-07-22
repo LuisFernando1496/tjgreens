@@ -70,7 +70,7 @@ class ProductController extends Controller
             // $product = Product::where('branch_office_id', 6)->get();
             // return $product;
         try {
-            DB::table('products')->where('branch_office_id', 5)->delete();
+            DB::table('products')->where('branch_office_id', 7)->delete();
             return 'eliminados';
         } catch (\Throwable $th) {
             DB::rollback();
