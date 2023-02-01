@@ -10,7 +10,7 @@ class ProviderController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 ||  Auth::user()->rol_id == 5) {
             $providers = Provider::all();
             return view('provider.index', ['providers' => $providers]);
         } else {
@@ -20,7 +20,7 @@ class ProviderController extends Controller
 
     public function store(Request $request)
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 ||  Auth::user()->rol_id == 5) {
             $provider = new Provider($request->all());
             if ($provider->save()) {
                 return back()->with(["success" => "Éxito al realizar la operación."]);

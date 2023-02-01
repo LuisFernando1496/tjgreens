@@ -41,7 +41,7 @@ class ProductController extends Controller
                 'offices' => $offices,
                 'providers' => $providers
             ]);
-        } if(Auth::user()->rol_id == 3){
+        } if(Auth::user()->rol_id == 3 || Auth::user()->rol_id == 5){
             $products = Product::where('status', true)
             ->where('branch_office_id', Auth::user()->branch_office_id)
             ->orderBy('id','DESC')

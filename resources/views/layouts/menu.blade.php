@@ -12,7 +12,7 @@
 
             @endif
 
-            @if(Auth::user()->rol_id === 1 || Auth::user()->rol_id === 3)
+            @if(Auth::user()->rol_id == 1 || Auth::user()->rol_id == 5 || Auth::user()->rol_id == 3)
                 <a href="/cashClosing" class="list-group-item list-group-item-action {{ strpos(Request::url(),'cashClosing') ? 'active' : '' }}">Historial de cortes</a>
                 <a href="/initialCash" class="list-group-item list-group-item-action {{ strpos(Request::url(),'initialCash') ? 'active' : '' }}">Establecer monto Inicial</a>
                 <a href="/users" class="list-group-item list-group-item-action {{ strpos(Request::url(),'users') ? 'active' : '' }}">Usuarios</a>
@@ -38,7 +38,7 @@
                 @endif
             @endif
 
-            @if (Auth::user()->rol_id === 1 || Auth::user()->rol_id === 4)
+            @if (Auth::user()->rol_id === 1 || Auth::user()->rol_id == 5 || Auth::user()->rol_id === 4)
                 <a href="{{route('almacen.index')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'almacen') ? 'active' : '' }}">Almacén</a>
                 <a href="{{route('almacen.ventas')}}" class="list-group-item list-group-item-action {{ strpos(Request::url(),'ventas') ? 'active' : '' }}">Ventas de Almacén</a>
             @else

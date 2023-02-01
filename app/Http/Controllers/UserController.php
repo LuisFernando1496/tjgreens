@@ -33,14 +33,15 @@ class UserController extends Controller
              $rols =  Rol::all();
             return view('user.index', ['users' => $users, 'offices' => $offices, 'rols' =>$rols]);
         }
-        if($user->rol_id == 3)
+        if($user->rol_id == 3 || $user->rol_id == 5)
         {
+            $branch_id = $user->branch_office_id;
             $users = User::with('address')->where('id', '!=',$user->id)
-            ->where('branch_office_id', $user->branch_office_id)
+            ->where('branch_office_id', $branch_id)
             ->where('rol_id', '!=', 1)
             ->where('status', true)
             ->get(); 
-            $offices = BranchOffice::where('status', true)->get();
+            $offices = BranchOffice::where('status', true)->where('id',$branch_id)->get();
             $rols =  Rol::all();
          //   return $offices;
            return view('user.index', ['users' => $users, 'offices' => $offices, 'rols' =>$rols]);
@@ -114,7 +115,7 @@ class UserController extends Controller
         $user = new User();
         $address = new Address();
         $current_user = Auth::user();
-        if ($current_user->rol_id == 1 || $current_user->rol_id == 3) {
+        if ($current_user->rol_id == 1 || $current_user->rol_id == 3 ||  $current_user->rol_id == 5) {
             $rols = Rol::all();
             $branchOffices = BranchOffice::all();
             return view('', ['user' => $user, 'rols' => $rols, 'branchOffices' => $branchOffices, 'address' => $address]);
@@ -213,7 +214,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 || Auth::user()->rol_id == 5) {
             DB::beginTransaction();
             try {
                 if ($request->has('branch_office_id')) {
@@ -257,7 +258,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request,User $user)
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 || Auth::user()->rol_id == 5) {
             if ($request->has('eliminate_client')) {
                 $client = Client::findOrFail($request['eliminate_client']);
                 $client->changeStatus(false);

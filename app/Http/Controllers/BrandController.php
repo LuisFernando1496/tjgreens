@@ -11,7 +11,7 @@ class BrandController extends Controller
 {
     public function index()
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 ||  Auth::user()->rol_id == 5) {
             $brands = Brand::where('status', true)->get();
             return view('products/brand', ['brands' => $brands]);
         } else {
@@ -38,7 +38,7 @@ class BrandController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 ||  Auth::user()->rol_id == 5) {
             $brand = new Brand([
                 'name' => $request['name'],
                 'status' => true

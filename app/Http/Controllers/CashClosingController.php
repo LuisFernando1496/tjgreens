@@ -14,6 +14,7 @@ use DateTime;
 use DateTimeZone;
 use DB;
 use App\ProductInSale;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use PDF;
 // use App\User;
 
@@ -41,7 +42,7 @@ class CashClosingController extends Controller
         $user = Auth::user();
         if ( $user->rol_id == 1 ) {
             $cashClosings = CashClosing::orderBy('id','DESC')->paginate(10);
-        } elseif( $user->rol_id == 3 ) {
+        } elseif( $user->rol_id == 3 || $user->rol_id == 5) {
             $cashClosings = CashClosing::where('branch_office_id', $user->branch_office_id)->orderBy('id','DESC')->paginate(10);
         }
         else {

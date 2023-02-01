@@ -45,7 +45,7 @@ class ReportController extends Controller
     public function employeeByOffice($office_id){
         $user = Auth::user();
 
-        if ($user->rol_id == 1 || $user->rol_id == 3) {
+        if ($user->rol_id == 1 || $user->rol_id == 3 ||  Auth::user()->rol_id == 5) {
             $employees = User::where('status',true)->where('branch_office_id',$office_id)->get();
             return response()->json($employees);
         }elseif ($user->rol_id == 2) {
@@ -67,7 +67,46 @@ class ReportController extends Controller
             $to = date('Y-m-d', strtotime('+1 day', strtotime($request->to)));
         }
 
+        if(Auth::user()->rol_id == 5){ 
+            $data = Sale::join("cash_closings" ,"cash_closings.id", "=" ,"sales.cash_closing_id")
+            ->leftjoin("expenses", "expenses.cash_closing_id", "=" ,"cash_closings.id")
+            ->select(DB::raw("SUM(sales.total_cost) as costo,
+            cash_closings.initial_cash as caja_inicial,
+            cash_closings.end_cash as caja_final,
+            SUM(amount_discount) as descuento,
+            SUM(cart_subtotal) as subtotal,
+            sum(cart_total) as total,
+            sum(expenses.price) as expense"))
+            ->whereBetween('sales.created_at',[$from, $to])
+            ->where("sales.status",  "=", true)
+            ->where("sales.branch_office_id",Auth::user()->branch_office_id)
+            ->where("cash_closings.status", "=", true) //cambiar a true
+            ->groupBy("sales.payment_type")
+            ->get();
 
+
+            $dataSub = Sale::join("cash_closings" ,"cash_closings.id", "=" ,"sales.cash_closing_id")
+            ->leftjoin("expenses", "expenses.cash_closing_id", "=" ,"cash_closings.id")
+            ->select(DB::raw(" SUM(sales.total_cost) as costo,
+            cash_closings.initial_cash as caja_inicial,
+            cash_closings.end_cash as caja_final,
+            SUM(amount_discount) as descuento,
+            SUM(cart_subtotal) as subtotal,
+            sum(cart_total) as total,
+            sales.payment_type as tipo_de_pago,
+            sales.branch_office_id,
+            sum(expenses.price) as expense"))
+            ->whereBetween('sales.created_at',[$from, $to])
+            ->where("cash_closings.status", "=", true) //cambiar a true
+            ->where("sales.status",  "=", true)
+            ->where("sales.branch_office_id",Auth::user()->branch_office_id)
+            ->groupBy("sales.payment_type")
+            ->groupBy("sales.branch_office_id")
+            ->orderBy("sales.branch_office_id")
+            ->orderBy("sales.payment_type")
+            ->get();
+        }
+        else{
             $data = Sale::join("cash_closings" ,"cash_closings.id", "=" ,"sales.cash_closing_id")
             ->leftjoin("expenses", "expenses.cash_closing_id", "=" ,"cash_closings.id")
             ->select(DB::raw("SUM(sales.total_cost) as costo,
@@ -103,6 +142,8 @@ class ReportController extends Controller
             ->orderBy("sales.branch_office_id")
             ->orderBy("sales.payment_type")
             ->get();
+        }
+           
             
 
 
@@ -165,30 +206,57 @@ class ReportController extends Controller
             }
 
 
-
-
-            $p = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
-            ->join("users","users.id","=","sales.user_id")
-            ->join("products","products.id","=","product_in_sales.product_id")
-            ->join("brands","brands.id","=","products.brand_id")
-            ->join("categories","categories.id","=","products.category_id")
-            ->select("products.name as product_name",
-            "categories.name as category",
-            "brands.name as brand",
-            "product_in_sales.quantity as quantity",
-            "products.cost as cost",
-            "product_in_sales.sale_price as sale_price",
-            "product_in_sales.discount as amount_discount",
-            "product_in_sales.total as total",
-            "users.name as seller",
-            "users.last_name as seller_lastName",
-            "product_in_sales.created_at as date",
-            "sales.branch_office_id"
-            )
-            ->where("sales.status",  "=", true)
-            ->whereBetween('sales.created_at',[$from, $to])
-            ->orderBy("sales.created_at")
-            ->get();
+            if(Auth::user()->rol_id == 5){ 
+                $p = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+                ->join("users","users.id","=","sales.user_id")
+                ->join("products","products.id","=","product_in_sales.product_id")
+                ->join("brands","brands.id","=","products.brand_id")
+                ->join("categories","categories.id","=","products.category_id")
+                ->select("products.name as product_name",
+                "categories.name as category",
+                "brands.name as brand",
+                "product_in_sales.quantity as quantity",
+                "products.cost as cost",
+                "product_in_sales.sale_price as sale_price",
+                "product_in_sales.discount as amount_discount",
+                "product_in_sales.total as total",
+                "users.name as seller",
+                "users.last_name as seller_lastName",
+                "product_in_sales.created_at as date",
+                "sales.branch_office_id"
+                )
+                ->where("sales.status",  "=", true)
+                ->where("products.branch_office_id", Auth::user()->branch_office_id) 
+                ->whereBetween('sales.created_at',[$from, $to])
+                ->orderBy("sales.created_at")
+                ->get();
+            }
+            else{
+                    $p = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
+                    ->join("users","users.id","=","sales.user_id")
+                    ->join("products","products.id","=","product_in_sales.product_id")
+                    ->join("brands","brands.id","=","products.brand_id")
+                    ->join("categories","categories.id","=","products.category_id")
+                    ->select("products.name as product_name",
+                    "categories.name as category",
+                    "brands.name as brand",
+                    "product_in_sales.quantity as quantity",
+                    "products.cost as cost",
+                    "product_in_sales.sale_price as sale_price",
+                    "product_in_sales.discount as amount_discount",
+                    "product_in_sales.total as total",
+                    "users.name as seller",
+                    "users.last_name as seller_lastName",
+                    "product_in_sales.created_at as date",
+                    "sales.branch_office_id"
+                    )
+                    ->where("sales.status",  "=", true)
+                    ->whereBetween('sales.created_at',[$from, $to])
+                    ->orderBy("sales.created_at")
+                    ->get();
+            }
+           
+           
 
 
 
@@ -216,11 +284,23 @@ class ReportController extends Controller
             ->get();
 
 
+            if(Auth::user()->rol_id == 1)
+            { 
+                $b = DB::table('branch_offices')
+                ->where("status",  "=", true)
+                ->distinct()
+                ->get();
+            }
+           else
+            {
+                $b = DB::table('branch_offices')
+                ->where("status",  "=", true)
+                ->where("id", Auth::user()->branch_office_id)
+                ->distinct()
+                ->get();
+           }
 
-            $b = DB::table('branch_offices')
-            ->where("status",  "=", true)
-            ->distinct()
-            ->get();
+           
             
             $d = new DateTime('NOW',new DateTimeZone('America/Mexico_City')); 
             $date =  $d->format('Y-m-d H:m:s');

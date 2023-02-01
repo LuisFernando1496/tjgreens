@@ -15,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 || Auth::user()->rol_id == 5) {
             $categories = Category::where('status', true)->get();
             return view('products/category', ['categories' => $categories]);
         } else {
@@ -42,7 +42,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3) {
+        if (Auth::user()->rol_id == 1 || Auth::user()->rol_id == 3 || Auth::user()->rol_id == 5) {
             $category = new Category([
                 'name' => $request['name'],
                 'status' => true
