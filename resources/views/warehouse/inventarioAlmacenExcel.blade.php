@@ -41,7 +41,31 @@
                                 <td>{{ $inventario->marca->name }}</td>
                                 <td>{{ $inventario->stock }}</td>
                                 <td>{{ $inventario->price }}</td>
-                                <td>{{ $inventario->cost }}</td>
+                                {{-- <td>{{ $inventario->cost }}</td> --}}
+                                <td>
+                                    <table class="table">
+                                        <tr>
+                                            <th>Sucursal</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                        <tbody>
+                                            <td>General</td>
+                                            <td>${{ $inventario->price }}</td>
+                                            @forelse ($inventario->branchPrice as $price)
+                                                <tr>
+                                                    <td>{{$price->office->name}}</td>
+                                                 
+                                                    <td>${{$price->branch_cost ? $price->branch_cost:"0.00" }}</td>
+                                                </tr>
+                                            @empty
+                                               
+                                            @endforelse
+                                           
+
+                                        </tbody>
+
+                                    </table>
+                                </td>
                                
                             </tr>
                         @empty

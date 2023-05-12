@@ -18,7 +18,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title" style="text-align: center">Reporte de Inventario</h4>
+                <h4 class="card-title" style="text-align: center">Reporte de Inventario <strong>{{$branch->name}}</strong></h4>
             </div>
             <div class="card-body">
                 <h6 class="card-title">Productos</h6>
@@ -32,7 +32,7 @@
                             <th>Marca</th>
                             <th>Stock</th>
                             <th>Costo</th>
-                            <th colspan="2">Precios</th>
+                            <th>Precio</th>
 
 
                         </tr>
@@ -47,32 +47,8 @@
                                 <td>{{ $inventario->marca->name }}</td>
                                 <td>{{ $inventario->stock }}</td>
                                 <td>${{ $inventario->cost }}</td>
-                                {{-- <td>${{ $inventario->price }}</td> --}}
-                                <td>
-                                    <table class="table">
-                                        <tr>
-                                            <th>Sucursal</th>
-                                            <th>Precio</th>
-                                        </tr>
-                                        <tbody>
-                                            <td>General</td>
-                                            <td>${{ $inventario->price }}</td>
-                                            @forelse ($inventario->branchPrice as $price)
-                                                <tr>
-                                                    <td>{{$price->office->name}}</td>
-                                                 
-                                                    <td>${{$price->branch_cost ? $price->branch_cost:"0.00" }}</td>
-                                                </tr>
-                                            @empty
-                                               
-                                            @endforelse
-                                           
-
-                                        </tbody>
-
-                                    </table>
-                                </td>
-
+                                <td>{{ $inventario->branch_cost ? "$$inventario->branch_cost":"General: $$inventario->price" }}</td>
+                                
                             </tr>
 
 

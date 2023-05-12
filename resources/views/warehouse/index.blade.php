@@ -133,8 +133,7 @@
                         @csrf
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Crear almacén</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p style="color: red">El siguiente formulario es para crear el almacén virtual y asignar al
@@ -166,86 +165,98 @@
             </div>
         </div>
     @else
-
-    <div class="modal fade" id="optionDownload" tabindex="-1" aria-labelledby="optionDownloadLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form action="{{ route('almacen.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="optionDownloadLabel">Descargar Inventario</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p style="color: red">Selecciona un formato de archivo</p>
-                        <div class="row">
-                            <div class="col text-center">
-                                <button class="btn btn-outline-success" type="submit" onclick="optionDownload(event, option='Excel')">
-                                    <i class="bi bi-file-earmark-excel-fill"></i>Excel</button>
-                                <button class="btn btn-outline-danger" type="submit" onclick="optionDownload(event, option='PDF')">
-                                    <i class="bi bi-file-earmark-pdf-fill"></i>PDF</button>
-
-                            </div>
+        <div class="modal fade" id="optionDownload" tabindex="-1" aria-labelledby="optionDownloadLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <form action="{{ route('almacen.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="optionDownloadLabel">Descargar Inventario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
-                      
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </form>
+                        <div class="modal-body">
+                            <p style="color: red">Selecciona una sucursal y un formato de archivo</p>
+                            <div class="row">
+                                <div class="col text-center">
+                                <select name="selectBranche" id="selectBranche" class="form-control">
+                                    <option value="0" selected disabled>--Selecciona una sucursal--</option>
+                                    <option value="Todos">Todos</option>
+                                    @foreach ($oficinas as $oficina)
+                                        <option value="{{$oficina->id}}">{{$oficina->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            </div>
+                            <div class="row">
+                                <div class="col text-center mt-5">
+                                    <button class="btn btn-outline-success btn-lg" type="submit"
+                                        onclick="optionDownload(event, option='Excel')">
+                                        <i class="bi bi-file-earmark-excel-fill"></i>Excel</button>
+                                    <button class="btn btn-outline-danger btn-lg" type="submit"
+                                        onclick="optionDownload(event, option='PDF')">
+                                        <i class="bi bi-file-earmark-pdf-fill"></i>PDF</button>
+                                </div>
+                            </div>
+                           
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="costSelect" tabindex="-1" aria-labelledby="costSelectLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <form action="{{ route('almacen.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="costSelectLabel">Selecion de costos</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p style="color: red">Costos encontrados para este producto</p>
-                        <div class="row">
-                            <div class="col text-center" >
-                                <table class="table">
-                                    <thead>
-                                       <tr>
-                                            <th>Producto</th>
-                                            <th>Sucursal</th>
-                                             <th>Costo</th>
-                                             <th>Agregar</th>
-                                       </tr>
-                                      
-                                    </thead>
-                                    <tbody id="resultCost">
-                                      
-                                    </tbody>
-                                </table>
-
-                            </div>
+        <div class="modal fade" id="costSelect" tabindex="-1" aria-labelledby="costSelectLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <form action="{{ route('almacen.store') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="costSelectLabel">Selecion de costos</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
-                      
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </form>
+                        <div class="modal-body">
+                            <p style="color: red">Costos encontrados para este producto</p>
+                            <div class="row">
+                                <div class="col text-center">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th>Sucursal</th>
+                                                <th>Costo</th>
+                                                <th>Agregar</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody id="resultCost">
+
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
         <div class="container">
             <div class="card">
                 <div class="card-header">
                     <div class="row">
                         <div class="col">
-                            {{--<input type="text" class="form-control" id="codigo" placeholder="Buscdsasdar en sucursales">--}}
+                            {{-- <input type="text" class="form-control" id="codigo" placeholder="Buscdsasdar en sucursales"> --}}
                             <select name="" id="buscarPorSucursal" class="form-control" required>
                                 <option value="">--Seleccionar--</option>
                                 @forelse ($oficinas as $oficina)
@@ -256,14 +267,13 @@
                                         <option value="{{ $oficina->id }}">{{ $oficina->name }}</option>
                                     @endif
                                 @empty
-
                                 @endforelse
                             </select>
                         </div>
-                       {{-- <div class="col-2">
+                        {{-- <div class="col-2">
                             <button id="search" class="btn btn-outline-primary" data-bs-toggle="modal"
                                 data-bs-target="#busquedaP"><i class="bi bi-search"></i></button>
-                        </div>--}}
+                        </div> --}}
                         <div class="col-2">
                             <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal"
                                 data-bs-target="#inventarioModal">Agregar</button>
@@ -289,9 +299,9 @@
                                 class="btn btn-outline-warning"><i class="bi bi-receipt-cutoff">Orden</i></a>
                         </div>
                         <div class="col-2">
-                            <button href="#"  type="button" data-bs-toggle="modal"
-                            data-bs-target="#optionDownload"
-                                class="btn btn-outline-info"><i class="bi bi-arrow-down-square-fill"> Inventario</i></button>
+                            <button href="#" type="button" data-bs-toggle="modal"
+                                data-bs-target="#optionDownload" class="btn btn-outline-info"><i
+                                    class="bi bi-arrow-down-square-fill"> Inventario</i></button>
                         </div>
                     </div>
                 </div>
@@ -299,10 +309,12 @@
                     <div class="container">
                         <div class="row">
                             <div class="col">
-                                <input type="text" class="form-control" id="inputBusqueda" placeholder="Buscar en Inventario">
+                                <input type="text" class="form-control" id="inputBusqueda"
+                                    placeholder="Buscar en Inventario">
                             </div>
                             <div class="col">
-                                <button class="btn btn-outline-success" type="button" id="buscarInve"><i class="bi bi-search"></i></button>
+                                <button class="btn btn-outline-success" type="button" id="buscarInve"><i
+                                        class="bi bi-search"></i></button>
                             </div>
                         </div>
                         <br>
@@ -333,48 +345,57 @@
                                             <td>{{ $inventario->marca->name }}</td>
                                             <td>{{ $inventario->stock }}</td>
                                             <td>${{ $inventario->price }}</td>
-                                            <td id="cost{{$inventario->id}}"><span id="spanCost{{$inventario->id}}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
-                                                data-bs-target="#costSelect" onclick="branchCost(id={{$inventario->id}})"  style="cursor: pointer">
-                                                ${{ $inventario->cost }}
-                                            </span>
-                                                
+                                            <td id="cost{{ $inventario->id }}"><span id="spanCost{{ $inventario->id }}"
+                                                    class="badge badge-success float-center"type="button"
+                                                    data-bs-toggle="modal" data-bs-target="#costSelect"
+                                                    onclick="branchCost(id={{ $inventario->id }})"
+                                                    style="cursor: pointer">
+                                                    ${{ $inventario->cost }}
+                                                </span>
+
                                             </td>
                                             <td>
-                                                @if($inventario->stock >0)
-                                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                                    data-bs-target="#addInventario" onclick="llenarinv({{$inventario}})"><i
-                                                        class="bi bi-bag-plus-fill"></i></button>
-                                                
+                                                @if ($inventario->stock > 0)
+                                                    <button type="button" class="btn btn-outline-secondary"
+                                                        data-bs-toggle="modal" data-bs-target="#addInventario"
+                                                        onclick="llenarinv({{ $inventario }})"><i
+                                                            class="bi bi-bag-plus-fill"></i></button>
                                                 @else
-                                                <button type="button" class="btn btn-outline-secondary" disabled ><i
-                                                        class="bi bi-bag-plus-fill"></i></button>
-                                                
+                                                    <button type="button" class="btn btn-outline-secondary" disabled><i
+                                                            class="bi bi-bag-plus-fill"></i></button>
                                                 @endif
-                                               
-                                                        
-                                                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                                    data-bs-target="#addCompra" onclick="llenarCompra({{$inventario}},{{$inventario->id}})"><i
+
+
+                                                <button type="button" class="btn btn-outline-success"
+                                                    data-bs-toggle="modal" data-bs-target="#addCompra"
+                                                    onclick="llenarCompra({{ $inventario }},{{ $inventario->id }})"><i
                                                         class="bi bi-bag-plus"></i></button>
                                             </td>
                                             <td>
-                                                {{--<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button>--}}
-                                                <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit({{$inventario}})"><i class="bi bi-pencil"></i></button>
-                                                <a href="{{route('codigoAlmacen', $inventario)}}" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>
+                                                {{-- <button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit{{$inventario->id}}"><i class="bi bi-pencil"></i></button> --}}
+                                                <button class="btn btn-outline-primary" type="button"
+                                                    data-bs-toggle="modal" data-bs-target="#modaledit"
+                                                    onclick="llenaredit({{ $inventario }})"><i
+                                                        class="bi bi-pencil"></i></button>
+                                                <a href="{{ route('codigoAlmacen', $inventario) }}" target="blank"
+                                                    type="button" class="btn btn-outline-primary"><i
+                                                        class="bi bi-upc"></i></a>
                                             </td>
                                             <td>
-                                                <form action="{{route('inventario.delete',$inventario->id)}}" method="POST">
+                                                <form action="{{ route('inventario.delete', $inventario->id) }}"
+                                                    method="POST">
                                                     @csrf @method('DELETE')
-                                                    <button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>
+                                                    <button class="btn btn-outline-danger" type="submit"><i
+                                                            class="bi bi-trash"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @empty
-
                                     @endforelse
                                 </tbody>
                             </table>
                             <div id="divtabla1">
-                                {{$inventarios->links()}}
+                                {{ $inventarios->links() }}
                             </div>
 
                             <table class="table table-hover" id="tabla2" hidden>
@@ -402,8 +423,7 @@
             </div>
         </div>
 
-        <div class="modal fade" id="modaledit" tabindex="-1"
-            aria-labelledby="modaledit" aria-hidden="true">
+        <div class="modal fade" id="modaledit" tabindex="-1" aria-labelledby="modaledit" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form id="formmodedit" method="POST">
@@ -417,18 +437,21 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="">Código de barra</label>
-                                    <input type="text" class="form-control" name="bar_code" value="" id="modeditbar_code" required>
+                                    <input type="text" class="form-control" name="bar_code" value=""
+                                        id="modeditbar_code" required>
                                 </div>
                                 <div class="col">
                                     <label for="">Nombre</label>
-                                    <input type="text" class="form-control" name="name" value="" id="modeditname" required>
+                                    <input type="text" class="form-control" name="name" value=""
+                                        id="modeditname" required>
                                 </div>
                                 <div class="col">
                                     <label for="">Categoria</label>
                                     <select name="category_id" id="modeditcategory_id" class="form-control" required>
                                         @forelse ($categorias as $categoria)
                                             @if ($categoria->id == $inventario->category_id)
-                                                <option selected value="{{ $categoria->id }}">{{ $categoria->name }}</option>
+                                                <option selected value="{{ $categoria->id }}">{{ $categoria->name }}
+                                                </option>
                                             @else
                                                 <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
                                             @endif
@@ -438,16 +461,19 @@
                                     </select>
                                 </div>
                             </div>
-                             <div class="col">
-                                    <label for="">Costo</label>
-                                    <input type="number" class="form-control" step="any" name="cost" value="" id="modeditcost">
-                                </div>
-                                @foreach ($oficinas as $oficina)
+                            <div class="col">
+                                <label for="">Costo</label>
+                                <input type="number" class="form-control" step="any" name="cost" value=""
+                                    id="modeditcost">
+                            </div>
+                            @foreach ($oficinas as $oficina)
                                 <div class="col">
-                                    <label for="">Costo {{$oficina->name}}</label>
-                                    <input type="number" step="any" class="form-control" id="branch_cost{{$oficina->id}}"  name="branch_cost{{$oficina->id}}" placeholder="$">
+                                    <label for="">Costo {{ $oficina->name }}</label>
+                                    <input type="number" step="any" class="form-control"
+                                        id="branch_cost{{ $oficina->id }}" name="branch_cost{{ $oficina->id }}"
+                                        placeholder="$">
                                 </div>
-                                @endforeach
+                            @endforeach
                             <div class="row">
                                 <div class="col">
                                     <label for="">Marca</label>
@@ -459,24 +485,24 @@
                                                 <option value="{{ $marca->id }}">{{ $marca->name }}</option>
                                             @endif
                                         @empty
-
                                         @endforelse
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="">Stock</label>
-                                    <input type="number" class="form-control" name="stock" value="" id="modeditstock">
+                                    <input type="number" class="form-control" name="stock" value=""
+                                        id="modeditstock">
                                 </div>
                                 <div class="col">
                                     <label for="">Precio</label>
-                                    <input type="numer" class="form-control" step="any" name="price" value="" id="modeditprice">
+                                    <input type="numer" class="form-control" step="any" name="price"
+                                        value="" id="modeditprice">
                                 </div>
-                               
+
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Actualizar</button>
                         </div>
                     </form>
@@ -485,8 +511,7 @@
 
         </div>
 
-        <div class="modal fade" id="addInventario" tabindex="-1"
-            aria-labelledby="addInventario" aria-hidden="true">
+        <div class="modal fade" id="addInventario" tabindex="-1" aria-labelledby="addInventario" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form id="formaddinv" method="POST">
@@ -500,46 +525,40 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="">Producto</label>
-                                    <input type="text" required readonly
-                                        value="" class="form-control" id="addmodinvproducto">
+                                    <input type="text" required readonly value="" class="form-control"
+                                        id="addmodinvproducto">
                                 </div>
                                 <div class="col">
                                     <label for="">Precio</label>
-                                    <input type="number" class="form-control" step="any"
-                                        required readonly value=""
-                                        id="addmodinvprice">
+                                    <input type="number" class="form-control" step="any" required readonly
+                                        value="" id="addmodinvprice">
                                 </div>
                                 <div class="col">
                                     <label for="">Cantidad</label>
-                                    <input name="quantity" type="number"
-                                        class="form-control cantidad" required
-                                        id="addmodinvquantity" min="1" 
-                                        value="1">
+                                    <input name="quantity" type="number" class="form-control cantidad" required
+                                        id="addmodinvquantity" min="1" value="1">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <label for="">Sub Total</label>
-                                    <input type="number" class="form-control" step="any"
-                                        id="addmodinvsubtotal" readonly
-                                        name="subtotal">
+                                    <input type="number" class="form-control" step="any" id="addmodinvsubtotal"
+                                        readonly name="subtotal">
                                 </div>
                                 <div class="col">
                                     <label for="">Descuento en %</label>
-                                    <input name="discount" type="number"
-                                        class="form-control descuento" step="any"
+                                    <input name="discount" type="number" class="form-control descuento" step="any"
                                         id="addmodinvdescuento" value="0" min="0">
                                 </div>
                                 <div class="col">
                                     <label for="">Total</label>
-                                    <input name="total" type="number" step="any"
-                                        class="form-control" id="addmodinvtotal" readonly>
+                                    <input name="total" type="number" step="any" class="form-control"
+                                        id="addmodinvtotal" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>
                     </form>
@@ -547,8 +566,7 @@
             </div>
 
         </div>
-        <div class="modal fade" id="addCompra" tabindex="-1"
-            aria-labelledby="addInventario" aria-hidden="true">
+        <div class="modal fade" id="addCompra" tabindex="-1" aria-labelledby="addInventario" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form id="formaddcom" method="POST">
@@ -562,54 +580,48 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="">Producto</label>
-                                    <input type="text" required readonly
-                                        value="" id="addmodcomproduct" class="form-control">
+                                    <input type="text" required readonly value="" id="addmodcomproduct"
+                                        class="form-control">
                                 </div>
                                 <div class="col">
                                     <label for="">Costo</label>
-                                    <input type="number" class="form-control" step="any"
-                                        required readonly value="" id="addmodcomcosto">
+                                    <input type="number" class="form-control" step="any" required readonly
+                                        value="" id="addmodcomcosto">
                                 </div>
                                 <div class="col">
                                     <label for="">Cantidad</label>
-                                    <input name="quantity" type="number"
-                                        class="form-control cantidadCompra" required
+                                    <input name="quantity" type="number" class="form-control cantidadCompra" required
                                         id="addmodcomcantidad" min="1" value="1">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <label for="">Sub Total</label>
-                                    <input type="number" class="form-control" step="any"
-                                        id="addmodcomsubtotal"
+                                    <input type="number" class="form-control" step="any" id="addmodcomsubtotal"
                                         value="" readonly name="subtotal">
                                 </div>
                                 <div class="col">
                                     <label for="">Descuento en %</label>
-                                    <input name="discount" type="number"
-                                        class="form-control descuentoCompra" step="any"
-                                        id="addmodcomdescuento" value="0"
-                                        min="0">
+                                    <input name="discount" type="number" class="form-control descuentoCompra"
+                                        step="any" id="addmodcomdescuento" value="0" min="0">
                                 </div>
                                 <div class="col">
                                     <label for="">Total</label>
-                                    <input name="total" type="number" step="any"
-                                        class="form-control"
+                                    <input name="total" type="number" step="any" class="form-control"
                                         id="addmodcomtotal" value="" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary" >Agregar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Agregar</button>
                         </div>
                     </form>
                 </div>
             </div>
 
         </div>
-        {{--@forelse ($invetories as $inventario)
+        {{-- @forelse ($invetories as $inventario)
             <div class="modal fade" id="modaledit{{ $inventario->id }}" tabindex="-1"
                 aria-labelledby="modaledit{{ $inventario->id }}" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -823,7 +835,7 @@
             </div>
         @empty
 
-        @endforelse--}}
+        @endforelse --}}
 
         <div class="modal fade" id="inventarioModal" tabindex="-1" aria-labelledby="exampleModalLabel"
             aria-hidden="true">
@@ -850,24 +862,26 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="">Stock</label>
-                                    <input type="number" class="form-control" required name="stock" >
+                                    <input type="number" class="form-control" required name="stock">
                                 </div>
-                               
-                                
-                              
+
+
+
                             </div>
                             <div class="col">
-                                    
+
                                 <label for="">Costo Por Defecto</label>
-                                <input type="number" step="any" class="form-control" required name="cost" placeholder="$">
+                                <input type="number" step="any" class="form-control" required name="cost"
+                                    placeholder="$">
                             </div>
-                                @foreach ($oficinas as $oficina)
+                            @foreach ($oficinas as $oficina)
                                 <div class="col">
-                                    
-                                    <label for="">Costo {{$oficina->name}}</label>
-                                    <input type="number" step="any" class="form-control"  name="branch_cost{{$oficina->id}}" placeholder="$">
+
+                                    <label for="">Costo {{ $oficina->name }}</label>
+                                    <input type="number" step="any" class="form-control"
+                                        name="branch_cost{{ $oficina->id }}" placeholder="$">
                                 </div>
-                                @endforeach
+                            @endforeach
                             <div class="row">
                                 <div class="col">
                                     <label for="">Precio</label>
@@ -880,7 +894,6 @@
                                         @forelse ($marcas as $marca)
                                             <option value="{{ $marca->id }}">{{ $marca->name }}</option>
                                         @empty
-
                                         @endforelse
                                     </select>
                                 </div>
@@ -891,7 +904,6 @@
                                         @forelse ($categorias as $categoria)
                                             <option value="{{ $categoria->id }}">{{ $categoria->name }}</option>
                                         @empty
-
                                         @endforelse
                                     </select>
                                 </div>
@@ -954,7 +966,6 @@
                                                 $total += $item->total;
                                             @endphp
                                         @empty
-
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -973,14 +984,14 @@
                                                     <option value="{{ $oficina->id }}">{{ $oficina->name }}</option>
                                                 @endif
                                             @empty
-
                                             @endforelse
                                             <option value="0">Cliente privado</option>
                                         </select>
                                     </div>
                                     <div class="col" id="showNombreCp" style="display: none">
                                         <label for="nombreCp">Nombre</label>
-                                        <input type="text" name="nombreCp" class="form-control" placeholder="Ingresa nombre" required>
+                                        <input type="text" name="nombreCp" class="form-control"
+                                            placeholder="Ingresa nombre" required>
                                     </div>
                                     <div class="col">
                                         <label for="">Tipo Pago</label>
@@ -991,7 +1002,7 @@
                                             <option value="Transferencia">Transferencia</option>
                                         </select>
                                     </div>
-                                   
+
                                     <div class="col">
                                         <label for="">Sub Total</label>
                                         <input type="number" name="subtotal" class="form-control" step="any"
@@ -999,8 +1010,8 @@
                                     </div>
                                     <div class="col">
                                         <label for="">Descuento %</label>
-                                        <input type="number" name="discount" value="0" min="0" class="form-control"
-                                            step="any" max="100" id="descuentoGeneral">
+                                        <input type="number" name="discount" value="0" min="0"
+                                            class="form-control" step="any" max="100" id="descuentoGeneral">
                                     </div>
                                     <div class="col">
                                         <label for="">Total</label>
@@ -1008,30 +1019,30 @@
                                             id="totalGeneral" readonly value="{{ $total }}">
                                     </div>
                                     @forelse ($carrito as $key => $item)
-                                    <div class="col" hidden>
-                                        <label for="">id</label>
-                                        <input type="number" name="productsId[]" class="form-control" step="any"
-                                             readonly value="{{$item->inventory_id}}">
-                                    </div>
-                                    <div class="col" hidden>
-                                        <label for="">id</label>
-                                        <input type="number" name="quantityProducts[]" class="form-control" step="any"
-                                             readonly value="{{$item->quantity}}">
-                                    </div>
+                                        <div class="col" hidden>
+                                            <label for="">id</label>
+                                            <input type="number" name="productsId[]" class="form-control"
+                                                step="any" readonly value="{{ $item->inventory_id }}">
+                                        </div>
+                                        <div class="col" hidden>
+                                            <label for="">id</label>
+                                            <input type="number" name="quantityProducts[]" class="form-control"
+                                                step="any" readonly value="{{ $item->quantity }}">
+                                        </div>
                                     @empty
-
                                     @endforelse
                                     <div class="col" hidden>
                                         <input type="number" name="transferencia" class="form-control" step="any"
-                                             readonly value="1">
+                                            readonly value="1">
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" id="btnModaltransferir" onclick="transferirProductos(event)" class="btn btn-primary">Transferir</button>
+                            <button type="submit" id="btnModaltransferir" onclick="transferirProductos(event)"
+                                class="btn btn-primary">Transferir</button>
                         </div>
                     </form>
                 </div>
@@ -1072,7 +1083,7 @@
                                         @endphp
                                         @forelse ($carritoCompras as $item)
                                             <tr>
-                                                <td hidden class="idProduct">{{$item->inventory_id}}</td>
+                                                <td hidden class="idProduct">{{ $item->inventory_id }}</td>
                                                 <td>{{ $item->id }}</td>
                                                 <td class="nameItem">{{ $item->inventario[0]->name }}</td>
                                                 <td class="priceItem">${{ $item->inventario[0]->price }}</td>
@@ -1080,10 +1091,10 @@
                                                 <td hidden class="subtotalItem">{{ $item->subtotal }}</td>
                                                 <td hidden class="discountItem">{{ $item->discount }}</td>
                                                 <td hidden class="totalItem">{{ $item->total }}</td>
-                                                <td >{{ $item->quantity }}</td>
-                                                <td >${{ $item->subtotal }}</td>
-                                                <td >{{ $item->discount }}%</td>
-                                                <td >${{ $item->total }}</td>
+                                                <td>{{ $item->quantity }}</td>
+                                                <td>${{ $item->subtotal }}</td>
+                                                <td>{{ $item->discount }}%</td>
+                                                <td>${{ $item->total }}</td>
                                                 <td>
                                                     <button class="btn btn-outline-danger eliminar" type="button"
                                                         data-id="{{ $item->id }}"><i
@@ -1094,7 +1105,6 @@
                                                 $total += $item->total;
                                             @endphp
                                         @empty
-
                                         @endforelse
                                     </tbody>
                                 </table>
@@ -1124,8 +1134,9 @@
                                     </div>
                                     <div class="col">
                                         <label for="">Descuento %</label>
-                                        <input type="number" name="discount" value="0" min="0" class="form-control"
-                                            step="any" max="100" id="descuentoGeneralCompra">
+                                        <input type="number" name="discount" value="0" min="0"
+                                            class="form-control" step="any" max="100"
+                                            id="descuentoGeneralCompra">
                                     </div>
                                     <div class="col">
                                         <label for="">Total</label>
@@ -1133,18 +1144,17 @@
                                             id="totalGeneralCompra" readonly value="{{ $total }}">
                                     </div>
                                     @forelse ($carritoCompras as $key => $item)
-                                    <div class="col" hidden>
-                                        <label for="">id</label>
-                                        <input type="number" name="productsId[]" class="form-control" step="any"
-                                             readonly value="{{$item->inventory_id}}">
-                                    </div>
-                                    <div class="col" hidden>
-                                        <label for="">id</label>
-                                        <input type="number" name="quantityProducts[]" class="form-control" step="any"
-                                             readonly value="{{$item->quantity}}">
-                                    </div>
+                                        <div class="col" hidden>
+                                            <label for="">id</label>
+                                            <input type="number" name="productsId[]" class="form-control"
+                                                step="any" readonly value="{{ $item->inventory_id }}">
+                                        </div>
+                                        <div class="col" hidden>
+                                            <label for="">id</label>
+                                            <input type="number" name="quantityProducts[]" class="form-control"
+                                                step="any" readonly value="{{ $item->quantity }}">
+                                        </div>
                                     @empty
-
                                     @endforelse
 
                                 </div>
@@ -1181,11 +1191,13 @@
                                 <div class="row">
                                     <div class="col">
                                         <label for="">Código de Barras</label>
-                                        <input type="text" class="form-control" required id="bar_code" name="bar_code">
+                                        <input type="text" class="form-control" required id="bar_code"
+                                            name="bar_code">
                                     </div>
                                     <div class="col">
                                         <label for="">Nombre</label>
-                                        <input type="text" class="form-control" required id="name" name="name">
+                                        <input type="text" class="form-control" required id="name"
+                                            name="name">
                                     </div>
                                     <div class="col">
                                         <label for="">Categoria</label>
@@ -1203,18 +1215,18 @@
                                     </div>
                                     <div class="col">
                                         <label for="">Stock</label>
-                                        <input type="number" class="form-control" min="0" required name="stock"
-                                            id="stock">
+                                        <input type="number" class="form-control" min="0" required
+                                            name="stock" id="stock">
                                     </div>
                                     <div class="col">
                                         <label for="">Costo</label>
-                                        <input type="numer" step="any" class="form-control" name="cost" id="cost"
-                                            required>
+                                        <input type="numer" step="any" class="form-control" name="cost"
+                                            id="cost" required>
                                     </div>
                                     <div class="col">
                                         <label for="">Precio</label>
-                                        <input type="number" step="any" class="form-control" name="price" id="price"
-                                            required>
+                                        <input type="number" step="any" class="form-control" name="price"
+                                            id="price" required>
                                     </div>
                                 </div>
                             </div>
@@ -1231,21 +1243,21 @@
         <script>
             let result = [];
             var nom = '';
-          async  function llenaredit(product){
+            async function llenaredit(product) {
                 //action="{{ route('inventario.update', $inventario->id) }}" 
-               
-              
-                if(typeof(product) == "number"){
-                    
-                  await $.get('/almacen/inventario/costo/'+product,function(data){
-                         data.map(function(cost){
-                             console.log(cost.id);
-                             document.getElementById(`branch_cost${cost.id}`).value = cost.branch_cost;
-                         });
-                     
-                });
-                    let item = result.find(element => element.id == product);  
-                    document.getElementById("formmodedit").action = "/inventario/"+item.id;
+
+
+                if (typeof(product) == "number") {
+
+                    await $.get('/almacen/inventario/costo/' + product, function(data) {
+                        data.map(function(cost) {
+                            console.log(cost.id);
+                            document.getElementById(`branch_cost${cost.id}`).value = cost.branch_cost;
+                        });
+
+                    });
+                    let item = result.find(element => element.id == product);
+                    document.getElementById("formmodedit").action = "/inventario/" + item.id;
                     document.getElementById('modeditbar_code').value = item.bar_code;
                     document.getElementById('modeditname').value = item.name;
                     document.getElementById('modeditcategory_id').value = item.category_id;
@@ -1253,14 +1265,14 @@
                     document.getElementById('modeditstock').value = item.stock;
                     document.getElementById('modeditprice').value = item.price;
                     document.getElementById('modeditcost').value = item.cost;
-                }else{
-                    await $.get('/almacen/inventario/costo/'+product.id,function(data){
-                         data.map(function(cost){
-                             document.getElementById(`branch_cost${cost.id}`).value = cost.branch_cost;
-                         });
-                     
-                });
-                    document.getElementById("formmodedit").action = "/inventario/"+product.id;
+                } else {
+                    await $.get('/almacen/inventario/costo/' + product.id, function(data) {
+                        data.map(function(cost) {
+                            document.getElementById(`branch_cost${cost.id}`).value = cost.branch_cost;
+                        });
+
+                    });
+                    document.getElementById("formmodedit").action = "/inventario/" + product.id;
                     document.getElementById('modeditbar_code').value = product.bar_code;
                     document.getElementById('modeditname').value = product.name;
                     document.getElementById('modeditcategory_id').value = product.category_id;
@@ -1270,13 +1282,14 @@
                     document.getElementById('modeditcost').value = product.cost;
                 }
             }
-            function llenarinv(product){
-                if(typeof(product) == "number"){
+
+            function llenarinv(product) {
+                if (typeof(product) == "number") {
                     //console.log("Entra: ",result.);
-                    let item = result.find(element => element.id == product);   
+                    let item = result.find(element => element.id == product);
 
                     //console.log("item: ",item.);
-                    document.getElementById("formaddinv").action = "/addInventario/"+item.id;
+                    document.getElementById("formaddinv").action = "/addInventario/" + item.id;
                     document.getElementById('addmodinvproducto').value = item.name;
                     document.getElementById('addmodinvquantity').value = 1;
                     document.getElementById('addmodinvquantity').max = product.stock;
@@ -1284,8 +1297,8 @@
                     document.getElementById('addmodinvprice').value = item.price;
                     document.getElementById('addmodinvsubtotal').value = item.price * 1;
                     document.getElementById('addmodinvtotal').value = item.price * 1;
-                }else{
-                    document.getElementById("formaddinv").action = "/addInventario/"+product.id;
+                } else {
+                    document.getElementById("formaddinv").action = "/addInventario/" + product.id;
                     document.getElementById('addmodinvproducto').value = product.name;
                     document.getElementById('addmodinvquantity').value = 1;
                     document.getElementById('addmodinvquantity').max = product.stock;
@@ -1295,197 +1308,198 @@
                     document.getElementById('addmodinvtotal').value = product.price * 1;
                 }
             }
-            function llenarCompra(product,id){
+
+            function llenarCompra(product, id) {
                 //console.log("init ",typeof(1));
-             
-                if(typeof(product) == "number"){
-                    let item = result.find(element => element.id == product);    
+
+                if (typeof(product) == "number") {
+                    let item = result.find(element => element.id == product);
                     let costoSpan = document.getElementById(`spanCost${item.id}`).innerHTML.trim();
                     const costo = parseFloat(costoSpan.substring(1)).toFixed(2);
-                   // console.log("costoSpan: ",costoSpan);
+                    // console.log("costoSpan: ",costoSpan);
                     //console.log("item: ",item.);
-                    document.getElementById("formaddcom").action = "/addCompra/"+item.id;
+                    document.getElementById("formaddcom").action = "/addCompra/" + item.id;
                     document.getElementById('addmodcomproduct').value = item.name;
                     document.getElementById('addmodcomcantidad').value = 1;
                     document.getElementById('addmodcomdescuento').value = 0;
                     document.getElementById('addmodcomcosto').value = costo;
                     document.getElementById('addmodcomsubtotal').value = costo * 1;
-                    document.getElementById('addmodcomtotal').value = costo *1 ;
-                }else{
-                   let costoSpan = document.getElementById(`spanCost${id}`).innerHTML.trim();
+                    document.getElementById('addmodcomtotal').value = costo * 1;
+                } else {
+                    let costoSpan = document.getElementById(`spanCost${id}`).innerHTML.trim();
                     const costo = parseFloat(costoSpan.substring(1)).toFixed(2);
-                    console.log("costo: ",costo);
-                    document.getElementById("formaddcom").action = "/addCompra/"+product.id;
+                    console.log("costo: ", costo);
+                    document.getElementById("formaddcom").action = "/addCompra/" + product.id;
                     document.getElementById('addmodcomcantidad').value = 1;
                     document.getElementById('addmodcomdescuento').value = 0;
                     document.getElementById('addmodcomproduct').value = product.name;
                     document.getElementById('addmodcomcosto').value = costo;
                     document.getElementById('addmodcomsubtotal').value = costo * 1;
-                    document.getElementById('addmodcomtotal').value = costo *1 ;
+                    document.getElementById('addmodcomtotal').value = costo * 1;
                 }
             }
             $(document).ready(function() {});
-                $('.cantidad').on('change', function() {
-                    var id = $(this).data('id');
-                    var precio = $('#price' + id).val();
-                    var cantidad = $(this).val();
-                    var subtotal = cantidad * precio;
-                    var descuento = $('#descuento' + id).val();
-                    $('#subtotal' + id).val(subtotal);
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#total' + id).val(total);
+            $('.cantidad').on('change', function() {
+                var id = $(this).data('id');
+                var precio = $('#price' + id).val();
+                var cantidad = $(this).val();
+                var subtotal = cantidad * precio;
+                var descuento = $('#descuento' + id).val();
+                $('#subtotal' + id).val(subtotal);
+                var porcentaje = descuento / 100;
+                var total = subtotal - (subtotal * porcentaje);
+                $('#total' + id).val(total);
+            });
+
+            $('.descuento').on('change', function() {
+                var id = $(this).data('id');
+                var descuento = $(this).val();
+                var subtotal = $('#subtotal' + id).val();
+                var porcentaje = descuento / 100;
+                var total = subtotal - (subtotal * porcentaje);
+                $('#total' + id).val(total);
+            });
+
+            $('.descuento').keyup(function(e) {
+                var id = $(this).data('id');
+                var descuento = $(this).val();
+                var subtotal = $('#subtotal' + id).val();
+                var porcentaje = descuento / 100;
+                var total = subtotal - (subtotal * porcentaje);
+                $('#total' + id).val(total);
+            });
+
+            $.get('/getCarrito', function(data) {
+
+            });
+
+            $('#descuentoGeneral').keyup(function(e) {
+                var descuento = $(this).val();
+                var porcentaje = descuento / 100;
+                var subtotal = $('#subtotalGeneral').val();
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalGeneral').val(total.toFixed(2));
+            });
+
+            $('#descuentoGeneral').on('change', function() {
+                var descuento = $(this).val();
+                var porcentaje = descuento / 100;
+                var subtotal = $('#subtotalGeneral').val();
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalGeneral').val(total.toFixed(2));
+            });
+
+
+
+            $('.cantidadCompra').on('change', function() {
+                var id = $(this).data('id');
+                var precio = $('#cost' + id).val();
+                var cantidad = $(this).val();
+                var subtotal = cantidad * precio;
+                var descuento = $('#descuentoCompra' + id).val();
+                $('#subtotalCompra' + id).val(subtotal);
+                var porcentaje = descuento / 100;
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalCompra' + id).val(total);
+            });
+
+            $('.descuentoCompra').on('change', function() {
+                var id = $(this).data('id');
+                var descuento = $(this).val();
+                var subtotal = $('#subtotalCompra' + id).val();
+                var porcentaje = descuento / 100;
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalCompra' + id).val(total);
+            });
+
+            $('.descuentoCompra').keyup(function(e) {
+                var id = $(this).data('id');
+                var descuento = $(this).val();
+                var subtotal = $('#subtotalCompra' + id).val();
+                var porcentaje = descuento / 100;
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalCompra' + id).val(total);
+            });
+
+
+            $('#descuentoGeneralCompra').keyup(function(e) {
+                var descuento = $(this).val();
+                var porcentaje = descuento / 100;
+                var subtotal = $('#subtotalGeneralCompra').val();
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalGeneralCompra').val(total.toFixed(2));
+            });
+
+            $('#descuentoGeneralCompra').on('change', function() {
+                var descuento = $(this).val();
+                var porcentaje = descuento / 100;
+                var subtotal = $('#subtotalGeneralCompra').val();
+                var total = subtotal - (subtotal * porcentaje);
+                $('#totalGeneralCompra').val(total.toFixed(2));
+            });
+
+            $('#search').on('click', function() {
+                var codigo = $('#codigo').val();
+
+                $.get('/buscar-cdigo/' + codigo, function(data) {
+                    if (data['id'] > 0) {
+                        console.log(data);
+                        $('#bar_code').val(data['bar_code']);
+                        $('#name').val(data['name']);
+                        $('#category_ide').empty();
+                        $('#brand_id').empty();
+                        $('#category_ide').append("<option value='" + data['categoria']['id'] +
+                            "'>" + data['categoria']['name'] + "</option>");
+                        $('#brand_id').append("<option value='" + data['brand']['id'] + "'>" + data[
+                            'brand']['name'] + "</option>");
+                        $('#cost').val(data['cost']);
+                        $('#price').val(data['price_1']);
+                    } else {
+                        alert("No se encontro ningun producto");
+                    }
+
                 });
+            });
 
-                $('.descuento').on('change', function() {
-                    var id = $(this).data('id');
-                    var descuento = $(this).val();
-                    var subtotal = $('#subtotal' + id).val();
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#total' + id).val(total);
+            $('.delete').on('click', function() {
+                var id = $(this).data('id');
+                var ajxReq = $.ajax('/eliminar/' + id, {
+                    type: 'DELETE'
                 });
-
-                $('.descuento').keyup(function(e) {
-                    var id = $(this).data('id');
-                    var descuento = $(this).val();
-                    var subtotal = $('#subtotal' + id).val();
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#total' + id).val(total);
+                ajxReq.success(function(data, status, jqXhr) {
+                    alert('Eliminado con exito');
+                    location.reload();
                 });
-
-                $.get('/getCarrito', function(data) {
-
+                ajxReq.error(function(jqXhr, textStatus, errorMessage) {
+                    alert('Error');
+                    location.reload();
                 });
+            });
 
-                $('#descuentoGeneral').keyup(function(e) {
-                    var descuento = $(this).val();
-                    var porcentaje = descuento / 100;
-                    var subtotal = $('#subtotalGeneral').val();
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalGeneral').val(total.toFixed(2));
-                });
-
-                $('#descuentoGeneral').on('change', function() {
-                    var descuento = $(this).val();
-                    var porcentaje = descuento / 100;
-                    var subtotal = $('#subtotalGeneral').val();
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalGeneral').val(total.toFixed(2));
-                });
-
-
-
-                $('.cantidadCompra').on('change', function() {
-                    var id = $(this).data('id');
-                    var precio = $('#cost' + id).val();
-                    var cantidad = $(this).val();
-                    var subtotal = cantidad * precio;
-                    var descuento = $('#descuentoCompra' + id).val();
-                    $('#subtotalCompra' + id).val(subtotal);
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalCompra' + id).val(total);
-                });
-
-                $('.descuentoCompra').on('change', function() {
-                    var id = $(this).data('id');
-                    var descuento = $(this).val();
-                    var subtotal = $('#subtotalCompra' + id).val();
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalCompra' + id).val(total);
-                });
-
-                $('.descuentoCompra').keyup(function(e) {
-                    var id = $(this).data('id');
-                    var descuento = $(this).val();
-                    var subtotal = $('#subtotalCompra' + id).val();
-                    var porcentaje = descuento / 100;
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalCompra' + id).val(total);
-                });
-
-
-                $('#descuentoGeneralCompra').keyup(function(e) {
-                    var descuento = $(this).val();
-                    var porcentaje = descuento / 100;
-                    var subtotal = $('#subtotalGeneralCompra').val();
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalGeneralCompra').val(total.toFixed(2));
-                });
-
-                $('#descuentoGeneralCompra').on('change', function() {
-                    var descuento = $(this).val();
-                    var porcentaje = descuento / 100;
-                    var subtotal = $('#subtotalGeneralCompra').val();
-                    var total = subtotal - (subtotal * porcentaje);
-                    $('#totalGeneralCompra').val(total.toFixed(2));
-                });
-
-                $('#search').on('click', function() {
-                    var codigo = $('#codigo').val();
-
-                    $.get('/buscar-cdigo/' + codigo, function(data) {
-                        if (data['id'] > 0) {
-                            console.log(data);
-                            $('#bar_code').val(data['bar_code']);
-                            $('#name').val(data['name']);
-                            $('#category_ide').empty();
-                            $('#brand_id').empty();
-                            $('#category_ide').append("<option value='" + data['categoria']['id'] +
-                                "'>" + data['categoria']['name'] + "</option>");
-                            $('#brand_id').append("<option value='" + data['brand']['id'] + "'>" + data[
-                                'brand']['name'] + "</option>");
-                            $('#cost').val(data['cost']);
-                            $('#price').val(data['price_1']);
-                        } else {
-                            alert("No se encontro ningun producto");
-                        }
-
-                    });
-                });
-
-                $('.delete').on('click', function() {
-                    var id = $(this).data('id');
-                    var ajxReq = $.ajax('/eliminar/'+id, {
-                        type: 'DELETE'
-                    });
-                    ajxReq.success(function(data, status, jqXhr) {
-                        alert('Eliminado con exito');
-                        location.reload();
-                    });
-                    ajxReq.error(function(jqXhr, textStatus, errorMessage) {
-                        alert('Error');
-                        location.reload();
-                    });
-                });
-
-                $('#btnModalComprar').on('click', function(){
-                    if ($('#checkTransferir').is(':checked') ) {
-                        if($('#typePaymnet').find(':selected').val() != ""){
-                            $('#carritoCompraModal').modal('hide');
-                            let idsP = [];
-                            let quaP = [];
-                            $('#tablita2').children().each(function (){
-                                //idsP.push(parseInt($(this).find('.idProduct').text()));
-                                //quaP.push(parseInt($(this).find('.quantityProduct').text()));
-                                let id = parseInt($(this).find('.idProduct').text());
-                                let request = {
-                                    quantity: parseFloat($(this).find('.quantityProduct').text()),
-                                    subtotal: parseFloat($(this).find('.subtotalItem').text()),
-                                    discount: parseFloat($(this).find('.discountItem').text()),
-                                    total: parseFloat($(this).find('.totalItem').text()),
-                                }
-                                $.ajax({
-                                url: "/addInventario/"+id,
+            $('#btnModalComprar').on('click', function() {
+                if ($('#checkTransferir').is(':checked')) {
+                    if ($('#typePaymnet').find(':selected').val() != "") {
+                        $('#carritoCompraModal').modal('hide');
+                        let idsP = [];
+                        let quaP = [];
+                        $('#tablita2').children().each(function() {
+                            //idsP.push(parseInt($(this).find('.idProduct').text()));
+                            //quaP.push(parseInt($(this).find('.quantityProduct').text()));
+                            let id = parseInt($(this).find('.idProduct').text());
+                            let request = {
+                                quantity: parseFloat($(this).find('.quantityProduct').text()),
+                                subtotal: parseFloat($(this).find('.subtotalItem').text()),
+                                discount: parseFloat($(this).find('.discountItem').text()),
+                                total: parseFloat($(this).find('.totalItem').text()),
+                            }
+                            $.ajax({
+                                url: "/addInventario/" + id,
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
                                 type: 'POST',
                                 contentType: "application/json; charset=iso-8859-1",
-                                data:JSON.stringify(request),
+                                data: JSON.stringify(request),
                                 dataType: 'html',
                                 success: function(data) {
                                     console.log("exito", data);
@@ -1495,488 +1509,497 @@
                                 },
                             });
 
-                            });
-                            /*let request = {
-                                office_id: $('#office_id').find(':selected').val(),
-                                type: $('#typePaymnet').find(':selected').val(),
-                                subtotal: parseFloat($('#subtotalGeneralCompra').val()),
-                                discount: parseFloat($('#descuentoGeneralCompra').val()),
-                                total: parseFloat($('#totalGeneralCompra').val()),
-                                productsId: idsP,
-                                quantityProducts: quaP,
-                                bandera: 0,
-                            };*/
-                            request = [];
-                            $.ajax({
-                                url: "/concluirCompra",
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                type: 'POST',
-                                contentType: "application/json; charset=iso-8859-1",
-                                data:JSON.stringify(request),
-                                dataType: 'html',
-                                success: function(data) {
-                                    console.log("exito");
-                                    setTimeout(location.reload(), 10000);
-                                },
-                                error: function(e) {
-                                    console.log("ERROR", e);
-                                    setTimeout(alert("Exito en la venta"),3000);
-                                    location.reload();
-                                },
-                            });
-                        }
-                    }else{
-                        if($('#typePaymnet').find(':selected').val() != ""){
-                            $('#carritoCompraModal').modal('hide');
-                            request = [];
-                            $.ajax({
-                                url: "/concluirCompra",
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                },
-                                type: 'POST',
-                                contentType: "application/json; charset=iso-8859-1",
-                                data:JSON.stringify(request),
-                                dataType: 'html',
-                                success: function(data) {
-                                    console.log("exito");
-                                    setTimeout(location.reload(), 10000);
-                                },
-                                error: function(e) {
-                                    console.log("ERROR", e);
-                                    setTimeout(alert("Exito en la venta"),3000);
-                                    location.reload();
-                                },
-                            });
-                        }
-                    }
-                });
-
-                
-
-                $('.eliminar').on('click', function() {
-                    var id = $(this).data('id');
-                    var ajxReq = $.ajax('/delete-cart/'+id, {
-                        type: 'DELETE'
-                    });
-                    ajxReq.success(function(data, status, jqXhr) {
-                        alert('Eliminado con exito');
-                        location.reload();
-                    });
-                    ajxReq.error(function(jqXhr, textStatus, errorMessage) {
-                        alert('Error');
-                        location.reload();
-                    });
-                });
-
-                /*document.getElementById("codigo").addEventListener("keyup", function(){
-
-                });*/
-
-                document.getElementById("inputBusqueda").addEventListener("keyup", function(){
-                    if (document.getElementById("inputBusqueda").value.length >= 1){
-                        $("#tabla1").prop('hidden', true);
-                        $("#divtabla1").prop('hidden', true);
-                        $("#tabla2").prop('hidden', false);
-                        var palabra = $('#inputBusqueda').val();
-                        $.get('/buscarInventario/'+palabra,function (data){
-                            //console.log(data);
-                            $('#inventarios2').empty();
-                            result = data;
-                            data.forEach(element => {
-                                var id = element['id'];
-                                var url = '{{route("inventario.delete",'+id+')}}';
-                                $('#inventarios2').append('<tr>'+
-                                    '<td>'+element['id']+'</td>'+
-                                    '<td>'+element['bar_code']+'</td>'+
-                                    '<td>'+element['name']+'</td>'+
-                                    '<td>'+element['categoria']['name']+'</td>'+
-                                    '<td>'+element['marca']['name']+'</td>'+
-                                    '<td>'+element['stock']+'</td>'+
-                                    '<td>'+element['price']+'</td>'+
-                                    '<td id ="costDymanic'+id+'">'+
-                                        '<span id="spanCost'+id+'" class="badge badge-success float-center"type="button" data-bs-toggle="modal"'
-                                                +'data-bs-target="#costSelect" onclick="branchCost(id='+id+')"  style="cursor: pointer">'
-                                               +'$'+element['cost']+''
-                                            +'</span>'
-                                    +'</td>'+
-                                
-                                    '<td>'+
-                                       ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
-                                            'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
-                                                '<i class="bi bi-bag-plus-fill"></i></button>':
-                                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
-                                                '<i class="bi bi-bag-plus-fill"></i></button>'
-                                            }`
-                                        +
-                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
-                                            'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
-                                            '<i class="bi bi-bag-plus"></i></button>'+
-                                        //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
-                                        //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
-                                    '</td>'+
-                                    '<td>'+
-                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
-                                        //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
-                                        '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
-                                    '</td>'+
-                                    '<td>'+
-                                        '<form action="/inventario/'+id+'" method="POST">'+
-                                            '@csrf @method("DELETE")'+
-                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
-                                        '</form>'+
-                                    '</td>'+
-                                '</tr>');
-                            });
                         });
-                    }else{
-                        $("#tabla1").prop('hidden', false);
-                        $("#divtabla1").prop('hidden', false);
-                        $("#tabla2").prop('hidden', true);
-                        document.getElementById("inventarios2").innerHTML = "";
+                        /*let request = {
+                            office_id: $('#office_id').find(':selected').val(),
+                            type: $('#typePaymnet').find(':selected').val(),
+                            subtotal: parseFloat($('#subtotalGeneralCompra').val()),
+                            discount: parseFloat($('#descuentoGeneralCompra').val()),
+                            total: parseFloat($('#totalGeneralCompra').val()),
+                            productsId: idsP,
+                            quantityProducts: quaP,
+                            bandera: 0,
+                        };*/
+                        request = [];
+                        $.ajax({
+                            url: "/concluirCompra",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data: JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {
+                                console.log("exito");
+                                setTimeout(location.reload(), 10000);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                                setTimeout(alert("Exito en la venta"), 3000);
+                                location.reload();
+                            },
+                        });
                     }
-                });
+                } else {
+                    if ($('#typePaymnet').find(':selected').val() != "") {
+                        $('#carritoCompraModal').modal('hide');
+                        request = [];
+                        $.ajax({
+                            url: "/concluirCompra",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            type: 'POST',
+                            contentType: "application/json; charset=iso-8859-1",
+                            data: JSON.stringify(request),
+                            dataType: 'html',
+                            success: function(data) {
+                                console.log("exito");
+                                setTimeout(location.reload(), 10000);
+                            },
+                            error: function(e) {
+                                console.log("ERROR", e);
+                                setTimeout(alert("Exito en la venta"), 3000);
+                                location.reload();
+                            },
+                        });
+                    }
+                }
+            });
 
-                $('#buscarPorSucursal').change(function(){
-                    let idsucursal = $('#buscarPorSucursal').val();
-                    console.log("sucursal: ",idsucursal);
+
+
+            $('.eliminar').on('click', function() {
+                var id = $(this).data('id');
+                var ajxReq = $.ajax('/delete-cart/' + id, {
+                    type: 'DELETE'
+                });
+                ajxReq.success(function(data, status, jqXhr) {
+                    alert('Eliminado con exito');
+                    location.reload();
+                });
+                ajxReq.error(function(jqXhr, textStatus, errorMessage) {
+                    alert('Error');
+                    location.reload();
+                });
+            });
+
+            /*document.getElementById("codigo").addEventListener("keyup", function(){
+
+            });*/
+
+            document.getElementById("inputBusqueda").addEventListener("keyup", function() {
+                if (document.getElementById("inputBusqueda").value.length >= 1) {
                     $("#tabla1").prop('hidden', true);
                     $("#divtabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
-                    $.get('/buscarInventarioSucursal/'+idsucursal, function (data){
-                        console.log("Data: ",data);
+                    var palabra = $('#inputBusqueda').val();
+                    $.get('/buscarInventario/' + palabra, function(data) {
+                        //console.log(data);
                         $('#inventarios2').empty();
                         result = data;
                         data.forEach(element => {
                             var id = element['id'];
-                            var url = '{{route("inventario.delete",'+id+')}}';
-                            $('#inventarios2').append('<tr>'+
-                                '<td>'+element['id']+'</td>'+
-                                '<td>'+element['code']+'</td>'+
-                                '<td>'+element['name']+'</td>'+
-                                '<td>'+element['categoriname']+'</td>'+
-                                '<td>'+element['brandname']+'</td>'+
-                                '<td>'+element['stock']+'</td>'+
-                                '<td>'+element['price']+'</td>'+
-                                '<td id ="costDymanic'+id+'">'+
-                                        '<span id="spanCost'+id+'" class="badge badge-success float-center"type="button" data-bs-toggle="modal"'
-                                                +'data-bs-target="#costSelect" onclick="branchCost(id='+id+')"  style="cursor: pointer">'
-                                               +'$'+element['cost']+''
-                                            +'</span>'
-                                    +'</td>'+
-                                '<td>'+
-                                    '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
-                                        'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
-                                            '<i class="bi bi-bag-plus-fill"></i></button>'+
-                                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
-                                        'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
-                                        '<i class="bi bi-bag-plus"></i></button>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
-                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<form action="/inventario/'+id+'" method="POST">'+
-                                        '@csrf @method("DELETE")'+
-                                        '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
-                                    '</form>'+
-                                '</td>'+
-                            '</tr>');
-                        });
-                    });
-                });
+                            var url = '{{ route('inventario.delete', '+id+') }}';
+                            $('#inventarios2').append('<tr>' +
+                                '<td>' + element['id'] + '</td>' +
+                                '<td>' + element['bar_code'] + '</td>' +
+                                '<td>' + element['name'] + '</td>' +
+                                '<td>' + element['categoria']['name'] + '</td>' +
+                                '<td>' + element['marca']['name'] + '</td>' +
+                                '<td>' + element['stock'] + '</td>' +
+                                '<td>' + element['price'] + '</td>' +
+                                '<td id ="costDymanic' + id + '">' +
+                                '<span id="spanCost' + id +
+                                '" class="badge badge-success float-center"type="button" data-bs-toggle="modal"' +
+                                'data-bs-target="#costSelect" onclick="branchCost(id=' + id +
+                                ')"  style="cursor: pointer">' +
+                                '$' + element['cost'] + '' +
+                                '</span>' +
+                                '</td>' +
 
-                $('#buscarInve').on('click',function(){
-                    if (document.getElementById("inputBusqueda").value.length >= 1){
-                        $("#tabla1").prop('hidden', true);
-                        $("#divtabla1").prop('hidden', true);
-                        $("#tabla2").prop('hidden', false);
-                        var palabra = $('#inputBusqueda').val();
-                        $.get('/buscarInventario/'+palabra,function (data){
-                            //console.log(data);
-                            $('#inventarios2').empty();
-                            result = data;
-                            data.forEach(element => {
-                                var id = element['id'];
-                                var url = '{{route("inventario.delete",'+id+')}}';
-                                $('#inventarios2').append('<tr>'+
-                                    '<td>'+element['id']+'</td>'+
-                                    '<td>'+element['bar_code']+'</td>'+
-                                    '<td>'+element['name']+'</td>'+
-                                    '<td>'+element['categoria']['name']+'</td>'+
-                                    '<td>'+element['marca']['name']+'</td>'+
-                                    '<td>'+element['stock']+'</td>'+
-                                    '<td>'+element['price']+'</td>'+
-                                    '<td id ="costDymanic'+id+'">'+
-                                        '<span id="spanCost'+id+'" class="badge badge-success float-center"type="button" data-bs-toggle="modal"'
-                                                +'data-bs-target="#costSelect" onclick="branchCost(id='+id+')"  style="cursor: pointer">'
-                                               +'$'+element['cost']+''
-                                            +'</span>'
-                                    +'</td>'+
-                                    '<td>'+
-                                       ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                '<td>' +
+                                ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
                                                 '<i class="bi bi-bag-plus-fill"></i></button>':
                                                 '<button type="button" class="btn btn-outline-secondary" disabled>'+
                                                 '<i class="bi bi-bag-plus-fill"></i></button>'
-                                            }`
-                                        +
-                                        '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
-                                            'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
-                                            '<i class="bi bi-bag-plus"></i></button>'+
-                                        //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
-                                        //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
-                                    '</td>'+
-                                    '<td>'+
-                                        '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
-                                        //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
-                                        '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
-                                    '</td>'+
-                                    '<td>'+
-                                        '<form action="/inventario/'+id+'" method="POST">'+
-                                            '@csrf @method("DELETE")'+
-                                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
-                                        '</form>'+
-                                    '</td>'+
+                                            }` +
+                                '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"' +
+                                'data-bs-target="#addCompra" onclick="llenarCompra(' + element.id +
+                                ')">' +
+                                '<i class="bi bi-bag-plus"></i></button>' +
+                                //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit(' +
+                                element.id + ')"><i class="bi bi-pencil"></i></button>' +
+                                //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                '<a href="/codigoAlmacen/' + element.id +
+                                '" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>' +
+                                '</td>' +
+                                '<td>' +
+                                '<form action="/inventario/' + id + '" method="POST">' +
+                                '@csrf @method('DELETE')' +
+                                '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>' +
+                                '</form>' +
+                                '</td>' +
                                 '</tr>');
-                            });
                         });
-                    }else{
-                        $("#tabla1").prop('hidden', false);
-                        $("#divtabla1").prop('hidden', false);
-                        $("#tabla2").prop('hidden', true);
-                        document.getElementById("inventarios2").innerHTML = "";
-                    }
-                    /*$("#tabla1").prop('hidden', true);
+                    });
+                } else {
+                    $("#tabla1").prop('hidden', false);
+                    $("#divtabla1").prop('hidden', false);
+                    $("#tabla2").prop('hidden', true);
+                    document.getElementById("inventarios2").innerHTML = "";
+                }
+            });
+
+            $('#buscarPorSucursal').change(function() {
+                let idsucursal = $('#buscarPorSucursal').val();
+                console.log("sucursal: ", idsucursal);
+                $("#tabla1").prop('hidden', true);
+                $("#divtabla1").prop('hidden', true);
+                $("#tabla2").prop('hidden', false);
+                $.get('/buscarInventarioSucursal/' + idsucursal, function(data) {
+                    console.log("Data: ", data);
+                    $('#inventarios2').empty();
+                    result = data;
+                    data.forEach(element => {
+                        var id = element['id'];
+                        var url = '{{ route('inventario.delete', '+id+') }}';
+                        $('#inventarios2').append('<tr>' +
+                            '<td>' + element['id'] + '</td>' +
+                            '<td>' + element['code'] + '</td>' +
+                            '<td>' + element['name'] + '</td>' +
+                            '<td>' + element['categoriname'] + '</td>' +
+                            '<td>' + element['brandname'] + '</td>' +
+                            '<td>' + element['stock'] + '</td>' +
+                            '<td>' + element['price'] + '</td>' +
+                            '<td id ="costDymanic' + id + '">' +
+                            '<span id="spanCost' + id +
+                            '" class="badge badge-success float-center"type="button" data-bs-toggle="modal"' +
+                            'data-bs-target="#costSelect" onclick="branchCost(id=' + id +
+                            ')"  style="cursor: pointer">' +
+                            '$' + element['cost'] + '' +
+                            '</span>' +
+                            '</td>' +
+                            '<td>' +
+                            '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"' +
+                            'data-bs-target="#addInventario" onclick="llenarinv(' + element.id +
+                            ')">' +
+                            '<i class="bi bi-bag-plus-fill"></i></button>' +
+                            '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"' +
+                            'data-bs-target="#addCompra" onclick="llenarCompra(' + element.id +
+                            ')">' +
+                            '<i class="bi bi-bag-plus"></i></button>' +
+                            '</td>' +
+                            '<td>' +
+                            '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit' +
+                            element['id'] + '"><i class="bi bi-pencil"></i></button>' +
+                            '<a href="/codigoAlmacen/' + element.id +
+                            '" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>' +
+                            '</td>' +
+                            '<td>' +
+                            '<form action="/inventario/' + id + '" method="POST">' +
+                            '@csrf @method('DELETE')' +
+                            '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>' +
+                            '</form>' +
+                            '</td>' +
+                            '</tr>');
+                    });
+                });
+            });
+
+            $('#buscarInve').on('click', function() {
+                if (document.getElementById("inputBusqueda").value.length >= 1) {
+                    $("#tabla1").prop('hidden', true);
                     $("#divtabla1").prop('hidden', true);
                     $("#tabla2").prop('hidden', false);
                     var palabra = $('#inputBusqueda').val();
-                    $.get('/buscarInventario/'+palabra,function (data){
+                    $.get('/buscarInventario/' + palabra, function(data) {
                         //console.log(data);
                         $('#inventarios2').empty();
                         result = data;
                         data.forEach(element => {
                             var id = element['id'];
-                            var url = '{{route("inventario.delete",'+id+')}}';
-                            $('#inventarios2').append('<tr>'+
-                                '<td>'+element['id']+'</td>'+
-                                '<td>'+element['bar_code']+'</td>'+
-                                '<td>'+element['name']+'</td>'+
-                                '<td>'+element['categoria']['name']+'</td>'+
-                                '<td>'+element['marca']['name']+'</td>'+
-                                '<td>'+element['stock']+'</td>'+
-                                '<td>'+element['price']+'</td>'+
-                                '<td>'+element['cost']+'</td>'+
-                                '<td>'+
-                                    ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
-                                        'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
-                                            '<i class="bi bi-bag-plus-fill"></i></button>':
-                                            '<button type="button" class="btn btn-outline-secondary" disabled>'+
-                                            '<i class="bi bi-bag-plus-fill"></i></button>'
-                                        }`
-                                    +
-                                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
-                                        'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
-                                        '<i class="bi bi-bag-plus"></i></button>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
-                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<form action="/inventario/'+id+'" method="POST">'+
-                                        '@csrf @method("DELETE")'+
-                                        '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
-                                    '</form>'+
-                                '</td>'+
-                            '</tr>');
-                        });
-                    });*/
-                    /*$.get('/buscarInventario/'+palabra,function (data){
-                        //console.log(data);
-                        $('#inventarios2').empty();
-                        data.forEach(element => {
-                            var id = element['id'];
-                            var url = '{{route("inventario.delete",'+id+')}}';
-                            $('#inventarios2').append('<tr>'+
-                                '<td>'+element['id']+'</td>'+
-                                '<td>'+element['bar_code']+'</td>'+
-                                '<td>'+element['name']+'</td>'+
-                                '<td>'+element['categoria']['name']+'</td>'+
-                                '<td>'+element['marca']['name']+'</td>'+
-                                '<td>'+element['stock']+'</td>'+
-                                '<td>'+element['price']+'</td>'+
-                                '<td>'+element['cost']+'</td>'+
-                                '<td>'+
-                                    ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                            var url = '{{ route('inventario.delete', '+id+') }}';
+                            $('#inventarios2').append('<tr>' +
+                                '<td>' + element['id'] + '</td>' +
+                                '<td>' + element['bar_code'] + '</td>' +
+                                '<td>' + element['name'] + '</td>' +
+                                '<td>' + element['categoria']['name'] + '</td>' +
+                                '<td>' + element['marca']['name'] + '</td>' +
+                                '<td>' + element['stock'] + '</td>' +
+                                '<td>' + element['price'] + '</td>' +
+                                '<td id ="costDymanic' + id + '">' +
+                                '<span id="spanCost' + id +
+                                '" class="badge badge-success float-center"type="button" data-bs-toggle="modal"' +
+                                'data-bs-target="#costSelect" onclick="branchCost(id=' + id +
+                                ')"  style="cursor: pointer">' +
+                                '$' + element['cost'] + '' +
+                                '</span>' +
+                                '</td>' +
+                                '<td>' +
+                                ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
                                             'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
                                                 '<i class="bi bi-bag-plus-fill"></i></button>':
                                                 '<button type="button" class="btn btn-outline-secondary" disabled>'+
                                                 '<i class="bi bi-bag-plus-fill"></i></button>'
-                                            }`+
-                                    '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
-                                    '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
-                                '</td>'+
-                                '<td>'+
-                                    '<form action="/inventario/'+id+'" method="POST">'+
-                                        '@csrf @method("DELETE")'+
-                                        '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
-                                    '</form>'+
-                                '</td>'+
-                            '</tr>');
+                                            }` +
+                                '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"' +
+                                'data-bs-target="#addCompra" onclick="llenarCompra(' + element.id +
+                                ')">' +
+                                '<i class="bi bi-bag-plus"></i></button>' +
+                                //'<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addInventario'+element['id']+'"><i class="bi bi-bag-plus-fill"></i></button>'+
+                                //'<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                                '</td>' +
+                                '<td>' +
+                                '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit(' +
+                                element.id + ')"><i class="bi bi-pencil"></i></button>' +
+                                //'<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                '<a href="/codigoAlmacen/' + element.id +
+                                '" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>' +
+                                '</td>' +
+                                '<td>' +
+                                '<form action="/inventario/' + id + '" method="POST">' +
+                                '@csrf @method('DELETE')' +
+                                '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>' +
+                                '</form>' +
+                                '</td>' +
+                                '</tr>');
                         });
-                    });*/
-                });
+                    });
+                } else {
+                    $("#tabla1").prop('hidden', false);
+                    $("#divtabla1").prop('hidden', false);
+                    $("#tabla2").prop('hidden', true);
+                    document.getElementById("inventarios2").innerHTML = "";
+                }
+                /*$("#tabla1").prop('hidden', true);
+                $("#divtabla1").prop('hidden', true);
+                $("#tabla2").prop('hidden', false);
+                var palabra = $('#inputBusqueda').val();
+                $.get('/buscarInventario/'+palabra,function (data){
+                    //console.log(data);
+                    $('#inventarios2').empty();
+                    result = data;
+                    data.forEach(element => {
+                        var id = element['id'];
+                        var url = '{{ route('inventario.delete', '+id+') }}';
+                        $('#inventarios2').append('<tr>'+
+                            '<td>'+element['id']+'</td>'+
+                            '<td>'+element['bar_code']+'</td>'+
+                            '<td>'+element['name']+'</td>'+
+                            '<td>'+element['categoria']['name']+'</td>'+
+                            '<td>'+element['marca']['name']+'</td>'+
+                            '<td>'+element['stock']+'</td>'+
+                            '<td>'+element['price']+'</td>'+
+                            '<td>'+element['cost']+'</td>'+
+                            '<td>'+
+                                ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                            'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                '<i class="bi bi-bag-plus-fill"></i></button>':
+                                '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                '<i class="bi bi-bag-plus-fill"></i></button>'
+                            }`
+                                +
+                                '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal"'+
+                                    'data-bs-target="#addCompra" onclick="llenarCompra('+element.id+')">'+
+                                    '<i class="bi bi-bag-plus"></i></button>'+
+                            '</td>'+
+                            '<td>'+
+                                '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit" onclick="llenaredit('+element.id+')"><i class="bi bi-pencil"></i></button>'+
+                                '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                            '</td>'+
+                            '<td>'+
+                                '<form action="/inventario/'+id+'" method="POST">'+
+                                    '@csrf @method('DELETE')'+
+                                    '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                '</form>'+
+                            '</td>'+
+                        '</tr>');
+                    });
+                });*/
+                /*$.get('/buscarInventario/'+palabra,function (data){
+                    //console.log(data);
+                    $('#inventarios2').empty();
+                    data.forEach(element => {
+                        var id = element['id'];
+                        var url = '{{ route('inventario.delete', '+id+') }}';
+                        $('#inventarios2').append('<tr>'+
+                            '<td>'+element['id']+'</td>'+
+                            '<td>'+element['bar_code']+'</td>'+
+                            '<td>'+element['name']+'</td>'+
+                            '<td>'+element['categoria']['name']+'</td>'+
+                            '<td>'+element['marca']['name']+'</td>'+
+                            '<td>'+element['stock']+'</td>'+
+                            '<td>'+element['price']+'</td>'+
+                            '<td>'+element['cost']+'</td>'+
+                            '<td>'+
+                                ` ${ element['stock'] > 0 ? '<button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"'+
+                                'data-bs-target="#addInventario" onclick="llenarinv('+element.id+')">'+
+                                    '<i class="bi bi-bag-plus-fill"></i></button>':
+                                    '<button type="button" class="btn btn-outline-secondary" disabled>'+
+                                    '<i class="bi bi-bag-plus-fill"></i></button>'
+                                }`+
+                                '<button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#addCompra'+element['id']+'"><i class="bi bi-bag-plus"></i></button>'+
+                            '</td>'+
+                            '<td>'+
+                                '<button class="btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modaledit'+element['id']+'"><i class="bi bi-pencil"></i></button>'+
+                                '<a href="/codigoAlmacen/'+element.id+'" target="blank" type="button" class="btn btn-outline-primary"><i class="bi bi-upc"></i></a>'+
+                            '</td>'+
+                            '<td>'+
+                                '<form action="/inventario/'+id+'" method="POST">'+
+                                    '@csrf @method('DELETE')'+
+                                    '<button class="btn btn-outline-danger" type="submit"><i class="bi bi-trash"></i></button>'+
+                                '</form>'+
+                            '</td>'+
+                        '</tr>');
+                    });
+                });*/
+            });
 
 
-            
-            $('#addmodinvquantity').on('change',function(event){
+
+            $('#addmodinvquantity').on('change', function(event) {
                 let cantidad = $('#addmodinvquantity').val();
                 let precio = $('#addmodinvprice').val();
                 let total = cantidad * precio;
                 $('#addmodinvsubtotal').val(total);
                 $('#addmodinvtotal').val(total);
-               
+
             });
-            $('#addmodinvquantity').on('keyup',function(event){
+            $('#addmodinvquantity').on('keyup', function(event) {
                 let cantidad = $('#addmodinvquantity').val();
                 let precio = $('#addmodinvprice').val();
                 let total = cantidad * precio;
                 $('#addmodinvsubtotal').val(total);
                 $('#addmodinvtotal').val(total);
             });
-           
-            $('.cantidadCompra').on('change',function(event){
-               
-                let cantidad = $(this).val();
-               let costo = $('#addmodcomcosto').val();
-                let total = cantidad * costo;
-                $('#addmodcomsubtotal').val(total);
-                $('#addmodcomtotal').val(total);
-            });
-            $('.cantidadCompra').on('keyup',function(event){
-               
+
+            $('.cantidadCompra').on('change', function(event) {
+
                 let cantidad = $(this).val();
                 let costo = $('#addmodcomcosto').val();
                 let total = cantidad * costo;
                 $('#addmodcomsubtotal').val(total);
                 $('#addmodcomtotal').val(total);
             });
-            
-            $('#addmodinvdescuento').on('change',function(event){
-                let descuento = $(this).val()/100;
+            $('.cantidadCompra').on('keyup', function(event) {
+
+                let cantidad = $(this).val();
+                let costo = $('#addmodcomcosto').val();
+                let total = cantidad * costo;
+                $('#addmodcomsubtotal').val(total);
+                $('#addmodcomtotal').val(total);
+            });
+
+            $('#addmodinvdescuento').on('change', function(event) {
+                let descuento = $(this).val() / 100;
                 let subtotal = $('#addmodinvsubtotal').val();
                 let total = subtotal - (subtotal * descuento);
                 $('#addmodinvtotal').val(total);
             });
-            $('#addmodinvdescuento').on('keyup',function(event){
-                let descuento = $(this).val()/100;
+            $('#addmodinvdescuento').on('keyup', function(event) {
+                let descuento = $(this).val() / 100;
                 let subtotal = $('#addmodinvsubtotal').val();
                 let total = subtotal - (subtotal * descuento);
                 $('#addmodinvtotal').val(total);
             });
 
-            $('#addmodcomdescuento').on('change',function(event){
-                let descuento = $(this).val()/100;
+            $('#addmodcomdescuento').on('change', function(event) {
+                let descuento = $(this).val() / 100;
                 let subtotal = $('#addmodcomsubtotal').val();
                 let total = subtotal - (subtotal * descuento);
                 $('#addmodcomtotal').val(total);
             });
-            $('#addmodcomdescuento').on('keyup',function(event){
+            $('#addmodcomdescuento').on('keyup', function(event) {
 
-                let descuento = $(this).val()/100;
+                let descuento = $(this).val() / 100;
                 let subtotal = $('#addmodcomsubtotall').val();
                 let total = subtotal - (subtotal * descuento);
                 $('#addmodcomtotal').val(total);
             });
 
-            const transferirProductos = (event) =>
-            {
+            const transferirProductos = (event) => {
                 event.preventDefault();
                 document.getElementById("formConcluir").submit();
-                window.open('/concluir');   
+                window.open('/concluir');
 
             }
-            $("#office_id").on('change',function(){
+            $("#office_id").on('change', function() {
                 let option = $(this).val();
-                if(option == 0){
+                if (option == 0) {
                     document.getElementById("showNombreCp").style.display = "inline-block";
-                }else{
+                } else {
                     document.getElementById("showNombreCp").style.display = "none";
                 }
             });
-            const optionDownload = (event,option) =>
-            {
+            const optionDownload = (event, option) => {
                 event.preventDefault();
-
-               
-               if(option =='Excel'){
-                   window.open('/almacen/inventario/Excel')
-               }
-               if(option == 'PDF')
-               {
-                    window.open('/almacen/inventario');
-               }
-                   
-                // document.getElementById("formConcluir").submit();
-                // window.open('/concluir');   
+                selectdOptionBranche = document.getElementById('selectBranche').value;
+              
+                if (option == 'Excel') {
+                window.open(`/almacen/inventario/Excel/${selectdOptionBranche}`)
+                }
+                if (option == 'PDF') {
+                    window.open(`/almacen/inventario/${selectdOptionBranche}`);
+                }
+ 
 
             }
-            const branchCost = (id)=>
-            {
+            const branchCost = (id) => {
                 $('#resultCost').empty();
-              $.get('/almacen/inventario/costo/'+id,function(data){
-                    nom ={...data};
-                   
-                  data.map( function(cost){
-                      let cantidad =parseFloat(cost.branch_cost);
-                      let id = cost.inventory.id;
-                       let idnom =  cost.office.id;
-                       $('#resultCost').append('<tr>'
-                        +'<td>'+cost.inventory.name +'</td>'
-                        +'<td>'+cost.office.name +'</td>'
-                        +'<td>$'+cantidad +'</td>'
-                        +'<td> <button class="btn btn-outline-success" onclick="insertNewCost('+id+','+cantidad+','+idnom+')" type="button">agregar</button>'+'</td>'
-                        +'</tr>')
-                
-                   }  );                   
+                $.get('/almacen/inventario/costo/' + id, function(data) {
+                    nom = {
+                        ...data
+                    };
+
+                    data.map(function(cost) {
+                        let cantidad = parseFloat(cost.branch_cost);
+                        let id = cost.inventory.id;
+                        let idnom = cost.office.id;
+                        $('#resultCost').append('<tr>' +
+                            '<td>' + cost.inventory.name + '</td>' +
+                            '<td>' + cost.office.name + '</td>' +
+                            '<td>$' + cantidad + '</td>' +
+                            '<td> <button class="btn btn-outline-success" onclick="insertNewCost(' +
+                            id + ',' + cantidad + ',' + idnom + ')" type="button">agregar</button>' +
+                            '</td>' +
+                            '</tr>')
+
+                    });
                 });
-               
+
             }
-            const insertNewCost = async(id,cost,idnom) =>
-            {
-                var nombreOffice='';
-             
-              await $.get('/office/buscar/'+idnom,function(data){
-               
-                nombreOffice = data.name;
-               });
+            const insertNewCost = async (id, cost, idnom) => {
+                var nombreOffice = '';
+
+                await $.get('/office/buscar/' + idnom, function(data) {
+
+                    nombreOffice = data.name;
+                });
                 let costo = cost.toFixed(2);
-               let elemntCost= $(`#cost${id}`);
-               let elemntCostDymanic = $(`#costDymanic${id}`);
-               elemntCost.empty();
-               elemntCost.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
+                let elemntCost = $(`#cost${id}`);
+                let elemntCostDymanic = $(`#costDymanic${id}`);
+                elemntCost.empty();
+                elemntCost.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
                                                 data-bs-target="#costSelect" onclick="branchCost(id=${id})"  style="cursor: pointer">
                                                $${costo}
                                             </span>`);
-               elemntCostDymanic.empty();
-               elemntCostDymanic.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
+                elemntCostDymanic.empty();
+                elemntCostDymanic.append(`${nombreOffice} <span id="spanCost${id}" class="badge badge-success float-center"type="button" data-bs-toggle="modal"
                                                 data-bs-target="#costSelect" onclick="branchCost(id=${id})"  style="cursor: pointer">
                                                $${costo}
                                             </span>`);
-             
-               $('#costSelect').modal('hide'); 
+
+                $('#costSelect').modal('hide');
                 alert('Se ha agregado el costo correctamente');
             }
-            
         </script>
-
     @endif
 
 @endsection

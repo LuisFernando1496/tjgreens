@@ -132,8 +132,8 @@ Route::group(['middleware'=>'auth'], function(){
     Route::patch('/almacen-status/{id}',[WarehouseController::class,'status'])->name('almacen.status');
     Route::patch('/almacen/{almacen}',[WarehouseController::class,'update'])->name('almacen.update');
     Route::get('/ventas',[WarehouseController::class,'ventas'])->name('almacen.ventas');
-    Route::get('/almacen/inventario',[WarehouseController::class,'inventarioDownload'])->name('inventarioDownload');
-    Route::get('/almacen/inventario/Excel',[WarehouseController::class,'inventarioDownloadExcel'])->name('inventarioDownloadExcel');
+    Route::get('/almacen/inventario/{option}',[WarehouseController::class,'inventarioDownload'])->name('inventarioDownload');
+    Route::get('/almacen/inventario/Excel/{option}',[WarehouseController::class,'inventarioDownloadExcel'])->name('inventarioDownloadExcel');
 
     Route::post('/inventario',[InventoryController::class,'store'])->name('inventario.store');
     Route::patch('/inventario/{id}',[InventoryController::class,'update'])->name('inventario.update');

@@ -19,7 +19,6 @@ use App\Exports\inventarioAlmacen;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -32,7 +31,7 @@ class WarehouseController extends Controller
      */
     public function index()
     {
-        
+
         try {
             $user = Auth::user();
             //$this->devolucion();
@@ -40,20 +39,20 @@ class WarehouseController extends Controller
                 $almacenes = Warehouse::with(['oficina', 'user', 'inventarios'])
                     ->where('office_id', '=', $user->branch_office_id)->paginate();
                 $usuarios = User::where('rol_id', '=', '4')->where('branch_office_id', '=', 1)->get();
-               // return $usuarios;
+                // return $usuarios;
                 return view('warehouse.index', [
                     'almacenes' => $almacenes,
                     'usuarios' => $usuarios
                 ]);
             } else {
-                
+
                 $almacen = Warehouse::where('user_id', '=', $user->id)->get();
-             // return $almacen;
-                if (empty($almacen) ) {
+                // return $almacen;
+                if (empty($almacen)) {
                     $inventarios = [];
                 } else {
-                    $inventarios = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->paginate(5);
-                    $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id','DESC')->get();
+                    $inventarios = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id', 'DESC')->paginate(5);
+                    $invetories = Inventory::where('warehouse_id', '=', $almacen[0]->id)->with(['marca', 'categoria', 'almacen'])->orderBy('id', 'DESC')->get();
                 }
                 $categorias = Category::all();
                 $carrito = Cart::where('user_id', '=', $user->id)
@@ -61,7 +60,7 @@ class WarehouseController extends Controller
                 $carritoCompras = CartShopping::where('user_id', '=', $user->id)->where('status', '=', true)->get();
                 $marcas = Brand::all();
                 $oficinas = BranchOffice::where('status', '=', true)->get();
-             //  return $inventario;
+                //  return $inventario;
                 return view('warehouse.index', [
                     'almacenes' => $almacen,
                     'inventarios' => $inventarios,
@@ -232,19 +231,28 @@ class WarehouseController extends Controller
         }
     }
 
-    public function inventarioDownload()
+    public function inventarioDownload($option)
     {
-        $productos = Inventory::with(['marca', 'categoria', 'almacen'])->get();
-     
-        return view('warehouse.inventarioAlmacen', compact('productos'));
-        return $productos;
+        if ($option == 'Todos') {
+            $productos = Inventory::with(['marca', 'categoria', 'almacen'])->get();
+            return view('warehouse.inventarioAlmacen', compact('productos'));
+          //  return $productos;
+        }
+        else{
+            $branch = BranchOffice::find($option);
+            $productos = Inventory::leftJoin('branch_prices','branch_prices.inventory_id','inventories.id')
+                                  ->where('branch_prices.office_id',$option)
+                                  ->with(['marca', 'categoria', 'almacen'])->get();
+         // return  $branch;
+            return view('warehouse.inventarioSucursalAlmacen', compact('productos','branch'));
+        }
     }
-    public function inventarioDownloadExcel()
+    public function inventarioDownloadExcel($option)
     {
-        $fecha = Carbon::now();
-       
-       return Excel::download(new inventarioAlmacen, "Reporte-inventario-$fecha.xlsx");
-   
+        
+            $fecha = Carbon::now();
+            return Excel::download(new inventarioAlmacen($option), "Reporte-inventario-$fecha.xlsx");
+        
     }
 
     public function show($id)
@@ -300,7 +308,7 @@ class WarehouseController extends Controller
     {
         $user = Auth::user();
         $ventas = Shipment::where('user_id', '=', $user->id)->paginate(10);
-        $sales = Shipment::where('user_id', '=', $user->id)->orderBy('id','DESC')->paginate(10);
+        $sales = Shipment::where('user_id', '=', $user->id)->orderBy('id', 'DESC')->paginate(10);
         return view('warehouse.ventas', [
             'ventas' => $ventas,
             'sales' => $sales
@@ -342,7 +350,7 @@ class WarehouseController extends Controller
     public function ticket($id)
     {
         $venta = Shipment::findOrFail($id);
-        
+
         return view('warehouse.ticket', [
             'venta' => $venta
         ]);
@@ -350,9 +358,9 @@ class WarehouseController extends Controller
 
     public function factura($id)
     {
-        $venta = Shipment::where('id',$id)->with(['productos.inventario.branchPrice'])->first();
+        $venta = Shipment::where('id', $id)->with(['productos.inventario.branchPrice'])->first();
         //return $venta;
-        return view('warehouse.factura',[
+        return view('warehouse.factura', [
             'venta' => $venta
         ]);
     }
@@ -361,11 +369,11 @@ class WarehouseController extends Controller
     {
         //$producto = Product::join("branch_offices","branch_offices.id","=","products.branch_office_id")
         $producto = Product::where('bar_code', '=', $codigo)
-        ->orWhere('name', 'LIKE', $codigo)
-        ->with(['categoria', 'brand'])
-        ->first();
+            ->orWhere('name', 'LIKE', $codigo)
+            ->with(['categoria', 'brand'])
+            ->first();
         //$p = ProductInSale::join("sales" ,"sales.id", "=" ,"product_in_sales.sale_id")
-            //->join("users","users.id","=","sales.user_id")
+        //->join("users","users.id","=","sales.user_id")
         if ($producto != null) {
             return response()->json($producto);
         } else {
@@ -376,7 +384,7 @@ class WarehouseController extends Controller
     public function codigoAlmacen(Inventory $almacen)
     {
         //return $almacen;
-        return view('products.tag',[
+        return view('products.tag', [
             'product' => $almacen,
         ]);
     }
