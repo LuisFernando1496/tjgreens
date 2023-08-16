@@ -21,7 +21,7 @@ use App\Box;
 use App\ProductInSale;
 use Illuminate\Support\Facades\Auth;
 
-class BranchOfficeExport implements FromView
+class BranchOfficeExport view(): View 
 {
     private $dataGlobal;
     public function __construct(Request $request)

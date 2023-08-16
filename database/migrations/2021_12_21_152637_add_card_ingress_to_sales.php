@@ -14,7 +14,7 @@ class AddCardIngressToSales extends Migration
     public function up()
     {
         Schema::table('sales', function (Blueprint $table) {
-            $table->decimal('card_ingress',8,2)->default(0)->after('ingress');
+             $table->decimal('card_ingress',8,2)->default(0)->after('ingress');
         });
     }
 

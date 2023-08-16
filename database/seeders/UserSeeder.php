@@ -1,21 +1,18 @@
 <?php
 
-use App\User;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\User;
 
 class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
-        
-    
         User::create([
             'name' => 'Santiago',
             'last_name' => 'López',
