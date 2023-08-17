@@ -4,7 +4,6 @@ namespace App\Exports;
 
 use App\Invoice;
 use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Http\Request;
 use App\User;
 use App\BranchOffice;
@@ -20,8 +19,9 @@ use DateTimeZone;
 use App\Box;
 use App\ProductInSale;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class BranchOfficeExport view(): View 
+class BranchOfficeExport implements FromView
 {
     private $dataGlobal;
     public function __construct(Request $request)

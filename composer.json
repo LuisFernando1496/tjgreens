@@ -15,7 +15,7 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.2",
         "livewire/livewire": "^2.11",
-        "maatwebsite/excel": "*",
+        "maatwebsite/excel": "^3.1",
         "milon/barcode": "*"
     },
     "require-dev": {
