@@ -48,7 +48,7 @@
                         <div class="row">
                             <div class="col">
                             <center>
-                                <img class="responsive-img" src="{{asset('/logo_inusual.png')}}" width="200px" height="250px"/>
+                                <img class="responsive-img" src="{{asset('/logo_inusual.png')}}" width="200px" height="200px"/>
                             </center>
                             </div>
                         </div>
