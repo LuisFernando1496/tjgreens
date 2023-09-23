@@ -132,6 +132,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        return back()->withErrors(["error" => "Limite de usuarios alcanzado contactar con soporte tecnico"]);
         DB::beginTransaction();
         try {
             if ($request->has('branch_office_id')) {

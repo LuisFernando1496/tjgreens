@@ -49,6 +49,7 @@ class BranchOfficeController extends Controller
      */
     public function store(Request $request)
     {
+        return back()->withErrors(["error" => "Limite de sucursales alcanzado contactar con soporte tecnico"]);
         $offices = BranchOffice::all();
         DB::beginTransaction();
 
