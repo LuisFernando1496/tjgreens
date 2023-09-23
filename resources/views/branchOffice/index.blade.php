@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="container">
+    @if($errors->any())
+    @foreach($errors->all() as $error)
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{$error}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    @endforeach
+    @endif
     <!-- Create Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
