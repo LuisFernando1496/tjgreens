@@ -27,14 +27,14 @@
     <div class="masthead">
         <div class="masthead-content text-white">
             <div class="container-fluid px-4 px-lg-0">
-                <h1 class="fst-italic lh-1 mb-4">Pagina temporalmente deshabilitada </h1>
-                <p class="mb-5">Lamentamos informarte que esta página está temporalmente deshabilitada debido a una falta de pago. Para restablecer el acceso, te invitamos a regularizar tu situación de pago lo antes posible.
+                <h1 class="fst-italic lh-1 mb-4">Sistema suspendido</h1>
+                <!-- <p class="mb-5">Lamentamos informarte que esta página está temporalmente deshabilitada debido a una falta de pago. Para restablecer el acceso, te invitamos a regularizar tu situación de pago lo antes posible.
 
                     Si tienes alguna duda sobre tu factura o necesitas asistencia para realizar el pago.
 
                     Agradecemos tu comprensión y esperamos poder restablecer el servicio pronto.
 
-                </p>
+                </p> -->
                 <!-- * * * * * * * * * * * * * * *-->
                 <!-- * * SB Forms Contact Form * *-->
                 <!-- * * * * * * * * * * * * * * *-->
